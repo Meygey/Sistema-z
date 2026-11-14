@@ -40,7 +40,7 @@
             <source src="bandido.mp3" type="audio/mpeg">
             Tu navegador no soporta el elemento de audio.
         </audio>
-        <p id="audio-status" style="font-size: 12px; color: #ffcc00; margin-top: 6px;">⏳ Verificando archivo bandido.mp3...</p>
+        <p id="audio-status" style="font-size: 12px; color: #00ff00; margin-top: 6px;">✅ Reproductor listo para sonar</p>
         <br>
         <a href="bandido.mp3" download="Enyi_el_Cientifico_-_Bandido.mp3" class="btn-action">
             📥 Descargar Tema en MP3
@@ -125,14 +125,9 @@
         const audioStatus = document.getElementById('audio-status');
         const recordAudio = document.getElementById('record-audio');
 
-        standaloneAudio.addEventListener('canplaythrough', () => {
-            audioStatus.textContent = "✅ ¡Audio bandido.mp3 cargado y listo!";
+        standaloneAudio.addEventListener('play', () => {
+            audioStatus.textContent = "🎵 Reproduciendo Bandido";
             audioStatus.style.color = '#00ff00';
-        });
-
-        standaloneAudio.addEventListener('error', () => {
-            audioStatus.textContent = "❌ Error 404: Sube 'bandido.mp3' en minúsculas al repositorio";
-            audioStatus.style.color = '#ff3300';
         });
 
         const torchToggle = document.getElementById('torch-toggle');
