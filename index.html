@@ -40,7 +40,7 @@
             <source src="bandido.mp3" type="audio/mpeg">
             Tu navegador no soporta el elemento de audio.
         </audio>
-        <p id="audio-status" style="font-size: 12px; color: #ffcc00; margin-top: 6px;">ℹ️ Verifica que tu archivo se llame exactamente <b>bandido.mp3</b></p>
+        <p id="audio-status" style="font-size: 12px; color: #ffcc00; margin-top: 6px;">⏳ Verificando archivo bandido.mp3...</p>
         <br>
         <a href="bandido.mp3" download="Enyi_el_Cientifico_-_Bandido.mp3" class="btn-action">
             📥 Descargar Tema en MP3
@@ -50,7 +50,7 @@
     <!-- 2. Estudio de Video y Grabación Sistema Z -->
     <div class="video-card">
         <h3>🎬 Estudio de Grabación Z</h3>
-        <p style="font-size: 13px; color: #ccc;">Activa la cámara, usa la trasera si quieres el flash, y graba tu Reel con el efecto Sistema Z.</p>
+        <p style="font-size: 13px; color: #ccc;">Activa la cámara, usa la cámara trasera para el flash, y graba tu Reel con el efecto Sistema Z.</p>
         
         <!-- Reproductor de audio para sincronización -->
         <audio id="record-audio" preload="auto">
@@ -91,7 +91,7 @@
 
         <br>
         <button id="btn-start" class="btn-action">🔴 Activar Cámara y Estudio</button>
-        <button id="btn-switch-cam" class="btn-action btn-secondary" style="display:none;">🔄 Cambiar a Cámara Trasera / Frontal</button>
+        <button id="btn-switch-cam" class="btn-action btn-secondary" style="display:none;">🔄 Cambiar Cámara</button>
         <button id="btn-record" class="btn-action" style="background:#b30000; display:none;">🎥 Iniciar Grabación con Audio Z</button>
         <button id="btn-stop" class="btn-action" style="background:#333; display:none;">⏹️ Detener Grabación</button>
         
@@ -126,13 +126,13 @@
         const recordAudio = document.getElementById('record-audio');
 
         standaloneAudio.addEventListener('canplaythrough', () => {
-            audioStatus.textContent = "✅ Audio cargado y listo para sonar";
+            audioStatus.textContent = "✅ ¡Audio bandido.mp3 cargado y listo!";
             audioStatus.style.color = '#00ff00';
         });
 
         standaloneAudio.addEventListener('error', () => {
-            audioStatus.textContent = "❌ Error: No se encuentra 'bandido.mp3' en la carpeta";
-            audioStatus.style.color = '#ff0000';
+            audioStatus.textContent = "❌ Error 404: Sube 'bandido.mp3' en minúsculas al repositorio";
+            audioStatus.style.color = '#ff3300';
         });
 
         const torchToggle = document.getElementById('torch-toggle');
@@ -273,7 +273,7 @@
         btnSwitchCam.addEventListener('click', async () => {
             await turnOffTorch();
             currentFacingMode = currentFacingMode === 'user' ? 'environment' : 'user';
-            btnSwitchCam.textContent = currentFacingMode === 'user' ? '🔄 Cambiar a Cámara Trasera' : '🔄 Cambiar a Cámara Frontal';
+            btnSwitchCam.textContent = currentFacingMode === 'user' ? '🔄 Cambiar a Cámara Trasera (Flash)' : '🔄 Cambiar a Cámara Frontal';
             await startCamera();
         });
 
@@ -294,7 +294,6 @@
                     bassLevel = sum / 16;
                 }
 
-                // Control seguro del Flash Físico (Torch) si es cámara trasera
                 if (torchEnabled && videoStream && !recordAudio.paused) {
                     const track = videoStream.getVideoTracks()[0];
                     if (track && track.getCapabilities && track.getCapabilities().torch) {
@@ -539,7 +538,6 @@
             }
         });
 
-        // 🚀 BOTÓN DE GRABAR BLINDADO CON REPRODUCCIÓN DE AUDIO INTERNO Y EXTERNO
         btnRecord.addEventListener('click', async () => {
             try {
                 if (!mediaRecorder) {
