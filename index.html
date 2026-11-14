@@ -36,11 +36,11 @@
     <!-- 1. Reproductor de Música Independiente -->
     <div class="track-card">
         <h3>Bandido (Audio Oficial)</h3>
-        <audio id="standalone-audio" controls preload="auto" style="width: 100%; margin-top: 10px;">
+        <audio id="standalone-audio" controls style="width: 100%; margin-top: 10px;">
             <source src="bandido.mp3" type="audio/mpeg">
             Tu navegador no soporta el elemento de audio.
         </audio>
-        <p id="audio-status" style="font-size: 12px; color: #ffcc00; margin-top: 6px;">ℹ️ Toca play para cargar el tema</p>
+        <p id="audio-status" style="font-size: 12px; color: #ffcc00; margin-top: 6px;">ℹ️ Toca play para activar el reproductor</p>
         <br>
         <a href="bandido.mp3" download="Enyi_el_Cientifico_-_Bandido.mp3" class="btn-action">
             📥 Descargar Tema en MP3
@@ -124,10 +124,8 @@
         const standaloneAudio = document.getElementById('standalone-audio');
         const audioStatus = document.getElementById('audio-status');
 
-        standaloneAudio.addEventListener('loadedmetadata', () => {
-            const mins = Math.floor(standaloneAudio.duration / 60);
-            const secs = Math.floor(standaloneAudio.duration % 60);
-            audioStatus.textContent = `✅ Reproductor listo (${mins}:${secs < 10 ? '0' : ''}${secs})`;
+        standaloneAudio.addEventListener('play', () => {
+            audioStatus.textContent = "🎵 Reproduciendo Bandido";
             audioStatus.style.color = '#00ff00';
         });
 
@@ -537,9 +535,8 @@
             }
         });
 
-        // 🚀 BOTÓN DE GRABAR 100% SÍNCRONO AL TOQUE (SIN BLOQUEOS MÓVILES)
-        btnRecord.addEventListener('pointerdown', (e) => {
-            e.preventDefault();
+        // 🚀 BOTÓN DE GRABAR CON EVENTO CLICK ESTÁNDAR Y DESBLOQUEO DE AUDIO MÓVIL
+        btnRecord.addEventListener('click', () => {
             try {
                 if (!mediaRecorder) {
                     alert("⚠️ Activa la cámara primero.");
@@ -552,7 +549,6 @@
                 recordedChunks = [];
                 recordAudio.currentTime = parseFloat(audioStartRange.value);
                 
-                // Iniciar grabación de inmediato de forma síncrona
                 mediaRecorder.start();
                 recordAudio.play().catch(err => console.log(err));
 
@@ -575,8 +571,7 @@
             }
         });
 
-        btnStop.addEventListener('pointerdown', (e) => {
-            e.preventDefault();
+        btnStop.addEventListener('click', () => {
             try {
                 clearInterval(timerInterval);
                 recTimer.style.display = 'none';
