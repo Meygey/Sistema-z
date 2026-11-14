@@ -36,11 +36,11 @@
     <!-- 1. Reproductor de Música Independiente -->
     <div class="track-card">
         <h3>Bandido (Audio Oficial)</h3>
-        <audio id="standalone-audio" controls preload="metadata" style="width: 100%; margin-top: 10px;">
+        <audio id="standalone-audio" controls style="width: 100%; margin-top: 10px;">
             <source src="bandido.mp3" type="audio/mpeg">
             Tu navegador no soporta el elemento de audio.
         </audio>
-        <p id="audio-status" style="font-size: 12px; color: #ffcc00; margin-top: 6px;">ℹ️ Reproductor independiente listo</p>
+        <p id="audio-status" style="font-size: 12px; color: #ffcc00; margin-top: 6px;">ℹ️ Verifica que tu archivo se llame exactamente <b>bandido.mp3</b></p>
         <br>
         <a href="bandido.mp3" download="Enyi_el_Cientifico_-_Bandido.mp3" class="btn-action">
             📥 Descargar Tema en MP3
@@ -50,9 +50,9 @@
     <!-- 2. Estudio de Video y Grabación Sistema Z -->
     <div class="video-card">
         <h3>🎬 Estudio de Grabación Z</h3>
-        <p style="font-size: 13px; color: #ccc;">Activa la cámara, sincroniza el flash y graba tu Reel con el efecto Sistema Z clásico y vibrante.</p>
+        <p style="font-size: 13px; color: #ccc;">Activa la cámara, usa la trasera si quieres el flash, y graba tu Reel con el efecto Sistema Z.</p>
         
-        <!-- Reproductor de audio exclusivo para sincronización de grabación -->
+        <!-- Reproductor de audio para sincronización -->
         <audio id="record-audio" preload="auto">
             <source src="bandido.mp3" type="audio/mpeg">
         </audio>
@@ -67,7 +67,7 @@
         <div style="margin: 10px 0; text-align: left; font-size: 13px; background: #111; padding: 10px; border-radius: 5px; border: 1px solid #333;">
             <label style="cursor: pointer; display: flex; align-items: center; gap: 8px; color: #ffcc00;">
                 <input type="checkbox" id="torch-toggle" style="accent-color: #ff0000; width: 18px; height: 18px;">
-                <span>🔦 <b>Sincronizar Flash Físico al Beat</b> <small style="color:#aaa; display:block;">(Usa la cámara trasera para que el LED parpadee)</small></span>
+                <span>🔦 <b>Sincronizar Flash Físico al Beat</b> <small style="color:#aaa; display:block;">(⚠️ Requiere usar la <b>Cámara Trasera</b>)</small></span>
             </label>
         </div>
 
@@ -91,14 +91,14 @@
 
         <br>
         <button id="btn-start" class="btn-action">🔴 Activar Cámara y Estudio</button>
-        <button id="btn-switch-cam" class="btn-action btn-secondary" style="display:none;">🔄 Cambiar Cámara</button>
+        <button id="btn-switch-cam" class="btn-action btn-secondary" style="display:none;">🔄 Cambiar a Cámara Trasera / Frontal</button>
         <button id="btn-record" class="btn-action" style="background:#b30000; display:none;">🎥 Iniciar Grabación con Audio Z</button>
         <button id="btn-stop" class="btn-action" style="background:#333; display:none;">⏹️ Detener Grabación</button>
         
         <br>
         <a id="download-video" style="display:none;" class="btn-action">💾 Descargar Reel a la Galería</a>
         
-        <!-- Botón de compartir nativo optimizado para TikTok, IG, FB -->
+        <!-- Botón de compartir nativo -->
         <button id="btn-share-social" style="display:none;" class="btn-action btn-share-social">
             🚀 Compartir en TikTok / IG / FB
         </button>
@@ -125,16 +125,18 @@
         const audioStatus = document.getElementById('audio-status');
         const recordAudio = document.getElementById('record-audio');
 
-        standaloneAudio.addEventListener('loadedmetadata', () => {
-            const mins = Math.floor(standaloneAudio.duration / 60);
-            const secs = Math.floor(standaloneAudio.duration % 60);
-            audioStatus.textContent = `✅ Duración: ${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        standaloneAudio.addEventListener('canplaythrough', () => {
+            audioStatus.textContent = "✅ Audio cargado y listo para sonar";
             audioStatus.style.color = '#00ff00';
+        });
+
+        standaloneAudio.addEventListener('error', () => {
+            audioStatus.textContent = "❌ Error: No se encuentra 'bandido.mp3' en la carpeta";
+            audioStatus.style.color = '#ff0000';
         });
 
         const torchToggle = document.getElementById('torch-toggle');
         let torchEnabled = false;
-        let lastTorchState = false;
         let lastAppliedTorch = false;
         let torchThrottle = 0;
 
@@ -149,13 +151,12 @@
             try {
                 if (videoStream) {
                     const track = videoStream.getVideoTracks()[0];
-                    if (track && track.applyConstraints) {
+                    if (track && track.getCapabilities && track.getCapabilities().torch) {
                         await track.applyConstraints({ advanced: [{ torch: false }] });
                         lastAppliedTorch = false;
                     }
                 }
             } catch (e) {}
-            lastTorchState = false;
         }
 
         const webcam = document.getElementById('webcam');
@@ -272,7 +273,7 @@
         btnSwitchCam.addEventListener('click', async () => {
             await turnOffTorch();
             currentFacingMode = currentFacingMode === 'user' ? 'environment' : 'user';
-            btnSwitchCam.textContent = currentFacingMode === 'user' ? '🔄 Cambiar Cámara' : '🔄 Cambiar Cámara';
+            btnSwitchCam.textContent = currentFacingMode === 'user' ? '🔄 Cambiar a Cámara Trasera' : '🔄 Cambiar a Cámara Frontal';
             await startCamera();
         });
 
@@ -293,10 +294,10 @@
                     bassLevel = sum / 16;
                 }
 
-                // Control optimizado del Flash Físico (Torch) al ritmo del beat
+                // Control seguro del Flash Físico (Torch) si es cámara trasera
                 if (torchEnabled && videoStream && !recordAudio.paused) {
                     const track = videoStream.getVideoTracks()[0];
-                    if (track && track.applyConstraints) {
+                    if (track && track.getCapabilities && track.getCapabilities().torch) {
                         torchThrottle++;
                         let targetTorch = bassLevel > 45 && (Math.floor(torchThrottle / 4) % 2 === 0);
                         if (targetTorch !== lastAppliedTorch) {
@@ -538,7 +539,7 @@
             }
         });
 
-        // 🚀 BOTÓN DE GRABAR CON REANUDACIÓN DE AUDIO Y REPRODUCCIÓN GARANTIZADA
+        // 🚀 BOTÓN DE GRABAR BLINDADO CON REPRODUCCIÓN DE AUDIO INTERNO Y EXTERNO
         btnRecord.addEventListener('click', async () => {
             try {
                 if (!mediaRecorder) {
