@@ -46,7 +46,7 @@
     <!-- 2. Estudio de Video Z -->
     <div class="video-card">
         <h3>🎬 Estudio de Grabación Z</h3>
-        <p style="font-size: 13px; color: #ccc;">Activa la cámara, sincroniza el flash y graba tu Reel con Aura Fantasma y Estela Z.</p>
+        <p style="font-size: 13px; color: #ccc;">Activa la cámara, sincroniza el flash y graba tu Reel con Estela Pesada y Silueta Espectral.</p>
         
         <!-- Audio oculto para mezcla -->
         <audio id="record-audio" preload="auto">
@@ -63,7 +63,7 @@
 
         <!-- Panel de Efectos Visuales -->
         <div class="effects-panel" id="panel-effects" style="display:none;">
-            <button class="btn-effect active" onclick="setFilter('sistema-z', this)">🔺 Sistema Z (Aura + Estela)</button>
+            <button class="btn-effect active" onclick="setFilter('sistema-z', this)">🔺 Sistema Z (Estela + Espectro)</button>
             <button class="btn-effect" onclick="setFilter('rojo', this)">🔴 Tono Cine</button>
             <button class="btn-effect" onclick="setFilter('oscuro', this)">🏴 Drill Nítido</button>
         </div>
@@ -143,11 +143,11 @@
         const panelEffects = document.getElementById('panel-effects');
         const recTimer = document.getElementById('rec-timer');
 
-        // Buffer para estelas de video (Motion Trails / Fantasmas)
+        // Búfer ampliado para estelas y rastros profundos
         let frameHistory = [];
-        const maxFrames = 12; // Cantidad de fotogramas de retraso para la estela fantasma
+        const maxFrames = 25;
 
-        // Códigos de Terminal (Termux Style) flotando
+        // Comandos Termux flotantes
         const termCommands = [
             "python setup_z.py", "416Hz active", "7.83Hz Schumann", "git push origin main", 
             "Enyi el Cientifico", "Tierra de Mafia", "system_z.exec()", "triad_resonance()", 
@@ -155,13 +155,13 @@
         ];
         
         let termLines = [];
-        for (let i = 0; i < 15; i++) {
+        for (let i = 0; i < 18; i++) {
             termLines.push({
                 text: termCommands[Math.floor(Math.random() * termCommands.length)],
                 x: Math.random() * 500 + 50,
                 y: Math.random() * 1200,
-                speed: Math.random() * 2.5 + 1.0,
-                opacity: Math.random() * 0.4 + 0.2
+                speed: Math.random() * 2.8 + 1.2,
+                opacity: Math.random() * 0.45 + 0.2
             });
         }
 
@@ -232,13 +232,13 @@
                 // Generar ondas cuando hay golpe fuerte
                 if (!recordAudio.paused && audioLevel > 65) {
                     beatCooldown++;
-                    if (beatCooldown > 10) {
+                    if (beatCooldown > 9) {
                         ripples.push({
                             x: Math.random() * (canvas.width * 0.6) + (canvas.width * 0.2),
                             y: Math.random() * (canvas.height * 0.6) + (canvas.height * 0.2),
                             radius: 5,
-                            maxRadius: Math.random() * 220 + 150,
-                            opacity: 0.9
+                            maxRadius: Math.random() * 240 + 160,
+                            opacity: 0.95
                         });
                         beatCooldown = 0;
                     }
@@ -247,9 +247,8 @@
                 ctx.fillStyle = '#000';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-                // Guardar fotograma actual en el buffer para las estelas fantasma
+                // Guardar fotograma actual en el búfer
                 if (currentFilter === 'sistema-z') {
-                    // Capturar imagen actual en un canvas temporal miniatura para el historial
                     let tempCanvas = document.createElement('canvas');
                     tempCanvas.width = canvas.width;
                     tempCanvas.height = canvas.height;
@@ -264,38 +263,48 @@
 
                 ctx.save();
 
-                // Dibujar Estelas Fantasma (Motion Trails / Aura Duplicada) con retraso en cámara lenta
-                if (currentFilter === 'sistema-z' && frameHistory.length > 2) {
+                // 1. SILUETA HUMANA OSCURA Y BLANCA EN EL FONDO (Efecto Espectral Profundo)
+                if (currentFilter === 'sistema-z' && frameHistory.length > 18) {
+                    ctx.save();
+                    ctx.globalAlpha = 0.4;
                     ctx.globalCompositeOperation = 'screen';
-                    // Tomar fotogramas del pasado para crear el eco y reflejo que sigue a la persona
-                    const steps = [3, 6, 9, 11];
+                    // Filtro de alto contraste en blanco y negro invertido para la silueta oscura y blanca profunda
+                    ctx.filter = 'grayscale(1) contrast(4.0) brightness(0.7) invert(1)';
+                    let ghostBg = frameHistory[frameHistory.length - 18];
+                    ctx.drawImage(ghostBg, -15, -10, canvas.width + 30, canvas.height + 20);
+                    ctx.restore();
+                }
+
+                // 2. ESTELAS FANTASMA MÚLTIPLES (Motion Trails pesadas)
+                if (currentFilter === 'sistema-z' && frameHistory.length > 3) {
+                    ctx.globalCompositeOperation = 'screen';
+                    const steps = [4, 8, 12, 16, 20, 23];
                     steps.forEach((idx, i) => {
                         let historyIndex = frameHistory.length - 1 - idx;
                         if (historyIndex >= 0) {
                             let pastFrame = frameHistory[historyIndex];
-                            let alpha = (0.22 - (i * 0.04));
-                            ctx.globalAlpha = Math.max(alpha, 0.03);
+                            let alpha = (0.28 - (i * 0.04));
+                            ctx.globalAlpha = Math.max(alpha, 0.02);
                             
-                            // Efecto estela con un ligero desplazamiento para simular el cuerpo atrás
-                            let shiftX = (i + 1) * 2;
-                            let shiftY = (i + 1) * 1;
+                            let shiftX = (i + 1) * 3;
+                            let shiftY = (i + 1) * 1.5;
                             ctx.drawImage(pastFrame, shiftX, shiftY, canvas.width, canvas.height);
                         }
                     });
                     ctx.globalAlpha = 1.0;
                 }
 
-                let isGlitching = (!recordAudio.paused && audioLevel > 70 && Math.random() > 0.6);
+                let isGlitching = (!recordAudio.paused && audioLevel > 68 && Math.random() > 0.55);
                 let offsetX = 0;
                 let offsetY = 0;
 
                 if (currentFilter === 'sistema-z') {
                     if (isGlitching) {
-                        offsetX = (Math.random() - 0.5) * 25;
-                        offsetY = (Math.random() - 0.5) * 15;
-                        ctx.filter = 'contrast(2.2) saturate(2.5) invert(0.15)';
+                        offsetX = (Math.random() - 0.5) * 35;
+                        offsetY = (Math.random() - 0.5) * 20;
+                        ctx.filter = 'contrast(2.5) saturate(2.8) invert(0.2)';
                     } else {
-                        ctx.filter = 'contrast(1.3) saturate(1.4) brightness(1.05)';
+                        ctx.filter = 'contrast(1.35) saturate(1.45) brightness(1.08)';
                     }
                 } else if (currentFilter === 'rojo') {
                     ctx.filter = 'contrast(1.4) saturate(1.8) sepia(0.3) hue-rotate(320deg)';
@@ -303,14 +312,14 @@
                     ctx.filter = 'grayscale(0.3) contrast(1.4) brightness(0.95)';
                 }
                 
-                // Dibujar imagen principal nítida encima de las estelas
+                // Dibujar imagen principal nítida encima
                 ctx.globalCompositeOperation = 'source-over';
                 ctx.drawImage(webcam, offsetX, offsetY, canvas.width, canvas.height);
 
                 if (isGlitching && currentFilter === 'sistema-z') {
-                    ctx.fillStyle = 'rgba(0, 255, 100, 0.25)';
+                    ctx.fillStyle = 'rgba(0, 255, 100, 0.3)';
                     let sliceY = Math.random() * canvas.height;
-                    ctx.fillRect(0, sliceY, canvas.width, Math.random() * 60 + 10);
+                    ctx.fillRect(0, sliceY, canvas.width, Math.random() * 80 + 15);
                 }
 
                 ctx.restore();
@@ -320,8 +329,8 @@
                     ctx.save();
                     for (let i = ripples.length - 1; i >= 0; i--) {
                         let r = ripples[i];
-                        r.radius += 6;
-                        r.opacity -= 0.025;
+                        r.radius += 7;
+                        r.opacity -= 0.022;
 
                         if (r.opacity <= 0 || r.radius >= r.maxRadius) {
                             ripples.splice(i, 1);
@@ -331,13 +340,13 @@
                         ctx.beginPath();
                         ctx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
                         ctx.strokeStyle = `rgba(255, 30, 30, ${r.opacity})`;
-                        ctx.lineWidth = 3;
+                        ctx.lineWidth = 3.5;
                         ctx.stroke();
 
                         ctx.beginPath();
-                        ctx.arc(r.x, r.y, r.radius * 0.5, 0, Math.PI * 2);
-                        ctx.strokeStyle = `rgba(0, 255, 120, ${r.opacity * 0.8})`;
-                        ctx.lineWidth = 1.5;
+                        ctx.arc(r.x, r.y, r.radius * 0.55, 0, Math.PI * 2);
+                        ctx.strokeStyle = `rgba(0, 255, 120, ${r.opacity * 0.85})`;
+                        ctx.lineWidth = 1.8;
                         ctx.stroke();
                     }
                     ctx.restore();
