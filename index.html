@@ -36,10 +36,11 @@
     <!-- 1. Reproductor de Música Independiente -->
     <div class="track-card">
         <h3>Bandido (Audio Oficial)</h3>
-        <audio id="standalone-audio" controls style="width: 100%; margin-top: 10px;">
+        <audio id="standalone-audio" controls preload="metadata" style="width: 100%; margin-top: 10px;">
             <source src="bandido.mp3" type="audio/mpeg">
             Tu navegador no soporta el elemento de audio.
         </audio>
+        <p id="audio-status" style="font-size: 12px; color: #00ff00; margin-top: 6px;">✅ Reproductor listo para sonar</p>
         <br>
         <a href="bandido.mp3" download="Enyi_el_Cientifico_-_Bandido.mp3" class="btn-action">
             📥 Descargar Tema en MP3
@@ -119,6 +120,15 @@
         let currentScale = 1.0;
         let timerInterval = null;
         let secondsElapsed = 0;
+
+        const standaloneAudio = document.getElementById('standalone-audio');
+        const audioStatus = document.getElementById('audio-status');
+
+        standaloneAudio.addEventListener('loadedmetadata', () => {
+            const mins = Math.floor(standaloneAudio.duration / 60);
+            const secs = Math.floor(standaloneAudio.duration % 60);
+            audioStatus.textContent = `✅ Duración: ${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        });
 
         const torchToggle = document.getElementById('torch-toggle');
         let torchEnabled = false;
@@ -526,8 +536,8 @@
             }
         });
 
-        // 🚀 BOTÓN DE GRABAR SINCRONIZADO AL TOQUE (SIN DELAYS)
-        btnRecord.addEventListener('click', async () => {
+        btnRecord.addEventListener('pointerdown', async (e) => {
+            e.preventDefault();
             try {
                 if (!mediaRecorder) {
                     alert("⚠️ Activa la cámara primero.");
@@ -541,7 +551,6 @@
                 recordAudio.currentTime = parseFloat(audioStartRange.value);
                 await recordAudio.play();
                 
-                // Iniciar la grabación de inmediato de forma síncrona al toque
                 mediaRecorder.start();
 
                 btnRecord.style.display = 'none';
@@ -563,7 +572,8 @@
             }
         });
 
-        btnStop.addEventListener('click', async () => {
+        btnStop.addEventListener('pointerdown', async (e) => {
+            e.preventDefault();
             try {
                 clearInterval(timerInterval);
                 recTimer.style.display = 'none';
