@@ -46,7 +46,7 @@
     <!-- 2. Estudio de Video Z -->
     <div class="video-card">
         <h3>🎬 Estudio de Grabación Z</h3>
-        <p style="font-size: 13px; color: #ccc;">Activa la cámara, usa la trasera para el flash y graba tu Reel con efecto Sistema Z.</p>
+        <p style="font-size: 13px; color: #ccc;">Activa la cámara, usa la trasera para el flash y graba tu Reel con ondas del Sistema Z.</p>
         
         <!-- Audio oculto para mezcla -->
         <audio id="record-audio" preload="auto">
@@ -63,9 +63,9 @@
 
         <!-- Panel de Efectos Visuales -->
         <div class="effects-panel" id="panel-effects" style="display:none;">
-            <button class="btn-effect active" onclick="setFilter('sistema-z', this)">🔥 Sistema Z</button>
-            <button class="btn-effect" onclick="setFilter('rojo', this)">🔴 Rojo 416</button>
-            <button class="btn-effect" onclick="setFilter('oscuro', this)">🏴 Drill</button>
+            <button class="btn-effect active" onclick="setFilter('sistema-z', this)">🔥 Sistema Z (Ondas)</button>
+            <button class="btn-effect" onclick="setFilter('rojo', this)">🔴 Tono Cine</button>
+            <button class="btn-effect" onclick="setFilter('oscuro', this)">🏴 Drill Nítido</button>
         </div>
 
         <!-- Vista previa Canvas -->
@@ -143,16 +143,20 @@
         const panelEffects = document.getElementById('panel-effects');
         const recTimer = document.getElementById('rec-timer');
 
+        // Partículas y Ondas de agua (Ripple / Pulso de frecuencia)
         let particles = [];
-        for (let i = 0; i < 35; i++) {
+        for (let i = 0; i < 20; i++) {
             particles.push({
                 x: Math.random() * 720,
                 y: Math.random() * 1280,
-                radius: Math.random() * 90 + 40,
-                speedY: -(Math.random() * 1.2 + 0.4),
-                opacity: Math.random() * 0.25 + 0.1
+                radius: Math.random() * 60 + 20,
+                speedY: -(Math.random() * 1.0 + 0.3),
+                opacity: Math.random() * 0.2 + 0.1
             });
         }
+
+        let ripples = [];
+        let beatCooldown = 0;
 
         function setFilter(filter, btn) {
             currentFilter = filter;
@@ -205,7 +209,7 @@
                     const track = videoStream.getVideoTracks()[0];
                     if (track && track.getCapabilities && track.getCapabilities().torch) {
                         torchThrottle++;
-                        let targetTorch = audioLevel > 45 && (Math.floor(torchThrottle / 4) % 2 === 0);
+                        let targetTorch = audioLevel > 50 && (Math.floor(torchThrottle / 4) % 2 === 0);
                         if (targetTorch !== lastAppliedTorch) {
                             lastAppliedTorch = targetTorch;
                             track.applyConstraints({ advanced: [{ torch: targetTorch }] }).catch(() => {});
@@ -215,37 +219,72 @@
                     turnOffTorch();
                 }
 
+                // Generar ondas en el agua (ripples) cuando hay un golpe de bajo fuerte
+                if (!recordAudio.paused && audioLevel > 65) {
+                    beatCooldown++;
+                    if (beatCooldown > 12) {
+                        ripples.push({
+                            x: Math.random() * (canvas.width * 0.6) + (canvas.width * 0.2),
+                            y: Math.random() * (canvas.height * 0.6) + (canvas.height * 0.2),
+                            radius: 10,
+                            maxRadius: Math.random() * 180 + 120,
+                            opacity: 0.85
+                        });
+                        beatCooldown = 0;
+                    }
+                }
+
                 ctx.fillStyle = '#000';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
 
                 ctx.save();
+                // Filtro nítido y balanceado: Sin enrojecer la cara
                 if (currentFilter === 'sistema-z') {
-                    ctx.filter = 'contrast(1.75) saturate(2.3) brightness(0.95)';
+                    ctx.filter = 'contrast(1.25) saturate(1.3) brightness(1.05)';
                 } else if (currentFilter === 'rojo') {
-                    ctx.filter = 'sepia(0.8) hue-rotate(315deg) saturate(3)';
+                    ctx.filter = 'contrast(1.4) saturate(1.8) sepia(0.3) hue-rotate(320deg)';
                 } else if (currentFilter === 'oscuro') {
-                    ctx.filter = 'grayscale(0.6) contrast(1.6) brightness(0.8)';
+                    ctx.filter = 'grayscale(0.3) contrast(1.4) brightness(0.95)';
                 }
                 
-                // Dibujar video ajustado (object-fit contain equivalente) para evitar zoom excesivo
                 ctx.drawImage(webcam, 0, 0, canvas.width, canvas.height);
                 ctx.restore();
 
-                // Capa visual Sistema Z
+                // Dibujar Efecto de Ondas en el Agua / Latido (Ripples)
                 if (currentFilter === 'sistema-z') {
-                    let ambientGrad = ctx.createRadialGradient(canvas.width / 2, canvas.height / 2, canvas.width * 0.2, canvas.width / 2, canvas.height / 2, canvas.width * 0.8);
-                    ambientGrad.addColorStop(0, 'rgba(255, 0, 0, 0)');
-                    ambientGrad.addColorStop(1, 'rgba(180, 0, 0, 0.35)');
-                    ctx.fillStyle = ambientGrad;
-                    ctx.globalCompositeOperation = 'screen';
-                    ctx.fillRect(0, 0, canvas.width, canvas.height);
-                    ctx.globalCompositeOperation = 'source-over';
+                    ctx.save();
+                    for (let i = ripples.length - 1; i >= 0; i--) {
+                        let r = ripples[i];
+                        r.radius += 4.5;
+                        r.opacity -= 0.02;
 
+                        if (r.opacity <= 0 || r.radius >= r.maxRadius) {
+                            ripples.splice(i, 1);
+                            continue;
+                        }
+
+                        // Anillo de onda tipo retumbe en el agua
+                        ctx.beginPath();
+                        ctx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
+                        ctx.strokeStyle = `rgba(255, 50, 50, ${r.opacity})`;
+                        ctx.lineWidth = 2.5;
+                        ctx.stroke();
+
+                        // Segundo anillo concentric interno con destello dorado
+                        ctx.beginPath();
+                        ctx.arc(r.x, r.y, r.radius * 0.6, 0, Math.PI * 2);
+                        ctx.strokeStyle = `rgba(255, 200, 0, ${r.opacity * 0.7})`;
+                        ctx.lineWidth = 1.5;
+                        ctx.stroke();
+                    }
+                    ctx.restore();
+
+                    // Partículas flotantes suaves
                     particles.forEach(p => {
                         p.y += p.speedY;
                         if (p.y < 0) p.y = canvas.height;
-                        let grad = ctx.createRadialGradient(p.x, p.y, 5, p.x, p.y, p.radius);
-                        grad.addColorStop(0, `rgba(255,255,255, ${p.opacity})`);
+                        let grad = ctx.createRadialGradient(p.x, p.y, 2, p.x, p.y, p.radius);
+                        grad.addColorStop(0, `rgba(255,255,255, ${p.opacity * 0.8})`);
                         grad.addColorStop(1, 'rgba(0,0,0,0)');
                         ctx.fillStyle = grad;
                         ctx.beginPath();
