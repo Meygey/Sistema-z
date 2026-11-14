@@ -7,7 +7,7 @@
     <style>
         body { background-color: #0d0d0d; color: #ffffff; font-family: sans-serif; text-align: center; padding: 20px; }
         .track-card, .video-card { background: #1a1a1a; border: 1px solid #ff0000; padding: 20px; margin: 20px auto; max-width: 400px; border-radius: 10px; }
-        .btn-action { background: #ff0000; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block; margin-top: 10px; border: none; cursor: pointer; width: 100%; box-sizing: border-box; }
+        .btn-action { background: #ff0000; color: #fff; padding: 12px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block; margin-top: 10px; border: none; cursor: pointer; width: 100%; box-sizing: border-box; font-size: 15px; }
         .btn-secondary { background: #222; border: 1px solid #ff0000; }
         .btn-whatsapp { background: #25D366; }
         .btn-share-social { background: #000; border: 1px solid #ff0000; }
@@ -19,94 +19,71 @@
 
         /* Panel de Efectos Visuales */
         .effects-panel { display: flex; gap: 4px; justify-content: center; margin: 10px 0; flex-wrap: wrap; }
-        .btn-effect { background: #222; color: #fff; border: 1px solid #ff0000; padding: 6px 8px; font-size: 10px; border-radius: 4px; cursor: pointer; font-weight: bold; flex: 1; min-width: 70px; }
-        .btn-effect:hover, .btn-effect.active { background: #ff0000; }
-
-        .time-selector { background: #111; border: 1px solid #444; padding: 10px; border-radius: 5px; margin-top: 10px; text-align: left; font-size: 13px; }
-        .time-selector input { width: 100%; margin-top: 5px; accent-color: #ff0000; }
-        .instruction-note { font-size: 11px; color: #aaa; margin-top: 8px; line-height: 1.4; }
-        .rec-timer { color: #ff0000; font-weight: bold; font-size: 14px; margin-top: 5px; display: none; }
+        .btn-effect { background: #222; color: #fff; border: 1px solid #ff0000; padding: 8px 10px; font-size: 11px; border-radius: 4px; cursor: pointer; font-weight: bold; flex: 1; }
+        .btn-effect.active { background: #ff0000; }
+        .rec-timer { color: #ff0000; font-weight: bold; font-size: 16px; margin-top: 10px; display: none; }
     </style>
 </head>
 <body>
     <h1>SISTEMA Z 🔺</h1>
-    <p>Lo más pesado del Dark Reguetrap/Drill con <strong>Enyi el Científico, Omotichi el de las mil voces, el 416 Hz</strong>.</p>
+    <p>Lo más pesado del Dark Reguetrap/Drill con <strong>Enyi el Científico</strong>.</p>
     <p class="album-tag">Álbum: Tierra de Mafia</p>
     
-    <!-- 1. Reproductor de Música Independiente -->
+    <!-- 1. Reproductor de Música -->
     <div class="track-card">
         <h3>Bandido (Audio Oficial)</h3>
         <audio id="standalone-audio" controls style="width: 100%; margin-top: 10px;">
             <source src="bandido.mp3" type="audio/mpeg">
-            Tu navegador no soporta el elemento de audio.
+            Tu navegador no soporta audio.
         </audio>
-        <p id="audio-status" style="font-size: 12px; color: #00ff00; margin-top: 6px;">✅ Reproductor listo para sonar</p>
+        <p style="font-size: 12px; color: #00ff00; margin-top: 6px;">✅ Reproductor listo</p>
         <br>
-        <a href="bandido.mp3" download="Enyi_el_Cientifico_-_Bandido.mp3" class="btn-action">
+        <a href="bandido.mp3" download="Bandido_Enyi_El_Cientifico.mp3" class="btn-action">
             📥 Descargar Tema en MP3
         </a>
     </div>
 
-    <!-- 2. Estudio de Video y Grabación Sistema Z -->
+    <!-- 2. Estudio de Video Z -->
     <div class="video-card">
         <h3>🎬 Estudio de Grabación Z</h3>
-        <p style="font-size: 13px; color: #ccc;">Activa la cámara, usa la cámara trasera para el flash, y graba tu Reel con el efecto Sistema Z.</p>
+        <p style="font-size: 13px; color: #ccc;">Activa la cámara con un solo toque y graba tu Reel con efecto Sistema Z.</p>
         
-        <!-- Reproductor de audio para sincronización -->
+        <!-- Audio oculto para mezcla -->
         <audio id="record-audio" preload="auto">
             <source src="bandido.mp3" type="audio/mpeg">
         </audio>
 
-        <!-- Selector de parte del audio -->
-        <div class="time-selector">
-            <label for="audio-start-range">🎚️ <b>Inicio del Beat (Grabación):</b> <span id="time-display">0:00</span></label>
-            <input type="range" id="audio-start-range" min="0" max="192" value="0">
-        </div>
-
-        <!-- Control de Flash Físico (Linterna LED) -->
-        <div style="margin: 10px 0; text-align: left; font-size: 13px; background: #111; padding: 10px; border-radius: 5px; border: 1px solid #333;">
-            <label style="cursor: pointer; display: flex; align-items: center; gap: 8px; color: #ffcc00;">
-                <input type="checkbox" id="torch-toggle" style="accent-color: #ff0000; width: 18px; height: 18px;">
-                <span>🔦 <b>Sincronizar Flash Físico al Beat</b> <small style="color:#aaa; display:block;">(⚠️ Requiere usar la <b>Cámara Trasera</b>)</small></span>
-            </label>
-        </div>
-
         <!-- Panel de Efectos Visuales -->
         <div class="effects-panel" id="panel-effects" style="display:none;">
-            <button class="btn-effect active" onclick="changeFilter('sistema-z', this)">🔥 Sistema Z</button>
-            <button class="btn-effect" onclick="changeFilter('rojo', this)">🔴 Rojo 416</button>
-            <button class="btn-effect" onclick="changeFilter('oscuro', this)">🏴 Drill</button>
-            <button class="btn-effect" onclick="changeFilter('normal', this)">Normal</button>
+            <button class="btn-effect active" onclick="setFilter('sistema-z', this)">🔥 Sistema Z</button>
+            <button class="btn-effect" onclick="setFilter('rojo', this)">🔴 Rojo 416</button>
+            <button class="btn-effect" onclick="setFilter('oscuro', this)">🏴 Drill</button>
         </div>
 
-        <!-- Vista previa procesada por Canvas -->
+        <!-- Vista previa Canvas -->
         <div class="video-container">
             <canvas id="video-canvas"></canvas>
         </div>
         
-        <!-- Video oculto fuente de la cámara -->
         <video id="webcam" autoplay muted playsinline style="display:none;"></video>
 
-        <div id="rec-timer" class="rec-timer">🔴 Grabando: 00:00</div>
+        <div id="rec-timer" class="rec-timer">🔴 Grabando Reel: 00:00</div>
 
         <br>
         <button id="btn-start" class="btn-action">🔴 Activar Cámara y Estudio</button>
-        <button id="btn-switch-cam" class="btn-action btn-secondary" style="display:none;">🔄 Cambiar Cámara</button>
-        <button id="btn-record" class="btn-action" style="background:#b30000; display:none;">🎥 Iniciar Grabación con Audio Z</button>
-        <button id="btn-stop" class="btn-action" style="background:#333; display:none;">⏹️ Detener Grabación</button>
+        <button id="btn-record" class="btn-action" style="background:#b30000; display:none;">🎥 Iniciar Grabación con Audio</button>
+        <button id="btn-stop" class="btn-action" style="background:#333; display:none;">⏹️ Detener y Guardar Reel</button>
         
         <br>
-        <a id="download-video" style="display:none;" class="btn-action">💾 Descargar Reel a la Galería</a>
+        <a id="download-video" style="display:none;" class="btn-action" style="background:#00b300;">💾 Descargar Reel a la Galería</a>
         
-        <!-- Botón de compartir nativo -->
         <button id="btn-share-social" style="display:none;" class="btn-action btn-share-social">
             🚀 Compartir en TikTok / IG / FB
         </button>
 
-        <p class="instruction-note" id="note-download" style="display:none;">💡 <b>Tip Pro:</b> Súbelo directo a <b>TikTok o Instagram Reels</b> desde el menú de compartir.</p>
-        
-        <a href="https://api.whatsapp.com/send?text=Escucha%20el%20Sistema%20Z%20de%20Enyi%20el%20Cientifico%20en%20Tierra%20de%20Mafia:%20https://meygey.github.io/Sistema-z/" target="_blank" class="btn-action btn-whatsapp">
-            📲 Compartir Web en WhatsApp
+        <br><br>
+        <a href="https://api.whatsapp.com/send?text=Escucha%20el%20Sistema%20Z%20en%20Tierra%20de%20Mafia:%20https://meygey.github.io/Sistema-z/" target="_blank" class="btn-action btn-whatsapp">
+            📲 Compartir en WhatsApp
         </a>
     </div>
 
@@ -116,472 +93,208 @@
         let videoStream, audioStream, combinedStream;
         let audioCtx, sourceNode, destinationNode, analyser;
         let currentFilter = 'sistema-z';
-        let currentFacingMode = 'user';
-        let currentScale = 1.0;
         let timerInterval = null;
         let secondsElapsed = 0;
-
-        const standaloneAudio = document.getElementById('standalone-audio');
-        const audioStatus = document.getElementById('audio-status');
-        const recordAudio = document.getElementById('record-audio');
-
-        standaloneAudio.addEventListener('play', () => {
-            audioStatus.textContent = "🎵 Reproduciendo Bandido";
-            audioStatus.style.color = '#00ff00';
-        });
-
-        const torchToggle = document.getElementById('torch-toggle');
-        let torchEnabled = false;
-        let lastAppliedTorch = false;
-        let torchThrottle = 0;
-
-        torchToggle.addEventListener('change', (e) => {
-            torchEnabled = e.target.checked;
-            if (!torchEnabled && lastAppliedTorch) {
-                turnOffTorch();
-            }
-        });
-
-        async function turnOffTorch() {
-            try {
-                if (videoStream) {
-                    const track = videoStream.getVideoTracks()[0];
-                    if (track && track.getCapabilities && track.getCapabilities().torch) {
-                        await track.applyConstraints({ advanced: [{ torch: false }] });
-                        lastAppliedTorch = false;
-                    }
-                }
-            } catch (e) {}
-        }
 
         const webcam = document.getElementById('webcam');
         const canvas = document.getElementById('video-canvas');
         const ctx = canvas.getContext('2d');
         const btnStart = document.getElementById('btn-start');
-        const btnSwitchCam = document.getElementById('btn-switch-cam');
         const btnRecord = document.getElementById('btn-record');
         const btnStop = document.getElementById('btn-stop');
         const downloadVideo = document.getElementById('download-video');
         const btnShareSocial = document.getElementById('btn-share-social');
-        const noteDownload = document.getElementById('note-download');
-        const audioStartRange = document.getElementById('audio-start-range');
-        const timeDisplay = document.getElementById('time-display');
+        const recordAudio = document.getElementById('record-audio');
         const panelEffects = document.getElementById('panel-effects');
         const recTimer = document.getElementById('rec-timer');
 
-        let smokeParticles = [];
-        for (let i = 0; i < 40; i++) {
-            smokeParticles.push({
+        let particles = [];
+        for (let i = 0; i < 30; i++) {
+            particles.push({
                 x: Math.random() * 720,
                 y: Math.random() * 1280,
-                radius: Math.random() * 110 + 50,
-                speedY: -(Math.random() * 1.2 + 0.5),
-                speedX: Math.random() * 1.0 - 0.5,
-                opacity: Math.random() * 0.28 + 0.1
+                radius: Math.random() * 80 + 30,
+                speedY: -(Math.random() * 1.0 + 0.3),
+                opacity: Math.random() * 0.2 + 0.1
             });
         }
 
-        let explosionSparks = [];
-        let shockwaves = [];
-
-        function triggerExplosion(width, height) {
-            let expX = width * 0.5;
-            let expY = height * 0.5;
-            shockwaves.push({ x: expX, y: expY, radius: 10, maxRadius: Math.max(width, height) * 0.8, opacity: 0.9 });
-
-            for (let i = 0; i < 30; i++) {
-                let angle = Math.random() * Math.PI * 2;
-                let speed = Math.random() * 20 + 6;
-                explosionSparks.push({
-                    x: expX, y: expY,
-                    vx: Math.cos(angle) * speed,
-                    vy: Math.sin(angle) * speed,
-                    size: Math.random() * 7 + 2,
-                    life: 1.0,
-                    color: Math.random() > 0.4 ? '#ff3300' : '#ffcc00'
-                });
-            }
-        }
-
-        let shatterCracks = [];
-        function generateShatterCracks(width, height) {
-            shatterCracks = [];
-            let centerX = width * 0.5;
-            let centerY = height * 0.5;
-            for (let i = 0; i < 16; i++) {
-                let angle = (i / 16) * Math.PI * 2;
-                let length = Math.max(width, height) * 0.9;
-                shatterCracks.push({
-                    x1: centerX, y1: centerY,
-                    x2: centerX + Math.cos(angle) * length,
-                    y2: centerY + Math.sin(angle) * length
-                });
-            }
-        }
-
-        function changeFilter(filterName, btn) {
-            currentFilter = filterName;
+        function setFilter(filter, btn) {
+            currentFilter = filter;
             document.querySelectorAll('.btn-effect').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            if (filterName === 'sistema-z') {
-                generateShatterCracks(canvas.width || 720, canvas.height || 1280);
-            }
         }
 
-        audioStartRange.addEventListener('input', (e) => {
-            const seconds = parseInt(e.target.value);
-            const mins = Math.floor(seconds / 60);
-            const secs = seconds % 60;
-            timeDisplay.textContent = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-            recordAudio.currentTime = seconds;
-        });
-
-        async function startCamera() {
+        async function initCamera() {
             try {
-                if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-                    throw new Error("Tu navegador no soporta el acceso a la cámara o requiere HTTPS.");
-                }
-                if (videoStream) {
-                    videoStream.getTracks().forEach(track => track.stop());
-                }
-                
-                try {
-                    videoStream = await navigator.mediaDevices.getUserMedia({ 
-                        video: { facingMode: currentFacingMode }, 
-                        audio: false 
-                    });
-                } catch (errConstraint) {
-                    videoStream = await navigator.mediaDevices.getUserMedia({ 
-                        video: true, 
-                        audio: false 
-                    });
-                }
-
+                // Petición de cámara limpia y compatible con cualquier Android
+                videoStream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { width: { ideal: 720 }, height: { ideal: 1280 } }, 
+                    audio: false 
+                });
                 webcam.srcObject = videoStream;
                 await webcam.play();
             } catch (err) {
-                alert("⚠️ Error al activar la cámara: " + err.message);
+                alert("⚠️ Error de cámara: Asegúrate de dar permisos en Chrome y cerrar otras apps que usen la cámara.");
                 throw err;
             }
         }
 
-        btnSwitchCam.addEventListener('click', async () => {
-            await turnOffTorch();
-            currentFacingMode = currentFacingMode === 'user' ? 'environment' : 'user';
-            btnSwitchCam.textContent = currentFacingMode === 'user' ? '🔄 Cambiar a Cámara Trasera (Flash)' : '🔄 Cambiar a Cámara Frontal';
-            await startCamera();
-        });
-
-        function renderFrame() {
+        function renderLoop() {
             if (webcam.readyState === webcam.HAVE_ENOUGH_DATA) {
                 if (canvas.width !== webcam.videoWidth || canvas.height !== webcam.videoHeight) {
                     canvas.width = webcam.videoWidth || 720;
                     canvas.height = webcam.videoHeight || 1280;
-                    generateShatterCracks(canvas.width, canvas.height);
                 }
 
-                let bassLevel = 0;
+                let audioLevel = 0;
                 if (analyser && !recordAudio.paused) {
-                    const dataArray = new Uint8Array(analyser.frequencyBinCount);
-                    analyser.getByteFrequencyData(dataArray);
+                    const data = new Uint8Array(analyser.frequencyBinCount);
+                    analyser.getByteFrequencyData(data);
                     let sum = 0;
-                    for (let i = 0; i < 16; i++) sum += dataArray[i];
-                    bassLevel = sum / 16;
+                    for(let i=0; i<10; i++) sum += data[i];
+                    audioLevel = sum / 10;
                 }
 
-                if (torchEnabled && videoStream && !recordAudio.paused) {
-                    const track = videoStream.getVideoTracks()[0];
-                    if (track && track.getCapabilities && track.getCapabilities().torch) {
-                        torchThrottle++;
-                        let targetTorch = bassLevel > 45 && (Math.floor(torchThrottle / 4) % 2 === 0);
-                        if (targetTorch !== lastAppliedTorch) {
-                            lastAppliedTorch = targetTorch;
-                            track.applyConstraints({ advanced: [{ torch: targetTorch }] }).catch(() => {});
-                        }
-                    }
-                } else if (!torchEnabled && lastAppliedTorch) {
-                    turnOffTorch();
-                }
-
-                if (currentFilter === 'sistema-z' && bassLevel > 60 && Math.random() < 0.3) {
-                    triggerExplosion(canvas.width, canvas.height);
-                }
-
-                let targetScale = 1.0 + (bassLevel / 255) * 0.5;
-                currentScale += (targetScale - currentScale) * 0.4;
-
-                if (currentFilter === 'sistema-z') {
-                    ctx.fillStyle = 'rgba(13, 13, 13, 0.2)';
-                    ctx.fillRect(0, 0, canvas.width, canvas.height);
-                } else {
-                    ctx.fillStyle = '#000';
-                    ctx.fillRect(0, 0, canvas.width, canvas.height);
-                }
+                ctx.fillStyle = '#000';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
 
                 ctx.save();
-                ctx.translate(canvas.width / 2, canvas.height / 2);
-                ctx.scale(currentScale, currentScale);
-                ctx.translate(-canvas.width / 2, -canvas.height / 2);
-
                 if (currentFilter === 'sistema-z') {
-                    ctx.filter = 'contrast(1.85) brightness(0.92) saturate(2.4)';
+                    ctx.filter = 'contrast(1.7) saturate(2.2) brightness(0.95)';
                 } else if (currentFilter === 'rojo') {
-                    ctx.filter = 'sepia(0.8) hue-rotate(315deg) saturate(3) contrast(1.3)';
+                    ctx.filter = 'sepia(0.8) hue-rotate(315deg) saturate(3)';
                 } else if (currentFilter === 'oscuro') {
-                    ctx.filter = 'grayscale(0.7) contrast(1.8) brightness(0.7)';
-                } else {
-                    ctx.filter = 'none';
+                    ctx.filter = 'grayscale(0.6) contrast(1.6) brightness(0.8)';
                 }
-
                 ctx.drawImage(webcam, 0, 0, canvas.width, canvas.height);
                 ctx.restore();
 
+                // Capa visual Sistema Z
                 if (currentFilter === 'sistema-z') {
-                    ctx.save();
-                    let ambientGrad = ctx.createRadialGradient(canvas.width / 2, canvas.height / 2, canvas.width * 0.25, canvas.width / 2, canvas.height / 2, canvas.width * 0.75);
-                    ambientGrad.addColorStop(0, 'rgba(255, 0, 0, 0)');
-                    ambientGrad.addColorStop(1, 'rgba(180, 0, 0, 0.45)');
-                    ctx.fillStyle = ambientGrad;
-                    ctx.globalCompositeOperation = 'screen';
+                    ctx.fillStyle = 'rgba(180, 0, 0, 0.25)';
                     ctx.fillRect(0, 0, canvas.width, canvas.height);
-                    ctx.restore();
-                }
 
-                if (currentFilter === 'sistema-z') {
-                    ctx.save();
-                    ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
-                    ctx.lineWidth = 1.8;
-                    shatterCracks.forEach(crack => {
-                        ctx.beginPath();
-                        ctx.moveTo(crack.x1, crack.y1);
-                        ctx.lineTo(crack.x2, crack.y2);
-                        ctx.stroke();
-
-                        ctx.strokeStyle = 'rgba(255, 0, 0, 0.6)';
-                        ctx.lineWidth = 0.9;
-                        ctx.beginPath();
-                        ctx.moveTo(crack.x1 + 2, crack.y1 + 2);
-                        ctx.lineTo(crack.x2 + 2, crack.y2 + 2);
-                        ctx.stroke();
-                    });
-                    ctx.restore();
-                }
-
-                if (currentFilter === 'sistema-z') {
-                    ctx.save();
-                    shockwaves.forEach((sw, index) => {
-                        sw.radius += 25;
-                        sw.opacity -= 0.05;
-                        if (sw.opacity <= 0) {
-                            shockwaves.splice(index, 1);
-                            return;
-                        }
-                        ctx.strokeStyle = `rgba(255, 100, 0, ${sw.opacity})`;
-                        ctx.lineWidth = 5;
-                        ctx.beginPath();
-                        ctx.arc(sw.x, sw.y, sw.radius, 0, Math.PI * 2);
-                        ctx.stroke();
-                    });
-
-                    explosionSparks.forEach((sp, index) => {
-                        sp.x += sp.vx;
-                        sp.y += sp.vy;
-                        sp.life -= 0.035;
-                        if (sp.life <= 0) {
-                            explosionSparks.splice(index, 1);
-                            return;
-                        }
-                        ctx.fillStyle = sp.color;
-                        ctx.globalAlpha = sp.life;
-                        ctx.beginPath();
-                        ctx.arc(sp.x, sp.y, sp.size, 0, Math.PI * 2);
-                        ctx.fill();
-                    });
-                    ctx.restore();
-                }
-
-                if (currentFilter === 'sistema-z' || currentFilter === 'oscuro') {
-                    smokeParticles.forEach(p => {
+                    particles.forEach(p => {
                         p.y += p.speedY;
-                        p.x += p.speedX;
-                        if (p.y < -100) { p.y = canvas.height + 100; p.x = Math.random() * canvas.width; }
-                        
-                        let grad = ctx.createRadialGradient(p.x, p.y, 10, p.x, p.y, p.radius);
-                        grad.addColorStop(0, `rgba(240, 240, 240, ${p.opacity * 1.3})`);
-                        grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
-                        
+                        if (p.y < 0) p.y = canvas.height;
+                        let grad = ctx.createRadialGradient(p.x, p.y, 5, p.x, p.y, p.radius);
+                        grad.addColorStop(0, `rgba(255,255,255, ${p.opacity})`);
+                        grad.addColorStop(1, 'rgba(0,0,0,0)');
                         ctx.fillStyle = grad;
                         ctx.beginPath();
-                        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                        ctx.arc(p.x, p.y, p.radius, 0, Math.PI*2);
                         ctx.fill();
                     });
                 }
 
-                if (currentFilter === 'sistema-z') {
-                    let time = Date.now() * 0.008;
-                    ctx.save();
-                    ctx.globalCompositeOperation = 'screen';
-                    if (bassLevel > 40 || Math.random() < 0.2) {
-                        ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
-                        ctx.fillRect(0, 0, canvas.width, canvas.height);
-                    } else {
-                        let r = Math.sin(time) * 120 + 135;
-                        let g = Math.sin(time + 2) * 70 + 80;
-                        let b = Math.sin(time + 4) * 130 + 125;
-                        ctx.fillStyle = `rgba(${Math.floor(r)}, ${Math.floor(g)}, ${Math.floor(b)}, 0.22)`;
-                        ctx.fillRect(0, 0, canvas.width, canvas.height);
-                    }
-                    ctx.restore();
-                }
-
-                ctx.fillStyle = 'rgba(0, 0, 0, 0.75)';
-                ctx.fillRect(canvas.width - 240, canvas.height - 60, 225, 40);
+                // Sello de agua
+                ctx.fillStyle = 'rgba(0,0,0,0.7)';
+                ctx.fillRect(canvas.width - 230, canvas.height - 50, 215, 36);
                 ctx.strokeStyle = '#ff0000';
-                ctx.lineWidth = 2;
-                ctx.strokeRect(canvas.width - 240, canvas.height - 60, 225, 40);
-
+                ctx.lineWidth = 1.5;
+                ctx.strokeRect(canvas.width - 230, canvas.height - 50, 215, 36);
                 ctx.fillStyle = '#ff0000';
-                ctx.font = 'bold 16px sans-serif';
-                ctx.fillText('SISTEMA Z 🔺 416 Hz', canvas.width - 225, canvas.height - 34);
+                ctx.font = 'bold 15px sans-serif';
+                ctx.fillText('SISTEMA Z 🔺 416 Hz', canvas.width - 215, canvas.height - 26);
             }
-            requestAnimationFrame(renderFrame);
+            requestAnimationFrame(renderLoop);
         }
 
         btnStart.addEventListener('click', async () => {
             try {
-                await startCamera();
-                renderFrame();
+                await initCamera();
+                renderLoop();
 
                 btnStart.style.display = 'none';
-                btnSwitchCam.style.display = 'block';
                 btnRecord.style.display = 'block';
-                btnRecord.textContent = "🎥 Iniciar Grabación con Audio Z";
                 panelEffects.style.display = 'flex';
 
-                if (!audioCtx) {
-                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                }
-                if (audioCtx.state === 'suspended') {
-                    await audioCtx.resume();
-                }
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.state === 'suspended') await audioCtx.resume();
 
                 if (!sourceNode) {
                     sourceNode = audioCtx.createMediaElementSource(recordAudio);
                     analyser = audioCtx.createAnalyser();
                     analyser.fftSize = 256;
                     destinationNode = audioCtx.createMediaStreamDestination();
-                    
                     sourceNode.connect(analyser);
                     analyser.connect(destinationNode);
                     analyser.connect(audioCtx.destination);
                 }
 
                 audioStream = destinationNode.stream;
-
                 const canvasStream = canvas.captureStream(30);
                 const audioTrack = audioStream.getAudioTracks()[0];
                 combinedStream = new MediaStream([canvasStream.getVideoTracks()[0], audioTrack]);
 
                 let options = { mimeType: 'video/webm;codecs=vp9,opus' };
-                if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-                    options = { mimeType: 'video/webm' };
-                    if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-                        options = { mimeType: 'video/mp4' };
-                        if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-                            options = {};
-                        }
-                    }
-                }
+                if (!MediaRecorder.isTypeSupported(options.mimeType)) options = { mimeType: 'video/webm' };
+                if (!MediaRecorder.isTypeSupported(options.mimeType)) options = {};
 
                 mediaRecorder = new MediaRecorder(combinedStream, options);
                 
-                mediaRecorder.ondataavailable = (event) => {
-                    if (event.data && event.data.size > 0) {
-                        recordedChunks.push(event.data);
-                    }
+                mediaRecorder.ondataavailable = e => {
+                    if (e.data && e.data.size > 0) recordedChunks.push(e.data);
                 };
                 
-                mediaRecorder.onstop = async () => {
-                    await turnOffTorch();
+                mediaRecorder.onstop = () => {
                     const blob = new Blob(recordedChunks, { type: mediaRecorder.mimeType || 'video/webm' });
                     const url = URL.createObjectURL(blob);
                     
                     downloadVideo.href = url;
-                    downloadVideo.download = 'SistemaZ_Reel_EnyiElCientifico.webm';
+                    downloadVideo.download = 'SistemaZ_Reel.webm';
                     downloadVideo.style.display = 'block';
-                    noteDownload.style.display = 'block';
-                    downloadVideo.textContent = '💾 Descargar Reel Listo';
 
                     if (navigator.share && navigator.canShare) {
-                        const file = new File([blob], "SistemaZ_Enyi.webm", { type: "video/webm" });
+                        const file = new File([blob], "SistemaZ.webm", { type: "video/webm" });
                         if (navigator.canShare({ files: [file] })) {
                             btnShareSocial.style.display = 'block';
                             btnShareSocial.onclick = async () => {
                                 try {
-                                    await navigator.share({
-                                        title: 'Sistema Z - Tierra de Mafia',
-                                        text: 'Escucha lo más pesado del Dark Reguetrap con Enyi el Científico 🔺',
-                                        files: [file]
-                                    });
+                                    await navigator.share({ title: 'Sistema Z', text: 'Tierra de Mafia 🔺', files: [file] });
                                 } catch (err) {}
                             };
                         }
                     }
                 };
             } catch (err) {
-                alert("⚠️ Error al inicializar estudio: " + err.message);
+                alert("Error al iniciar estudio: " + err.message);
             }
         });
 
         btnRecord.addEventListener('click', async () => {
             try {
-                if (!mediaRecorder) {
-                    alert("⚠️ Activa la cámara primero.");
-                    return;
-                }
-                if (audioCtx && audioCtx.state === 'suspended') {
-                    await audioCtx.resume();
-                }
-
+                if (audioCtx && audioCtx.state === 'suspended') await audioCtx.resume();
                 recordedChunks = [];
-                recordAudio.currentTime = parseFloat(audioStartRange.value);
+                recordAudio.currentTime = 0;
                 
                 await recordAudio.play();
                 mediaRecorder.start();
 
                 btnRecord.style.display = 'none';
-                btnSwitchCam.style.display = 'none';
                 btnStop.style.display = 'block';
                 
                 secondsElapsed = 0;
                 recTimer.style.display = 'block';
-                recTimer.textContent = "🔴 Grabando: 00:00";
                 timerInterval = setInterval(() => {
                     secondsElapsed++;
                     let m = Math.floor(secondsElapsed / 60);
                     let s = secondsElapsed % 60;
-                    recTimer.textContent = `🔴 Grabando: ${m < 10 ? '0':''}${m}:${s < 10 ? '0':''}${s}`;
+                    recTimer.textContent = `🔴 Grabando Reel: ${m < 10 ? '0':''}${m}:${s < 10 ? '0':''}${s}`;
                 }, 1000);
-
             } catch (err) {
-                alert("⚠️ Error al iniciar grabación: " + err.message);
+                alert("Error al grabar: " + err.message);
             }
         });
 
-        btnStop.addEventListener('click', async () => {
-            try {
-                clearInterval(timerInterval);
-                recTimer.style.display = 'none';
-                await turnOffTorch();
-                if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-                    mediaRecorder.stop();
-                }
-                recordAudio.pause();
-                btnStop.style.display = 'none';
-                btnSwitchCam.style.display = 'block';
-            } catch (err) {
-                alert("⚠️ Error al detener: " + err.message);
-            }
+        btnStop.addEventListener('click', () => {
+            clearInterval(timerInterval);
+            recTimer.style.display = 'none';
+            if (mediaRecorder && mediaRecorder.state !== 'inactive') mediaRecorder.stop();
+            recordAudio.pause();
+            btnStop.style.display = 'none';
+            btnRecord.style.display = 'block';
         });
     </script>
 </body>
