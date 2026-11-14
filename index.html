@@ -36,11 +36,11 @@
     <!-- 1. Reproductor de Música Independiente -->
     <div class="track-card">
         <h3>Bandido (Audio Oficial)</h3>
-        <audio id="standalone-audio" controls style="width: 100%; margin-top: 10px;">
+        <audio id="standalone-audio" controls preload="metadata" style="width: 100%; margin-top: 10px;">
             <source src="bandido.mp3" type="audio/mpeg">
             Tu navegador no soporta el elemento de audio.
         </audio>
-        <p id="audio-status" style="font-size: 12px; color: #ffcc00; margin-top: 6px;">ℹ️ Toca play para activar el reproductor</p>
+        <p id="audio-status" style="font-size: 12px; color: #ffcc00; margin-top: 6px;">ℹ️ Reproductor independiente listo</p>
         <br>
         <a href="bandido.mp3" download="Enyi_el_Cientifico_-_Bandido.mp3" class="btn-action">
             📥 Descargar Tema en MP3
@@ -52,8 +52,8 @@
         <h3>🎬 Estudio de Grabación Z</h3>
         <p style="font-size: 13px; color: #ccc;">Activa la cámara, sincroniza el flash y graba tu Reel con el efecto Sistema Z clásico y vibrante.</p>
         
-        <!-- Reproductor de audio oculto exclusivo para sincronización de grabación -->
-        <audio id="record-audio" preload="auto" style="display:none;">
+        <!-- Reproductor de audio exclusivo para sincronización de grabación -->
+        <audio id="record-audio" preload="auto">
             <source src="bandido.mp3" type="audio/mpeg">
         </audio>
 
@@ -123,20 +123,24 @@
 
         const standaloneAudio = document.getElementById('standalone-audio');
         const audioStatus = document.getElementById('audio-status');
+        const recordAudio = document.getElementById('record-audio');
 
-        standaloneAudio.addEventListener('play', () => {
-            audioStatus.textContent = "🎵 Reproduciendo Bandido";
+        standaloneAudio.addEventListener('loadedmetadata', () => {
+            const mins = Math.floor(standaloneAudio.duration / 60);
+            const secs = Math.floor(standaloneAudio.duration % 60);
+            audioStatus.textContent = `✅ Duración: ${mins}:${secs < 10 ? '0' : ''}${secs}`;
             audioStatus.style.color = '#00ff00';
         });
 
         const torchToggle = document.getElementById('torch-toggle');
         let torchEnabled = false;
         let lastTorchState = false;
+        let lastAppliedTorch = false;
         let torchThrottle = 0;
 
         torchToggle.addEventListener('change', (e) => {
             torchEnabled = e.target.checked;
-            if (!torchEnabled && lastTorchState) {
+            if (!torchEnabled && lastAppliedTorch) {
                 turnOffTorch();
             }
         });
@@ -147,6 +151,7 @@
                     const track = videoStream.getVideoTracks()[0];
                     if (track && track.applyConstraints) {
                         await track.applyConstraints({ advanced: [{ torch: false }] });
+                        lastAppliedTorch = false;
                     }
                 }
             } catch (e) {}
@@ -163,7 +168,6 @@
         const downloadVideo = document.getElementById('download-video');
         const btnShareSocial = document.getElementById('btn-share-social');
         const noteDownload = document.getElementById('note-download');
-        const recordAudio = document.getElementById('record-audio');
         const audioStartRange = document.getElementById('audio-start-range');
         const timeDisplay = document.getElementById('time-display');
         const panelEffects = document.getElementById('panel-effects');
@@ -289,19 +293,18 @@
                     bassLevel = sum / 16;
                 }
 
+                // Control optimizado del Flash Físico (Torch) al ritmo del beat
                 if (torchEnabled && videoStream && !recordAudio.paused) {
                     const track = videoStream.getVideoTracks()[0];
                     if (track && track.applyConstraints) {
-                        try {
-                            torchThrottle++;
-                            let targetTorch = bassLevel > 48 && (Math.floor(torchThrottle / 3) % 2 === 0);
-                            if (targetTorch !== lastTorchState) {
-                                lastTorchState = targetTorch;
-                                track.applyConstraints({ advanced: [{ torch: targetTorch }] }).catch(() => {});
-                            }
-                        } catch (e) {}
+                        torchThrottle++;
+                        let targetTorch = bassLevel > 45 && (Math.floor(torchThrottle / 4) % 2 === 0);
+                        if (targetTorch !== lastAppliedTorch) {
+                            lastAppliedTorch = targetTorch;
+                            track.applyConstraints({ advanced: [{ torch: targetTorch }] }).catch(() => {});
+                        }
                     }
-                } else if (!torchEnabled && lastTorchState) {
+                } else if (!torchEnabled && lastAppliedTorch) {
                     turnOffTorch();
                 }
 
@@ -535,22 +538,22 @@
             }
         });
 
-        // 🚀 BOTÓN DE GRABAR CON EVENTO CLICK ESTÁNDAR Y DESBLOQUEO DE AUDIO MÓVIL
-        btnRecord.addEventListener('click', () => {
+        // 🚀 BOTÓN DE GRABAR CON REANUDACIÓN DE AUDIO Y REPRODUCCIÓN GARANTIZADA
+        btnRecord.addEventListener('click', async () => {
             try {
                 if (!mediaRecorder) {
                     alert("⚠️ Activa la cámara primero.");
                     return;
                 }
                 if (audioCtx && audioCtx.state === 'suspended') {
-                    audioCtx.resume();
+                    await audioCtx.resume();
                 }
 
                 recordedChunks = [];
                 recordAudio.currentTime = parseFloat(audioStartRange.value);
                 
+                await recordAudio.play();
                 mediaRecorder.start();
-                recordAudio.play().catch(err => console.log(err));
 
                 btnRecord.style.display = 'none';
                 btnSwitchCam.style.display = 'none';
@@ -571,11 +574,11 @@
             }
         });
 
-        btnStop.addEventListener('click', () => {
+        btnStop.addEventListener('click', async () => {
             try {
                 clearInterval(timerInterval);
                 recTimer.style.display = 'none';
-                turnOffTorch();
+                await turnOffTorch();
                 if (mediaRecorder && mediaRecorder.state !== 'inactive') {
                     mediaRecorder.stop();
                 }
