@@ -15,7 +15,7 @@
         
         /* Contenedor de Video / Canvas */
         .video-container { position: relative; width: 100%; margin-top: 10px; border-radius: 5px; overflow: hidden; background: #000; display: inline-block; }
-        canvas { width: 100%; display: block; background: #000; aspect-ratio: 9/16; object-fit: cover; }
+        canvas { width: 100%; display: block; background: #000; aspect-ratio: 9/16; object-fit: contain; }
 
         /* Panel de Efectos Visuales */
         .effects-panel { display: flex; gap: 4px; justify-content: center; margin: 10px 0; flex-wrap: wrap; }
@@ -46,12 +46,20 @@
     <!-- 2. Estudio de Video Z -->
     <div class="video-card">
         <h3>🎬 Estudio de Grabación Z</h3>
-        <p style="font-size: 13px; color: #ccc;">Activa la cámara con un solo toque y graba tu Reel con efecto Sistema Z.</p>
+        <p style="font-size: 13px; color: #ccc;">Activa la cámara, usa la trasera para el flash y graba tu Reel con efecto Sistema Z.</p>
         
         <!-- Audio oculto para mezcla -->
         <audio id="record-audio" preload="auto">
             <source src="bandido.mp3" type="audio/mpeg">
         </audio>
+
+        <!-- Control de Flash Físico (Linterna LED) -->
+        <div style="margin: 10px 0; text-align: left; font-size: 13px; background: #111; padding: 10px; border-radius: 5px; border: 1px solid #333;">
+            <label style="cursor: pointer; display: flex; align-items: center; gap: 8px; color: #ffcc00;">
+                <input type="checkbox" id="torch-toggle" style="accent-color: #ff0000; width: 18px; height: 18px;">
+                <span>🔦 <b>Sincronizar Flash al Beat</b> <small style="color:#aaa; display:block;">(⚠️ Requiere <b>Cámara Trasera</b>)</small></span>
+            </label>
+        </div>
 
         <!-- Panel de Efectos Visuales -->
         <div class="effects-panel" id="panel-effects" style="display:none;">
@@ -71,6 +79,7 @@
 
         <br>
         <button id="btn-start" class="btn-action">🔴 Activar Cámara y Estudio</button>
+        <button id="btn-switch-cam" class="btn-action btn-secondary" style="display:none;">🔄 Cambiar a Cámara Trasera (Flash)</button>
         <button id="btn-record" class="btn-action" style="background:#b30000; display:none;">🎥 Iniciar Grabación con Audio</button>
         <button id="btn-stop" class="btn-action" style="background:#333; display:none;">⏹️ Detener y Guardar Reel</button>
         
@@ -93,13 +102,39 @@
         let videoStream, audioStream, combinedStream;
         let audioCtx, sourceNode, destinationNode, analyser;
         let currentFilter = 'sistema-z';
+        let currentFacingMode = 'user';
         let timerInterval = null;
         let secondsElapsed = 0;
+
+        const torchToggle = document.getElementById('torch-toggle');
+        let torchEnabled = false;
+        let lastAppliedTorch = false;
+        let torchThrottle = 0;
+
+        torchToggle.addEventListener('change', (e) => {
+            torchEnabled = e.target.checked;
+            if (!torchEnabled && lastAppliedTorch) {
+                turnOffTorch();
+            }
+        });
+
+        async function turnOffTorch() {
+            try {
+                if (videoStream) {
+                    const track = videoStream.getVideoTracks()[0];
+                    if (track && track.getCapabilities && track.getCapabilities().torch) {
+                        await track.applyConstraints({ advanced: [{ torch: false }] });
+                        lastAppliedTorch = false;
+                    }
+                }
+            } catch (e) {}
+        }
 
         const webcam = document.getElementById('webcam');
         const canvas = document.getElementById('video-canvas');
         const ctx = canvas.getContext('2d');
         const btnStart = document.getElementById('btn-start');
+        const btnSwitchCam = document.getElementById('btn-switch-cam');
         const btnRecord = document.getElementById('btn-record');
         const btnStop = document.getElementById('btn-stop');
         const downloadVideo = document.getElementById('download-video');
@@ -109,13 +144,13 @@
         const recTimer = document.getElementById('rec-timer');
 
         let particles = [];
-        for (let i = 0; i < 30; i++) {
+        for (let i = 0; i < 35; i++) {
             particles.push({
                 x: Math.random() * 720,
                 y: Math.random() * 1280,
-                radius: Math.random() * 80 + 30,
-                speedY: -(Math.random() * 1.0 + 0.3),
-                opacity: Math.random() * 0.2 + 0.1
+                radius: Math.random() * 90 + 40,
+                speedY: -(Math.random() * 1.2 + 0.4),
+                opacity: Math.random() * 0.25 + 0.1
             });
         }
 
@@ -127,18 +162,27 @@
 
         async function initCamera() {
             try {
-                // Petición de cámara limpia y compatible con cualquier Android
+                if (videoStream) {
+                    videoStream.getTracks().forEach(track => track.stop());
+                }
                 videoStream = await navigator.mediaDevices.getUserMedia({ 
-                    video: { width: { ideal: 720 }, height: { ideal: 1280 } }, 
+                    video: { facingMode: currentFacingMode, width: { ideal: 720 }, height: { ideal: 1280 } }, 
                     audio: false 
                 });
                 webcam.srcObject = videoStream;
                 await webcam.play();
             } catch (err) {
-                alert("⚠️ Error de cámara: Asegúrate de dar permisos en Chrome y cerrar otras apps que usen la cámara.");
+                alert("⚠️ Error de cámara: " + err.message);
                 throw err;
             }
         }
+
+        btnSwitchCam.addEventListener('click', async () => {
+            await turnOffTorch();
+            currentFacingMode = currentFacingMode === 'user' ? 'environment' : 'user';
+            btnSwitchCam.textContent = currentFacingMode === 'user' ? '🔄 Cambiar a Cámara Trasera (Flash)' : '🔄 Cambiar a Cámara Frontal';
+            await initCamera();
+        });
 
         function renderLoop() {
             if (webcam.readyState === webcam.HAVE_ENOUGH_DATA) {
@@ -152,8 +196,23 @@
                     const data = new Uint8Array(analyser.frequencyBinCount);
                     analyser.getByteFrequencyData(data);
                     let sum = 0;
-                    for(let i=0; i<10; i++) sum += data[i];
-                    audioLevel = sum / 10;
+                    for(let i=0; i<16; i++) sum += data[i];
+                    audioLevel = sum / 16;
+                }
+
+                // Sincronizar Flash físico al ritmo del bajo
+                if (torchEnabled && videoStream && !recordAudio.paused) {
+                    const track = videoStream.getVideoTracks()[0];
+                    if (track && track.getCapabilities && track.getCapabilities().torch) {
+                        torchThrottle++;
+                        let targetTorch = audioLevel > 45 && (Math.floor(torchThrottle / 4) % 2 === 0);
+                        if (targetTorch !== lastAppliedTorch) {
+                            lastAppliedTorch = targetTorch;
+                            track.applyConstraints({ advanced: [{ torch: targetTorch }] }).catch(() => {});
+                        }
+                    }
+                } else if (!torchEnabled && lastAppliedTorch) {
+                    turnOffTorch();
                 }
 
                 ctx.fillStyle = '#000';
@@ -161,19 +220,26 @@
 
                 ctx.save();
                 if (currentFilter === 'sistema-z') {
-                    ctx.filter = 'contrast(1.7) saturate(2.2) brightness(0.95)';
+                    ctx.filter = 'contrast(1.75) saturate(2.3) brightness(0.95)';
                 } else if (currentFilter === 'rojo') {
                     ctx.filter = 'sepia(0.8) hue-rotate(315deg) saturate(3)';
                 } else if (currentFilter === 'oscuro') {
                     ctx.filter = 'grayscale(0.6) contrast(1.6) brightness(0.8)';
                 }
+                
+                // Dibujar video ajustado (object-fit contain equivalente) para evitar zoom excesivo
                 ctx.drawImage(webcam, 0, 0, canvas.width, canvas.height);
                 ctx.restore();
 
                 // Capa visual Sistema Z
                 if (currentFilter === 'sistema-z') {
-                    ctx.fillStyle = 'rgba(180, 0, 0, 0.25)';
+                    let ambientGrad = ctx.createRadialGradient(canvas.width / 2, canvas.height / 2, canvas.width * 0.2, canvas.width / 2, canvas.height / 2, canvas.width * 0.8);
+                    ambientGrad.addColorStop(0, 'rgba(255, 0, 0, 0)');
+                    ambientGrad.addColorStop(1, 'rgba(180, 0, 0, 0.35)');
+                    ctx.fillStyle = ambientGrad;
+                    ctx.globalCompositeOperation = 'screen';
                     ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    ctx.globalCompositeOperation = 'source-over';
 
                     particles.forEach(p => {
                         p.y += p.speedY;
@@ -188,8 +254,8 @@
                     });
                 }
 
-                // Sello de agua
-                ctx.fillStyle = 'rgba(0,0,0,0.7)';
+                // Sello de agua Sistema Z
+                ctx.fillStyle = 'rgba(0,0,0,0.75)';
                 ctx.fillRect(canvas.width - 230, canvas.height - 50, 215, 36);
                 ctx.strokeStyle = '#ff0000';
                 ctx.lineWidth = 1.5;
@@ -207,6 +273,7 @@
                 renderLoop();
 
                 btnStart.style.display = 'none';
+                btnSwitchCam.style.display = 'block';
                 btnRecord.style.display = 'block';
                 panelEffects.style.display = 'flex';
 
@@ -238,7 +305,8 @@
                     if (e.data && e.data.size > 0) recordedChunks.push(e.data);
                 };
                 
-                mediaRecorder.onstop = () => {
+                mediaRecorder.onstop = async () => {
+                    await turnOffTorch();
                     const blob = new Blob(recordedChunks, { type: mediaRecorder.mimeType || 'video/webm' });
                     const url = URL.createObjectURL(blob);
                     
@@ -273,6 +341,7 @@
                 mediaRecorder.start();
 
                 btnRecord.style.display = 'none';
+                btnSwitchCam.style.display = 'none';
                 btnStop.style.display = 'block';
                 
                 secondsElapsed = 0;
@@ -288,12 +357,14 @@
             }
         });
 
-        btnStop.addEventListener('click', () => {
+        btnStop.addEventListener('click', async () => {
             clearInterval(timerInterval);
             recTimer.style.display = 'none';
+            await turnOffTorch();
             if (mediaRecorder && mediaRecorder.state !== 'inactive') mediaRecorder.stop();
             recordAudio.pause();
             btnStop.style.display = 'none';
+            btnSwitchCam.style.display = 'block';
             btnRecord.style.display = 'block';
         });
     </script>
