@@ -36,11 +36,11 @@
     <!-- 1. Reproductor de Música Independiente -->
     <div class="track-card">
         <h3>Bandido (Audio Oficial)</h3>
-        <audio id="standalone-audio" controls preload="metadata" style="width: 100%; margin-top: 10px;">
+        <audio id="standalone-audio" controls preload="auto" style="width: 100%; margin-top: 10px;">
             <source src="bandido.mp3" type="audio/mpeg">
             Tu navegador no soporta el elemento de audio.
         </audio>
-        <p id="audio-status" style="font-size: 12px; color: #00ff00; margin-top: 6px;">✅ Reproductor listo para sonar</p>
+        <p id="audio-status" style="font-size: 12px; color: #ffcc00; margin-top: 6px;">ℹ️ Toca play para cargar el tema</p>
         <br>
         <a href="bandido.mp3" download="Enyi_el_Cientifico_-_Bandido.mp3" class="btn-action">
             📥 Descargar Tema en MP3
@@ -127,7 +127,8 @@
         standaloneAudio.addEventListener('loadedmetadata', () => {
             const mins = Math.floor(standaloneAudio.duration / 60);
             const secs = Math.floor(standaloneAudio.duration % 60);
-            audioStatus.textContent = `✅ Duración: ${mins}:${secs < 10 ? '0' : ''}${secs}`;
+            audioStatus.textContent = `✅ Reproductor listo (${mins}:${secs < 10 ? '0' : ''}${secs})`;
+            audioStatus.style.color = '#00ff00';
         });
 
         const torchToggle = document.getElementById('torch-toggle');
@@ -536,7 +537,8 @@
             }
         });
 
-        btnRecord.addEventListener('pointerdown', async (e) => {
+        // 🚀 BOTÓN DE GRABAR 100% SÍNCRONO AL TOQUE (SIN BLOQUEOS MÓVILES)
+        btnRecord.addEventListener('pointerdown', (e) => {
             e.preventDefault();
             try {
                 if (!mediaRecorder) {
@@ -544,14 +546,15 @@
                     return;
                 }
                 if (audioCtx && audioCtx.state === 'suspended') {
-                    await audioCtx.resume();
+                    audioCtx.resume();
                 }
 
                 recordedChunks = [];
                 recordAudio.currentTime = parseFloat(audioStartRange.value);
-                await recordAudio.play();
                 
+                // Iniciar grabación de inmediato de forma síncrona
                 mediaRecorder.start();
+                recordAudio.play().catch(err => console.log(err));
 
                 btnRecord.style.display = 'none';
                 btnSwitchCam.style.display = 'none';
@@ -572,12 +575,12 @@
             }
         });
 
-        btnStop.addEventListener('pointerdown', async (e) => {
+        btnStop.addEventListener('pointerdown', (e) => {
             e.preventDefault();
             try {
                 clearInterval(timerInterval);
                 recTimer.style.display = 'none';
-                await turnOffTorch();
+                turnOffTorch();
                 if (mediaRecorder && mediaRecorder.state !== 'inactive') {
                     mediaRecorder.stop();
                 }
