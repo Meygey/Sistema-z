@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enyi Científico Omotichi - El de las Mil Voces | Sistema Z</title>
+    <meta name="description" content="Sistema Z — Tierra de Mafia. Estudio interactivo oficial de Enyi Científico Omotichi.">
+    <style>
+        body { background-color: #030303; color: #ffffff; font-family: sans-serif; text-align: center; padding: 15px; margin: 0; }
+        .track-card, .video-card, .relations-card { background: #0c0c0c; border: 1px solid #ff0000; padding: 20px; margin: 15px auto; max-width: 680px; border-radius: 10px; box-shadow: 0 0 25px rgba(255,0,0,0.3); width: 95%; box-sizing: border-box; }
+        .btn-action { background: #ff0000; color: #fff; padding: 14px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block; margin-top: 10px; border: none; cursor: pointer; width: 100%; box-sizing: border-box; font-size: 16px; transition: 0.2s; }
+        .btn-action:hover { background: #cc0000; box-shadow: 0 0 15px #ff0000; }
+        .btn-secondary { background: #1a1a1a; border: 1px solid #ff0000; color: #ff5555; }
+        .btn-whatsapp { background: #25D366; }
+        .btn-relations { background: #000; border: 1px solid #ff2222; color: #ff3333; }
+        .album-tag { color: #ff0000; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; font-size: 12px; }
+        
+        .artist-title { color: #ff2222; font-size: 22px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; margin: 10px 0 2px 0; text-shadow: 0 0 15px rgba(255,0,0,0.8); }
+        .artist-sub { color: #ff5555; font-size: 14px; font-weight: bold; letter-spacing: 1px; margin-bottom: 15px; text-shadow: 0 0 10px rgba(255,0,0,0.4); }
+        
+        .player-artist { color: #ff3333; font-size: 15px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; }
+        .player-sub { color: #ff6666; font-size: 12px; margin-bottom: 8px; font-style: italic; }
+
+        .video-container { position: relative; width: 100%; margin-top: 12px; border-radius: 8px; overflow: hidden; background: #000; display: inline-block; border: 1px solid #ff0000; box-shadow: 0 0 35px rgba(255,0,0,0.25); }
+        canvas { width: 100%; display: block; background: #000; aspect-ratio: 9/16; object-fit: contain; }
+
+        .effects-panel { display: flex; gap: 6px; justify-content: center; margin: 12px 0; flex-wrap: wrap; }
+        .btn-effect { background: #151515; color: #fff; border: 1px solid #ff0000; padding: 10px 12px; font-size: 12px; border-radius: 4px; cursor: pointer; font-weight: bold; flex: 1; }
+        .btn-effect.active { background: #ff0000; box-shadow: 0 0 12px #ff0000; }
+        .rec-timer { color: #ff0000; font-weight: bold; font-size: 18px; margin-top: 10px; display: none; text-shadow: 0 0 8px #ff0000; }
+
+        /* Nodo de Conexiones / Contador Hacker */
+        .node-counter { background: #050505; border: 1px dashed #ff0000; padding: 10px; border-radius: 6px; margin-bottom: 15px; font-family: monospace; font-size: 13px; color: #ff4444; letter-spacing: 1px; }
+        
+        /* Modal de Relaciones Z */
+        .relations-box { display: none; background: #080808; border: 1px solid #ff0000; padding: 15px; border-radius: 8px; margin-top: 10px; text-align: left; }
+        .relations-box p { font-size: 13px; color: #ccc; margin: 8px 0; }
+        .relations-box a { color: #ff4444; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="artist-title">ENYI CIENTÍFICO OMOTICHI</div>
+    <div class="artist-sub">« El de las Mil Voces » 🔺</div>
+    <p style="color:#888; font-size:13px; margin: 0 0 10px 0;">SISTEMA Z — Dark Reguetrap / Drill Underground</p>
+    <p class="album-tag">Universo: Tierra de Mafia</p>
+
+    <!-- CONTADOR DE VISITAS / NODO Z -->
+    <div class="track-card" style="padding: 12px; max-width: 500px;">
+        <div class="node-counter">
+            🌐 NODO Z ACTIVE | Conexiones Globales: <span id="visit-count" style="color:#fff; font-weight:bold;">Loading...</span> 🔺
+        </div>
+        <button class="btn-action btn-relations" onclick="toggleRelations()">🔗 Centro de Relaciones y Alianzas Z</button>
+        
+        <div id="relations-panel" class="relations-box">
+            <p>🧪 <b>Fórmula de la Tríada:</b> 416Hz / 7.83Hz / Sistema Z</p>
+            <p>👑 <b>La Reina del Sistema:</b> Daniela Suárez (La Elegida del 416)</p>
+            <p>📲 <b>Canal Directo WhatsApp:</b> <a href="https://api.whatsapp.com/send?text=Enyi%20Cientifico%20-%20Sistema%20Z" target="_blank">Abrir Enlace Seguro ↗</a></p>
+            <p>🎬 <b>TikTok Oficial:</b> <a href="https://www.tiktok.com" target="_blank">@EnyiCientifico ↗</a></p>
+        </div>
+    </div>
+    
+    <!-- 1. Reproductor de Música -->
+    <div class="track-card">
+        <div class="player-artist">🎙️ Enyi Científico Omotichi</div>
+        <div class="player-sub">« El de las Mil Voces »</div>
+        <h3>Bandido (Audio Oficial)</h3>
+        <audio id="standalone-audio" controls style="width: 100%; margin-top: 10px;">
+            <source src="bandido.mp3" type="audio/mpeg">
+            Tu navegador no soporta audio.
+        </audio>
+        <p style="font-size: 12px; color: #ff3333; margin-top: 6px;">✅ Reproductor Z Activo (416Hz Matrix)</p>
+        <br>
+        <a href="bandido.mp3" download="Bandido_Omotichi_Enyi.mp3" class="btn-action">
+            📥 Descargar Tema en MP3
+        </a>
+    </div>
+
+    <!-- 2. Estudio de Video Z -->
+    <div class="video-card">
+        <h3>🎬 Estudio de Grabación Z</h3>
+        <p style="font-size: 13px; color: #aaa;">Generador de Reels de Alta Retención con Códec Compatible para TikTok.</p>
+        
+        <audio id="record-audio" preload="auto">
+            <source src="bandido.mp3" type="audio/mpeg">
+        </audio>
+
+        <div style="margin: 10px 0; text-align: left; font-size: 13px; background: #0a0a0a; padding: 10px; border-radius: 5px; border: 1px solid #440000;">
+            <label style="cursor: pointer; display: flex; align-items: center; gap: 8px; color: #ffcc00;">
+                <input type="checkbox" id="torch-toggle" style="accent-color: #ff0000; width: 18px; height: 18px;">
+                <span>🔦 <b>Sincronizar Flash al Beat</b> <small style="color:#aaa; display:block;">(⚠️ Requiere <b>Cámara Trasera</b>)</small></span>
+            </label>
+        </div>
+
+        <div class="effects-panel" id="panel-effects" style="display:none;">
+            <button class="btn-effect active" onclick="setFilter('sistema-z', this)">🔺 Sistema Z (Humo & Glitch Fino)</button>
+            <button class="btn-effect" onclick="setFilter('rojo', this)">🔴 Tono Mafia</button>
+            <button class="btn-effect" onclick="setFilter('oscuro', this)">🏴 Drill Absoluto</button>
+        </div>
+
+        <div class="video-container">
+            
+        <!-- ESTUDIO Z UNIVERSAL: SELECTOR DE PISTAS -->
+        <div class="card" style="background:#0c0c0c; border:1px solid #ff0000; padding:15px; margin:15px 0; border-radius:10px; text-align:left;">
+            <h3 style="color:#ff2222; margin-top:0;">🎛️ Selector de Pistas para el Estudio Z</h3>
+            <p style="font-size: 13px; color: #aaa;">Elige qué tema sonará de fondo al encender la cámara y grabar tu Reel soberano.</p>
+            <label style="font-size:12px; color:#ff5555; font-weight:bold;">Pista Activa en el Estudio:</label>
+            <select id="select-audio-track" class="input-z" style="background:#111; border:1px solid #ff0000; color:#fff; padding:10px; margin:6px 0; width:100%; border-radius:5px; box-sizing:border-box;">
+                <option value="bandido.mp3">Enyi Científico Omotichi - Bandido (Default 416Hz)</option>
+            </select>
+        </div>
+    
+    <canvas id="video-canvas"></canvas>
+        </div>
+        
+        <video id="webcam" autoplay muted playsinline style="display:none;"></video>
+
+        <div id="rec-timer" class="rec-timer">🔴 Grabando Reel: 00:00</div>
+
+        <br>
+        <button id="btn-start" class="btn-action">🔴 Activar Cámara y Estudio</button>
+        <button id="btn-switch-cam" class="btn-action btn-secondary" style="display:none;">🔄 Cambiar a Cámara Trasera (Flash)</button>
+        <button id="btn-record" class="btn-action" style="background:#b30000; display:none;">🎥 Iniciar Grabación con Audio</button>
+        <button id="btn-stop" class="btn-action" style="background:#333; display:none;">⏹️ Detener y Guardar Reel</button>
+        
+        <br>
+        <a id="download-video" style="display:none;" class="btn-action" style="background:#00b300;">💾 Descargar Reel Compatible para TikTok</a>
+        
+        <button id="btn-share-social" style="display:none;" class="btn-action btn-share-social">
+            🚀 Compartir Directo a TikTok / IG
+        </button>
+
+        <br><br>
+        <a href="https://api.whatsapp.com/send?text=Escucha%20el%20Sistema%20Z%20en%20Tierra%20de%20Mafia:%20https://meygey.github.io/Sistema-z/" target="_blank" class="btn-action btn-whatsapp">
+            📲 Compartir en WhatsApp
+        </a>
+    </div>
+
+    <script>
+        // CONTADOR DE VISITAS LOCAL / NODO HACKER
+        (function() {
+            let visits = localStorage.getItem('system_z_visits');
+            if (!visits) {
+                visits = 1420; // Base inicial de lealtad Tierra de Mafia
+            } else {
+                visits = parseInt(visits) + 1;
+            }
+            localStorage.setItem('system_z_visits', visits);
+            document.getElementById('visit-count').textContent = visits.toLocaleString();
+        })();
+
+        function toggleRelations() {
+            const panel = document.getElementById('relations-panel');
+            panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+        }
+
+        let mediaRecorder;
+        let recordedChunks = [];
+        let videoStream, audioStream, combinedStream;
+        let audioCtx, sourceNode, destinationNode, analyser;
+        let currentFilter = 'sistema-z';
+        let currentFacingMode = 'user';
+        let timerInterval = null;
+        let secondsElapsed = 0;
+
+        const torchToggle = document.getElementById('torch-toggle');
+        let torchEnabled = false;
+        let lastAppliedTorch = false;
+        let torchThrottle = 0;
+
+        torchToggle.addEventListener('change', (e) => {
+            torchEnabled = e.target.checked;
+            if (!torchEnabled && lastAppliedTorch) {
+                turnOffTorch();
+            }
+        });
+
+        async function turnOffTorch() {
+            try {
+                if (videoStream) {
+                    const track = videoStream.getVideoTracks()[0];
+                    if (track && track.getCapabilities && track.getCapabilities().torch) {
+                        await track.applyConstraints({ advanced: [{ torch: false }] });
+                        lastAppliedTorch = false;
+                    }
+                }
+            } catch (e) {}
+        }
+
+        const webcam = document.getElementById('webcam');
+        const canvas = document.getElementById('video-canvas');
+        const ctx = canvas.getContext('2d');
+        const btnStart = document.getElementById('btn-start');
+        const btnSwitchCam = document.getElementById('btn-switch-cam');
+        const btnRecord = document.getElementById('btn-record');
+        const btnStop = document.getElementById('btn-stop');
+        const downloadVideo = document.getElementById('download-video');
+        const btnShareSocial = document.getElementById('btn-share-social');
+        const recordAudio = document.getElementById('record-audio');
+        const panelEffects = document.getElementById('panel-effects');
+        const recTimer = document.getElementById('rec-timer');
+
+        let smokeParticles = [];
+        for (let i = 0; i < 90; i++) {
+            smokeParticles.push({
+                x: Math.random() * 720,
+                y: Math.random() * 1280,
+                radius: Math.random() * 260 + 110,
+                speedY: -(Math.random() * 2.5 + 0.8),
+                speedX: (Math.random() - 0.5) * 1.8,
+                opacity: Math.random() * 0.55 + 0.3,
+                growth: Math.random() * 0.8 + 0.25,
+                isRedTint: Math.random() > 0.5
+            });
+        }
+
+        const termCommands = [
+            "root@z-system:~$ node_relations_active",
+            "python3 script_cash.py --target=mafia",
+            "416Hz frequency locked: active",
+            "7.83Hz Schumann resonance stable",
+            "exec(omoti_voice_matrix)",
+            "root@z-system:~$ ./load_bandido.sh",
+            "h264_mp4_export: active",
+            "Enyi Cientifico Omotichi [100%]",
+            "root@z-system:~$ chmod +x sistema_z",
+            "Tierra de Mafia // Protocolo Supremo"
+        ];
+        
+        let termLines = [];
+        for (let i = 0; i < 20; i++) {
+            termLines.push({
+                text: termCommands[Math.floor(Math.random() * termCommands.length)],
+                x: Math.random() * 600 + 20,
+                y: Math.random() * 1280,
+                speed: (Math.random() * 3.2 + 1.5) * (Math.random() > 0.5 ? 1 : -1),
+                opacity: Math.random() * 0.55 + 0.3
+            });
+        }
+
+        let ripples = [];
+        let beatCooldown = 0;
+
+        function setFilter(filter, btn) {
+            currentFilter = filter;
+            document.querySelectorAll('.btn-effect').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+
+        async function initCamera() {
+            try {
+                if (videoStream) {
+                    videoStream.getTracks().forEach(track => track.stop());
+                }
+                videoStream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { facingMode: currentFacingMode, width: { ideal: 720 }, height: { ideal: 1280 } }, 
+                    audio: false 
+                });
+                webcam.srcObject = videoStream;
+                await webcam.play();
+            } catch (err) {
+                alert("⚠️ Error de cámara: " + err.message);
+                throw err;
+            }
+        }
+
+        btnSwitchCam.addEventListener('click', async () => {
+            await turnOffTorch();
+            currentFacingMode = currentFacingMode === 'user' ? 'environment' : 'user';
+            btnSwitchCam.textContent = currentFacingMode === 'user' ? '🔄 Cambiar a Cámara Trasera (Flash)' : '🔄 Cambiar a Cámara Frontal';
+            await initCamera();
+        });
+
+        function renderLoop() {
+            if (webcam.readyState === webcam.HAVE_ENOUGH_DATA) {
+                if (canvas.width !== webcam.videoWidth || canvas.height !== webcam.videoHeight) {
+                    canvas.width = webcam.videoWidth || 720;
+                    canvas.height = webcam.videoHeight || 1280;
+                }
+
+                let audioLevel = 0;
+                let audioPlaying = false;
+                if (analyser && !recordAudio.paused) {
+                    audioPlaying = true;
+                    const data = new Uint8Array(analyser.frequencyBinCount);
+                    analyser.getByteFrequencyData(data);
+                    let sum = 0;
+                    for(let i=0; i<16; i++) sum += data[i];
+                    audioLevel = sum / 16;
+                }
+
+                let beatIntensity = audioLevel / 110;
+                let pulse = 1.0;
+                if (audioPlaying && audioLevel > 50) {
+                    pulse = 1.0 + (audioLevel / 400);
+                }
+
+                if (torchEnabled && videoStream && audioPlaying) {
+                    const track = videoStream.getVideoTracks()[0];
+                    if (track && track.getCapabilities && track.getCapabilities().torch) {
+                        torchThrottle++;
+                        let targetTorch = audioLevel > 55 && (Math.floor(torchThrottle / 3) % 2 === 0);
+                        if (targetTorch !== lastAppliedTorch) {
+                            lastAppliedTorch = targetTorch;
+                            track.applyConstraints({ advanced: [{ torch: targetTorch }] }).catch(() => {});
+                        }
+                    }
+                } else if (!torchEnabled && lastAppliedTorch) {
+                    turnOffTorch();
+                }
+
+                if (audioPlaying && audioLevel > 55) {
+                    beatCooldown++;
+                    if (beatCooldown > 7) {
+                        ripples.push({
+                            x: Math.random() * canvas.width,
+                            y: Math.random() * canvas.height,
+                            radius: 10,
+                            maxRadius: Math.random() * 320 + 200,
+                            opacity: 0.7
+                        });
+                        beatCooldown = 0;
+                    }
+                }
+
+                ctx.fillStyle = '#010101';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                if (currentFilter === 'sistema-z') {
+                    ctx.save();
+                    ctx.globalCompositeOperation = 'screen';
+                    smokeParticles.forEach(p => {
+                        p.y += p.speedY - (audioPlaying ? beatIntensity * 1.5 : 0.3);
+                        p.x += p.speedX;
+                        p.radius += p.growth;
+
+                        if (p.y < -p.radius) {
+                            p.y = canvas.height + p.radius;
+                            p.x = Math.random() * canvas.width;
+                            p.radius = Math.random() * 260 + 110;
+                        }
+
+                        let grad = ctx.createRadialGradient(p.x, p.y, 2, p.x, p.y, p.radius);
+                        if (p.isRedTint) {
+                            grad.addColorStop(0, `rgba(180, 20, 20, ${p.opacity * 0.4})`);
+                            grad.addColorStop(0.5, `rgba(80, 10, 10, ${p.opacity * 0.25})`);
+                            grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+                        } else {
+                            grad.addColorStop(0, `rgba(220, 220, 220, ${p.opacity * 0.45})`);
+                            grad.addColorStop(0.5, `rgba(90, 90, 90, ${p.opacity * 0.3})`);
+                            grad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+                        }
+                        
+                        ctx.fillStyle = grad;
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                        ctx.fill();
+                    });
+                    ctx.restore();
+                }
+
+                ctx.save();
+                ctx.translate(canvas.width / 2, canvas.height / 2);
+                ctx.scale(pulse, pulse);
+                ctx.translate(-canvas.width / 2, -canvas.height / 2);
+
+                if (currentFilter === 'sistema-z') {
+                    ctx.filter = 'contrast(1.2) brightness(1.05) saturate(1.1)';
+                } else if (currentFilter === 'rojo') {
+                    ctx.filter = 'contrast(1.5) saturate(2.2) sepia(0.4) hue-rotate(315deg) brightness(0.95)';
+                } else if (currentFilter === 'oscuro') {
+                    ctx.filter = 'grayscale(0.3) contrast(1.6) brightness(0.9)';
+                }
+
+                ctx.drawImage(webcam, 0, 0, canvas.width, canvas.height);
+
+                let isGlitching = (audioPlaying && audioLevel > 60);
+                if (isGlitching && currentFilter === 'sistema-z') {
+                    let sliceY = Math.random() * (canvas.height - 100);
+                    let sliceH = Math.random() * 25 + 5;
+                    let shift = (Math.random() - 0.5) * 18;
+                    ctx.drawImage(webcam, 0, sliceY, canvas.width, sliceH, shift, sliceY, canvas.width, sliceH);
+
+                    ctx.fillStyle = Math.random() > 0.5 ? 'rgba(255, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.08)';
+                    ctx.fillRect(0, sliceY, canvas.width, sliceH);
+                }
+
+                ctx.restore();
+
+                if (currentFilter === 'sistema-z') {
+                    ctx.save();
+                    for (let i = ripples.length - 1; i >= 0; i--) {
+                        let r = ripples[i];
+                        r.radius += 7;
+                        r.opacity -= 0.02;
+
+                        if (r.opacity <= 0 || r.radius >= r.maxRadius) {
+                            ripples.splice(i, 1);
+                            continue;
+                        }
+
+                        let waveGrad = ctx.createRadialGradient(r.x, r.y, 0, r.x, r.y, r.radius);
+                        waveGrad.addColorStop(0, `rgba(255, 30, 30, 0)`);
+                        waveGrad.addColorStop(0.7, `rgba(255, 30, 30, ${r.opacity * 0.3})`);
+                        waveGrad.addColorStop(1, `rgba(0, 0, 0, 0)`);
+
+                        ctx.fillStyle = waveGrad;
+                        ctx.beginPath();
+                        ctx.arc(r.x, r.y, r.radius, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                    ctx.restore();
+
+                    ctx.font = 'bold 12px monospace';
+                    termLines.forEach(line => {
+                        line.y += line.speed;
+                        if (line.y > canvas.height + 20) {
+                            line.y = -20;
+                            line.text = termCommands[Math.floor(Math.random() * termCommands.length)];
+                        } else if (line.y < -20) {
+                            line.y = canvas.height + 20;
+                            line.text = termCommands[Math.floor(Math.random() * termCommands.length)];
+                        }
+                        
+                        ctx.fillStyle = line.text.includes('root@z-system') ? `rgba(255, 50, 50, ${line.opacity})` : `rgba(190, 190, 190, ${line.opacity})`;
+                        ctx.fillText(line.text, line.x, line.y);
+                    });
+                }
+
+                ctx.fillStyle = 'rgba(0,0,0,0.85)';
+                ctx.fillRect(canvas.width - 340, canvas.height - 65, 325, 50);
+                ctx.strokeStyle = '#ff0000';
+                ctx.lineWidth = 1.5;
+                ctx.strokeRect(canvas.width - 340, canvas.height - 65, 325, 50);
+                
+                ctx.fillStyle = '#ff2222';
+                ctx.font = 'bold 12px sans-serif';
+                ctx.fillText('ENYI CIENTIFICO OMOTICHI', canvas.width - 330, canvas.height - 40);
+                
+                ctx.fillStyle = '#ff6666';
+                ctx.font = 'bold 11px sans-serif';
+                ctx.fillText('« El de las Mil Voces » 🔺', canvas.width - 330, canvas.height - 20);
+            }
+            requestAnimationFrame(renderLoop);
+        }
+
+        btnStart.addEventListener('click', async () => {
+            try {
+                await initCamera();
+                renderLoop();
+
+                btnStart.style.display = 'none';
+                btnSwitchCam.style.display = 'block';
+                btnRecord.style.display = 'block';
+                panelEffects.style.display = 'flex';
+
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.state === 'suspended') await audioCtx.resume();
+
+                if (!sourceNode) {
+                    sourceNode = audioCtx.createMediaElementSource(recordAudio);
+                    analyser = audioCtx.createAnalyser();
+                    analyser.fftSize = 256;
+                    destinationNode = audioCtx.createMediaStreamDestination();
+                    sourceNode.connect(analyser);
+                    analyser.connect(destinationNode);
+                    analyser.connect(audioCtx.destination);
+                }
+
+                audioStream = destinationNode.stream;
+                const canvasStream = canvas.captureStream(30);
+                const audioTrack = audioStream.getAudioTracks()[0];
+                combinedStream = new MediaStream([canvasStream.getVideoTracks()[0], audioTrack]);
+
+                let options = { mimeType: 'video/mp4;codecs=avc1.42E01E,mp4a.40.2' };
+                if (!MediaRecorder.isTypeSupported(options.mimeType)) options = { mimeType: 'video/webm;codecs=h264,opus' };
+                if (!MediaRecorder.isTypeSupported(options.mimeType)) options = { mimeType: 'video/webm;codecs=vp8,opus' };
+                if (!MediaRecorder.isTypeSupported(options.mimeType)) options = {};
+
+                mediaRecorder = new MediaRecorder(combinedStream, options);
+                
+                mediaRecorder.ondataavailable = e => {
+                    if (e.data && e.data.size > 0) recordedChunks.push(e.data);
+                };
+                
+                mediaRecorder.onstop = async () => {
+                    await turnOffTorch();
+                    let mime = mediaRecorder.mimeType || 'video/webm';
+                    let ext = mime.includes('mp4') ? 'mp4' : 'webm';
+                    const blob = new Blob(recordedChunks, { type: mime });
+                    const url = URL.createObjectURL(blob);
+                    
+                    downloadVideo.href = url;
+                    downloadVideo.download = `SistemaZ_Omotichi_TikTok.${ext}`;
+                    downloadVideo.style.display = 'block';
+
+                    if (navigator.share && navigator.canShare) {
+                        const file = new File([blob], `SistemaZ_TikTok.${ext}`, { type: mime });
+                        if (navigator.canShare({ files: [file] })) {
+                            btnShareSocial.style.display = 'block';
+                            btnShareSocial.onclick = async () => {
+                                try {
+                                    await navigator.share({ title: 'Sistema Z - Omotichi', text: 'Tierra de Mafia 🔺', files: [file] });
+                                } catch (err) {}
+                            };
+                        }
+                    }
+                };
+            } catch (err) {
+                alert("Error al iniciar estudio: " + err.message);
+            }
+        });
+
+        btnRecord.addEventListener('click', async () => {
+            try {
+                if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+                recordedChunks = [];
+                recordAudio.currentTime = 0;
+                
+                await recordAudio.play();
+                mediaRecorder.start();
+
+                btnRecord.style.display = 'none';
+                btnSwitchCam.style.display = 'none';
+                btnStop.style.display = 'block';
+                
+                secondsElapsed = 0;
+                recTimer.style.display = 'block';
+                timerInterval = setInterval(() => {
+                    secondsElapsed++;
+                    let m = Math.floor(secondsElapsed / 60);
+                    let s = secondsElapsed % 60;
+                    recTimer.textContent = `🔴 Grabando Reel: ${m < 10 ? '0':''}${m}:${s < 10 ? '0':''}${s}`;
+                }, 1000);
+            } catch (err) {
+                alert("Error al grabar: " + err.message);
+            }
+        });
+
+        btnStop.addEventListener('click', async () => {
+            clearInterval(timerInterval);
+            recTimer.style.display = 'none';
+            await turnOffTorch();
+            if (mediaRecorder && mediaRecorder.state !== 'inactive') mediaRecorder.stop();
+            recordAudio.pause();
+            btnStop.style.display = 'none';
+            btnSwitchCam.style.display = 'block';
+            btnRecord.style.display = 'block';
+        });
+    </script>
+
+    <script>
+    function handleZUpload(event) {
+        event.preventDefault();
+        const artist = document.getElementById('up-artist').value;
+        const title = document.getElementById('up-title').value;
+        const fileInput = document.getElementById('up-file');
+        const statusDiv = document.getElementById('upload-status');
+        if (fileInput.files.length > 0) {
+            const file = fileInput.files[0];
+            const audioUrl = URL.createObjectURL(file);
+            statusDiv.style.display = 'block';
+            statusDiv.textContent = "Generando Z-Copyright soberano...";
+            setTimeout(() => {
+                const feed = document.getElementById('feed-container') || document.body;
+                const newTrackId = 'Z-MAFIA-' + Math.floor(Math.random() * 89999 + 10000);
+                const htmlCard = `
+                    <div class="track-item" style="background:#111; border-left:4px solid #00ffcc; padding:12px; margin:10px 0; border-radius:6px; text-align:left;">
+                        <div style="color:#ff5555; font-size:13px; font-weight:bold;">🎙️ ${artist}</div>
+                        <div style="font-weight:bold; font-size:15px; color:#fff;">${title}</div>
+                        <audio controls style="width: 100%; margin-top: 6px;">
+                            <source src="${audioUrl}" type="${file.type}">
+                        </audio>
+                        <div style="font-size: 11px; color: #888; font-family: monospace; margin-top: 4px;">🛡️ Z-Copyright ID: ${newTrackId} (Sello Independiente Z)</div>
+                        <a href="${audioUrl}" download="${title.replace(/\s+/g, '_')}.mp3" class="btn-action" style="padding: 6px; font-size: 12px; margin-top: 6px; background:#111; border:1px solid #00ffcc; color:#00ffcc; text-decoration:none; display:inline-block; border-radius:4px;">📥 Descargar MP3</a>
+                    </div>
+                `;
+                if (feed) feed.insertAdjacentHTML('afterbegin', htmlCard);
+                statusDiv.textContent = "Tema publicado con exito en el Nodo Z!";
+                document.getElementById('upload-form').reset();
+            }, 1000);
+        }
+    }
+    </script>
+    </body>
+    </html>
+    
