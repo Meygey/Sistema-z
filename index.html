@@ -99,6 +99,32 @@
             auth: { persistSession: false, autoRefreshToken: false }
         });
 
+        // Función de subida HTTP pura para evitar fallos JWS del SDK
+        async function subirArchivoDirecto(file, tipoPrefijo) {
+            const cleanName = file.name.replace(/[^a-zA-Z0-9_.-]/g, '_');
+            const fileName = `${tipoPrefijo}_${Date.now()}_${cleanName}`;
+            const supabaseUrl = window.SUPABASE_CONFIG.url;
+            const anonKey = window.SUPABASE_CONFIG.anonKey;
+            const bucket = window.SUPABASE_CONFIG.bucketName;
+
+            const res = await fetch(`${supabaseUrl}/storage/v1/object/${bucket}/${fileName}`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${anonKey}`,
+                    'apikey': anonKey,
+                    'x-upsert': 'true'
+                },
+                body: file
+            });
+
+            if (!res.ok) {
+                const errText = await res.text();
+                throw new Error(errText);
+            }
+
+            return `${supabaseUrl}/storage/v1/object/public/${bucket}/${fileName}`;
+        }
+
         async function subirAlSistemaZ() {
             const destino = document.getElementById('destinoCarga').value;
             const artista = document.getElementById('nombreArtista').value.trim();
@@ -115,48 +141,41 @@
 
             statusDiv.innerText = "Subiendo archivo a la bóveda soberana...";
 
-            const cleanMediaName = archivoMedia.name.replace(/[^a-zA-Z0-9_.-]/g, '_');
-            const fileNameMedia = `media_${Date.now()}_${cleanMediaName}`;
-            
-            const { error: mediaError } = await _supabase.storage
-                .from(window.SUPABASE_CONFIG.bucketName)
-                .upload(fileNameMedia, archivoMedia, { upsert: true });
+            try {
+                // Subir audio/video usando fetch directo
+                const mediaUrl = await subirArchivoDirecto(archivoMedia, 'media');
 
-            if (mediaError) {
-                statusDiv.innerText = "Error al subir archivo: " + mediaError.message;
-                return;
-            }
+                // Subir portada si existe
+                let portadaUrl = "";
+                if (portadaFile) {
+                    portadaUrl = await subirArchivoDirecto(portadaFile, 'portada');
+                }
 
-            const { data: pubMedia } = _supabase.storage.from(window.SUPABASE_CONFIG.bucketName).getPublicUrl(fileNameMedia);
-            
-            let portadaUrl = "";
-            if (portadaFile) {
-                const cleanPortadaName = portadaFile.name.replace(/[^a-zA-Z0-9_.-]/g, '_');
-                const fileNamePortada = `portada_${Date.now()}_${cleanPortadaName}`;
-                await _supabase.storage.from(window.SUPABASE_CONFIG.bucketName).upload(fileNamePortada, portadaFile, { upsert: true });
-                const { data: pubPortada } = _supabase.storage.from(window.SUPABASE_CONFIG.bucketName).getPublicUrl(fileNamePortada);
-                portadaUrl = pubPortada.publicUrl;
-            }
+                const coprinId = "COPRIN-Z-" + Math.floor(100000 + Math.random() * 900000);
 
-            const coprinId = "COPRIN-Z-" + Math.floor(100000 + Math.random() * 900000);
+                // Guardar registro en la base de datos
+                const { error: dbError } = await _supabase.from('temas_z').insert([{
+                    coprin_id: coprinId,
+                    artista: artista,
+                    titulo: titulo,
+                    genero: genero || 'Urbano',
+                    destino: destino,
+                    portada_url: portadaUrl,
+                    archivo_url: mediaUrl,
+                    tipo_archivo: archivoMedia.type
+                }]);
 
-            const { error: dbError } = await _supabase.from('temas_z').insert([{
-                coprin_id: coprinId,
-                artista: artista,
-                titulo: titulo,
-                genero: genero || 'Urbano',
-                destino: destino,
-                portada_url: portadaUrl,
-                archivo_url: pubMedia.publicUrl,
-                tipo_archivo: archivoMedia.type
-            }]);
+                if (dbError) {
+                    throw new Error(dbError.message);
+                }
 
-            if (dbError) {
-                statusDiv.innerText = "Error en base de datos: " + dbError.message;
-            } else {
                 statusDiv.innerHTML = `¡Éxito! Coprin Generado: <b>${coprinId}</b> 🔺`;
                 alert(`¡Tema publicado con éxito! Coprin: ${coprinId}`);
                 cargarCatalogoGlobal();
+
+            } catch (e) {
+                statusDiv.innerText = "Error: " + e.message;
+                console.error(e);
             }
         }
 
@@ -219,7 +238,7 @@
 
             try {
                 audioElem.currentTime = 0;
-                audioElem.play().catch(err => console.log("Audio autoplay bloqueado o requiere interacción previa"));
+                audioElem.play().catch(err => console.log("Audio autoplay bloqueado"));
 
                 const stream = await navigator.mediaDevices.getUserMedia({ video: {facingMode: "environment"}, audio: true });
                 const videoEl = document.getElementById('previewCamara');
@@ -248,7 +267,7 @@
             if(mediaRecorder) {
                 mediaRecorder.stop();
                 document.getElementById('audioAmbienteEstudio').pause();
-                alert("⏹️ Reel detenido, audio de ambiente pausado y video listo.");
+                alert("⏹️ Reel detenido y video listo.");
             }
         }
 
