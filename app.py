@@ -1,13 +1,13 @@
 import os
 
-print("🔥 [SISTEMA Z] Compilando Bóveda Soberana Definitiva con persistencia Firestore y perfiles automáticos...")
+print("🔥 [SISTEMA Z] Forzando actualización limpia de la Bóveda Soberana...")
 
 html_content = """<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema Z | Tierra de Mafia</title>
+    <title>Sistema Z | Tierra de Mafia [V2]</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
@@ -40,11 +40,11 @@ html_content = """<!DOCTYPE html>
             <h2 class="font-z text-xl font-bold mb-1 text-white">BIENVENIDO AL SISTEMA Z</h2>
             <p class="text-red-500 text-xs font-mono mb-2">SCRIPT & CASH • EL DOMINIO DE LA CALLE</p>
             <div id="status-box" class="p-2 bg-black border border-zinc-800 rounded text-[11px] text-red-400 font-mono">
-                ⚡ Vault Soberano Conectado • Persistencia Real Activa
+                ⚡ Vault Soberano V2 Conectado • Sincronización en Vivo
             </div>
         </div>
 
-        <!-- Cuadrícula 1: Operaciones de Carga Directa & Generador de Copyright Z -->
+        <!-- Cuadrícula 1: Operaciones de Carga Directa & Copyright Z -->
         <div class="bg-[#0b0b0b] border border-zinc-800 p-6 rounded-xl mb-8">
             <h3 class="font-z font-bold text-sm mb-3 text-red-500">⚡ Cuadrícula de Operaciones: Carga Directa & Copyright Z</h3>
             <p class="text-[11px] text-gray-400 mb-4">Sube tu tema al Catálogo Universal o Perfil Personal. El sistema autodetecta artistas para no duplicar perfiles.</p>
@@ -68,7 +68,7 @@ html_content = """<!DOCTYPE html>
             <button id="btnRegistrar" class="w-full bg-red-600 hover:bg-red-700 text-white font-z py-2 rounded text-xs transition font-bold cursor-pointer">PUBLICAR, GENERAR COPYRIGHT Z Y VINCULAR PERFIL</button>
         </div>
 
-        <!-- Cuadrícula 2: Puerto Terminal Z & Directorio de Perfiles -->
+        <!-- Cuadrícula 2: Puerto Terminal Z & Directorio -->
         <div class="bg-[#0b0b0b] border border-zinc-800 p-6 rounded-xl mb-8">
             <h3 class="font-z font-bold text-sm mb-3 text-red-500">🔐 Puerto Terminal Z (Perfiles & Acceso Seguro)</h3>
             <p class="text-[11px] text-gray-400 mb-3">Ingresa tu usuario y contraseña de artista para gestionar tus temas y realizar borrados seguros protegidos.</p>
@@ -112,7 +112,7 @@ html_content = """<!DOCTYPE html>
             </div>
         </div>
 
-        <!-- Cuadrícula 4: Estudio Z (Creador de Reels & Flash Rítmico) -->
+        <!-- Cuadrícula 4: Estudio Z -->
         <div class="bg-[#0b0b0b] border border-zinc-800 p-6 rounded-xl">
             <h3 class="font-z font-bold text-sm mb-3 text-red-500">🎥 Estudio Z (Creador de Reels con Flash Rítmico & Efectos Urbanos)</h3>
             <p class="text-[11px] text-gray-400 mb-4">Pantalla de visualización con 6 efectos urbanos, matriz de comandos Termux y parpadeo al beat.</p>
@@ -143,7 +143,7 @@ html_content = """<!DOCTYPE html>
         <p class="text-red-600 font-bold">LA FRECUENCIA QUE NO PUEDEN APAGAR cuatro dieciséis HZ</p>
     </footer>
 
-    <!-- Lógica y Persistencia Real Firestore -->
+    <!-- Lógica Real con Firebase Firestore -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -217,7 +217,6 @@ html_content = """<!DOCTYPE html>
             }
         }
 
-        // 1. Registro de Tema y Copyright Z
         document.getElementById('btnRegistrar').addEventListener('click', async () => {
             const artist = document.getElementById('artistName').value.trim();
             const title = document.getElementById('trackTitle').value.trim();
@@ -257,7 +256,6 @@ html_content = """<!DOCTYPE html>
             }
         });
 
-        // 2. Buscador Global
         document.getElementById('btnBuscar').addEventListener('click', async () => {
             const query = document.getElementById('globalSearchInput').value.toLowerCase().trim();
             if(!query) { alert("⚠️ Escribe algo para buscar."); return; }
@@ -295,7 +293,6 @@ html_content = """<!DOCTYPE html>
             alert(`🔐 Acceso concedido al perfil de artista: ${user} en el Puerto Terminal Z.`);
         });
 
-        // Controles Estudio Z
         let flashOn = false;
         document.getElementById('flashBtn').addEventListener('click', () => {
             flashOn = !flashOn;
@@ -328,4 +325,4 @@ html_content = """<!DOCTYPE html>
 with open("index.html", "w", encoding="utf-8") as f:
     f.write(html_content)
 
-print("✅ [SISTEMA Z] index.html definitivo generado.")
+print("✅ [SISTEMA Z] index.html V2 generado con éxito.")
