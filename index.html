@@ -105,6 +105,10 @@
 <div id="logPantalla" style="background: #000; color: #0f0; padding: 15px; margin: 10px; font-family: monospace; font-size: 13px; border: 3px solid red; border-radius: 8px; z-index: 999999; position: relative; max-height: 200px; overflow-y: auto;">
     🟢 ESTADO: Depurador Z en línea.
 </div>
+
+<div id="logPantalla" style="background: #000; color: #0f0; padding: 15px; margin: 10px; font-family: monospace; font-size: 13px; border: 3px solid red; border-radius: 8px; z-index: 999999; position: relative; max-height: 200px; overflow-y: auto;">
+    🟢 ESTADO: Depurador Z enlazado directo.
+</div>
 <script>
 function logZ(m) {
     const box = document.getElementById('logPantalla');
@@ -116,12 +120,12 @@ function logZ(m) {
 }
 
 async function subirAlSistemaz() {
-    alert('¡Botón presionado con éxito! Iniciando subida...');
-    logZ('🚀 Botón tocado: procesando campos...');
+    alert('¡Botón presionado con éxito!');
+    logZ('🚀 ¡Clic registrado en el botón!');
     
     const audioInput = document.querySelector('input[type="file"]');
-        alert('❌ Error: No hay archivo seleccionado.');
-        logZ('❌ Error: Falta seleccionar el archivo.');
+        alert('❌ Falta seleccionar el archivo de audio.');
+        logZ('❌ Error: No hay archivo seleccionado.');
         return;
     }
     
@@ -129,13 +133,13 @@ async function subirAlSistemaz() {
     logZ('Archivo detectado: ' + file.name);
     
     const clienteSupabase = window._supabase || window.supabase;
-        alert('❌ Error: Supabase no está cargado.');
-        logZ('❌ Error: Supabase no inicializado.');
+        alert('❌ Supabase no está inicializado.');
+        logZ('❌ Error: Supabase no disponible.');
         return;
     }
     
     try {
-        logZ('Conectando con Supabase (boveda-z)...');
+        logZ('Subiendo a boveda-z...');
         const ruta = 'audio/' + Date.now() + '_' + file.name;
         const { data, error } = await clienteSupabase.storage
             .from('boveda-z')
@@ -144,26 +148,27 @@ async function subirAlSistemaz() {
         if (error) throw error;
         
         alert('¡Éxito! Archivo subido a la boveda-z.');
-        logZ('✅ ¡Archivo subido exitosamente!');
+        logZ('✅ ¡Subida completada con éxito!');
     } catch (err) {
-        alert('❌ Error en Supabase: ' + err.message);
+        alert('❌ Error: ' + err.message);
         logZ('❌ Error Supabase: ' + err.message);
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    logZ('DOM listo.');
+// Ejecutar de inmediato sin esperar DOMContentLoaded
+setTimeout(() => {
+    logZ('Buscando botón en la interfaz...');
     const btn = document.getElementById('btnSubirZ') || document.querySelector('button');
     if (btn) {
         btn.id = 'btnSubirZ';
-        logZ('Botón enlazado.');
+        logZ('✅ ¡Botón enlazado con éxito!');
         btn.onclick = async function(e) {
             e.preventDefault();
             await subirAlSistemaz();
         };
     } else {
-        logZ('❌ Botón no encontrado.');
+        logZ('❌ No se encontró ningún botón.');
     }
-});
+}, 500);
 </script>
 </body></html>
