@@ -107,7 +107,9 @@
             const anonKey = window.SUPABASE_CONFIG.anonKey;
             const bucket = window.SUPABASE_CONFIG.bucketName;
 
-            const res = await fetch(`${supabaseUrl}/storage/v1/object/${bucket}/${fileName}`, {
+            const { data: upData, error: upErr } = await _supabase.storage.from(bucket).upload(fileName, file); if (upErr) throw upErr;
+    const res = { ok: true };
+    // fetch(`${supabaseUrl}/storage/v1/object/${bucket}/${fileName}`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${anonKey}`,
