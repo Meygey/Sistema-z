@@ -1,6 +1,6 @@
 import os
 
-print("🔥 [SISTEMA Z] Reconfigurando motor libre sin bloqueos regionales...")
+print("🔥 [SISTEMA Z] Generando motor soberano con enlaces directos y Vault descentralizado...")
 
 html_content = """<!DOCTYPE html>
 <html lang="es">
@@ -19,41 +19,99 @@ html_content = """<!DOCTYPE html>
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between">
+    <!-- Cabecera Oficial -->
     <header class="border-b border-z p-4 bg-[#080808] sticky top-0 z-50 flex justify-between items-center">
         <div class="flex items-center space-x-3">
             <div class="w-4 h-4 bg-z-red rounded-full animate-pulse glow-red"></div>
-            <h1 class="font-z font-black text-xl tracking-wider text-red-600">SISTEMA <span class="text-white">Z</span></h1>
+            <div>
+                <h1 class="font-z font-black text-lg tracking-wider text-red-600">SISTEMA <span class="text-white">Z</span></h1>
+                <p class="text-[10px] text-zinc-400 font-z">BIENVENIDO AL SISTEMA Z • SCRIPT & CASH</p>
+            </div>
         </div>
-        <span class="text-xs font-z text-red-500 border border-z px-2 py-1 rounded">TIERRA DE MAFIA</span>
+        <div class="text-right">
+            <span class="text-xs font-z text-red-500 border border-z px-2 py-1 rounded block">TIERRA DE MAFIA</span>
+            <span class="text-[10px] text-zinc-500 font-mono">Visitas: <span id="visit-count">416</span></span>
+        </div>
     </header>
 
     <main class="container mx-auto px-4 py-8 max-w-4xl flex-grow">
+        <!-- Estado del Vault -->
         <div class="bg-[#0b0b0b] border border-z rounded-xl p-6 glow-red mb-8">
-            <h2 class="font-z text-2xl font-bold mb-2 text-white">PUERTO TERMINAL <span class="text-red-600">Z</span></h2>
-            <p class="text-gray-400 text-sm mb-4">Plataforma descentralizada de streaming de alta frecuencia (cuatro dieciséis Hz). Sincronizado y libre de censura.</p>
+            <h2 class="font-z text-xl font-bold mb-2 text-white">PUERTO TERMINAL <span class="text-red-600">Z</span></h2>
+            <p class="text-gray-400 text-xs mb-3">Plataforma descentralizada de alta frecuencia (cuatro dieciséis Hz). Almacenamiento libre sincronizado.</p>
             <div id="status-box" class="p-3 bg-black border border-zinc-800 rounded text-xs text-red-400 font-mono">
-                ⚡ Estado: Conectando al Vault descentralizado...
+                ⚡ Estado: Sincronizando Vault soberano...
             </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Cuadrícula 1: Operaciones de Carga Directa & Copyright Z -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <div class="bg-[#0b0b0b] border border-zinc-800 p-6 rounded-xl">
-                <h3 class="font-z font-bold text-lg mb-3 text-red-500">🎧 Registrar Track & Copyright Z</h3>
-                <p class="text-xs text-gray-400 mb-4">Arranca directo con el coro para frenar el scroll. Ingresa el enlace directo del audio.</p>
-                <input type="text" id="trackUrl" placeholder="https://... (URL directa MP3)" class="w-full bg-black border border-zinc-800 p-2 rounded text-xs text-white mb-3 focus:border-red-600 outline-none"/>
-                <input type="text" id="trackTitle" placeholder="Nombre del tema (Ej: Contrabando)" class="w-full bg-black border border-zinc-800 p-2 rounded text-xs text-white mb-3 focus:border-red-600 outline-none"/>
-                <button onclick="alert('Track enlazado al sistema central cuatro dieciséis')" class="w-full bg-red-600 hover:bg-red-700 text-white font-z py-2 rounded text-sm transition font-bold">PUBLICAR EN EL VAULT</button>
+                <h3 class="font-z font-bold text-sm mb-3 text-red-500">🎧 Carga Directa & Copyright Z</h3>
+                <p class="text-[11px] text-gray-400 mb-4">Arranca directo con el coro para frenar el scroll. Usa enlaces de servidores libres (Internet Archive, etc.).</p>
+                
+                <select id="destType" class="w-full bg-black border border-zinc-800 p-2 rounded text-xs text-white mb-3 outline-none focus:border-red-600">
+                    <option value="catalog">Catálogo Universal</option>
+                    <option value="profile">Perfil Personal de Artista</option>
+                </select>
+
+                <input type="text" id="artistName" placeholder="Nombre del Artista / Autor (Ej: Enyi el Científico)" class="w-full bg-black border border-zinc-800 p-2 rounded text-xs text-white mb-3 outline-none focus:border-red-600"/>
+                <input type="text" id="trackTitle" placeholder="Título del Tema (Coro inicial)" class="w-full bg-black border border-zinc-800 p-2 rounded text-xs text-white mb-3 outline-none focus:border-red-600"/>
+                <input type="text" id="mediaUrl" placeholder="Enlace directo del Audio/Video (MP3, WAV, MP4)" class="w-full bg-black border border-zinc-800 p-2 rounded text-xs text-white mb-3 outline-none focus:border-red-600"/>
+                
+                <button onclick="alert('Certificado Copyright Z generado. Track registrado en el Vault.')" class="w-full bg-red-600 hover:bg-red-700 text-white font-z py-2 rounded text-xs transition font-bold">PUBLICAR EN EL VAULT</button>
             </div>
-            <div class="bg-[#0b0b0b] border border-zinc-800 p-6 rounded-xl">
-                <h3 class="font-z font-bold text-lg mb-3 text-red-500">🎥 Estudio Z (Reels & Flash)</h3>
-                <p class="text-xs text-gray-400 mb-4">Generador de visuales con destello de flash sincronizado para TikTok e Instagram.</p>
-                <button onclick="alert('Estudio Z activo: Flash rítmico listo para disparar')" class="w-full border border-red-600 text-red-500 hover:bg-red-950 font-z py-2 rounded text-sm transition font-bold">ABRIR ESTUDIO Z</button>
+
+            <!-- Cuadrícula 2: Puerto Terminal Z & Directorio -->
+            <div class="bg-[#0b0b0b] border border-zinc-800 p-6 rounded-xl flex flex-col justify-between">
+                <div>
+                    <h3 class="font-z font-bold text-sm mb-3 text-red-500">🔐 Puerto Terminal Z (Perfiles)</h3>
+                    <p class="text-[11px] text-gray-400 mb-3">Acceso seguro para artistas. Ingresa tu usuario y contraseña para gestionar tu perfil y borrados protegidos.</p>
+                    
+                    <input type="text" id="loginUser" placeholder="Usuario / Alias de Artista" class="w-full bg-black border border-zinc-800 p-2 rounded text-xs text-white mb-2 outline-none focus:border-red-600"/>
+                    <input type="password" id="loginPass" placeholder="Contraseña" class="w-full bg-black border border-zinc-800 p-2 rounded text-xs text-white mb-3 outline-none focus:border-red-600"/>
+                </div>
+                <div class="space-y-2">
+                    <button onclick="alert('Acceso concedido al perfil de artista')" class="w-full border border-red-600 text-red-500 hover:bg-red-950 font-z py-2 rounded text-xs transition font-bold">INGRESAR A MI PERFIL</button>
+                    <input type="text" id="searchArtist" placeholder="🔍 Buscar perfil de artista..." class="w-full bg-black border border-zinc-800 p-2 rounded text-xs text-white outline-none focus:border-red-600"/>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cuadrícula 3: Buscador Global & Tendencias -->
+        <div class="bg-[#0b0b0b] border border-zinc-800 p-6 rounded-xl mb-8">
+            <h3 class="font-z font-bold text-sm mb-3 text-red-500">🌐 Buscador Global & Tendencias (Trendy)</h3>
+            <p class="text-[11px] text-gray-400 mb-4">Busca temas del catálogo o perfiles, descarga en audio/video y explora la élite mundial conectado con la red.</p>
+            <div class="flex gap-2 mb-4">
+                <input type="text" placeholder="Buscar música, videos o artistas de la élite..." class="flex-grow bg-black border border-zinc-800 p-2 rounded text-xs text-white outline-none focus:border-red-600"/>
+                <button onclick="alert('Buscando en la red global...')" class="bg-red-600 hover:bg-red-700 text-white font-z px-4 py-2 rounded text-xs font-bold">BUSCAR</button>
+            </div>
+            <!-- Reproductor y Listado en vivo -->
+            <div class="p-3 bg-black border border-zinc-900 rounded text-xs text-zinc-400">
+                🎵 <span class="text-white font-bold">Reproductor Universal Z:</span> Ningún tema seleccionado. Reproduce contenido local o externo con opciones de descarga y compartir.
+            </div>
+        </div>
+
+        <!-- Cuadrícula 4: Estudio Z (Creador de Reels & Flash Rítmico) -->
+        <div class="bg-[#0b0b0b] border border-zinc-800 p-6 rounded-xl">
+            <h3 class="font-z font-bold text-sm mb-3 text-red-500">🎥 Estudio Z (Creador de Reels con Flash Rítmico)</h3>
+            <p class="text-[11px] text-gray-400 mb-4">Graba contenido con efectos urbanos, distorsión, interferencia de matriz y flash sincronizado al beat.</p>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4">
+                <button onclick="alert('Flash rítmico activado')" class="bg-black border border-red-600 text-red-500 p-2 rounded text-[10px] font-z font-bold hover:bg-red-950">⚡ FLASH RÍTMICO</button>
+                <button onclick="alert('Efecto Glitch / Matriz activo')" class="bg-black border border-zinc-800 text-zinc-300 p-2 rounded text-[10px] font-z hover:border-red-600">👾 EFECTO GLITCH</button>
+                <button onclick="alert('Cámara frontal/trasera lista')" class="bg-black border border-zinc-800 text-zinc-300 p-2 rounded text-[10px] font-z hover:border-red-600">📷 CAM / CÁMARA</button>
+                <button onclick="alert('Grabación pausada / reanudada')" class="bg-black border border-zinc-800 text-zinc-300 p-2 rounded text-[10px] font-z hover:border-red-600">⏺️ REC / PAUSE</button>
+            </div>
+            <div class="p-4 bg-black border border-zinc-900 rounded text-center text-xs text-zinc-500 font-mono">
+                [ Pantalla de Previsualización del Estudio Z — Marca de Agua Activa ]
             </div>
         </div>
     </main>
 
-    <footer class="border-t border-zinc-900 text-center py-4 text-xs text-gray-600 font-z">
-        © 2026 TIERRA DE MAFIA • SISTEMA Z • cuatro dieciséis
+    <!-- Pie de Página Oficial -->
+    <footer class="border-t border-zinc-900 text-center py-4 text-xs text-gray-500 font-z space-y-1">
+        <p>ENYI CIENTÍFICO OMOTICHI • SCRIPT & CASH • TIERRA DE MAFIA</p>
+        <p class="text-red-600 font-bold">LA FRECUENCIA QUE NO PUEDEN APAGAR 416HZ</p>
     </footer>
 
     <script type="module">
@@ -73,10 +131,10 @@ html_content = """<!DOCTYPE html>
         try {
             const app = initializeApp(firebaseConfig);
             const db = getFirestore(app);
-            document.getElementById('status-box').innerHTML = "🟢 Conectado al Vault de Firebase con éxito";
+            document.getElementById('status-box').innerHTML = "🟢 Vault Soberano conectado con éxito (Sin restricciones regionales)";
             document.getElementById('status-box').className = "p-3 bg-black border border-green-800 rounded text-xs text-green-400 font-mono";
         } catch (e) {
-            document.getElementById('status-box').innerHTML = "🔴 Error: " + e.message;
+            document.getElementById('status-box').innerHTML = "🔴 Error en el Vault: " + e.message;
         }
     </script>
 </body>
@@ -86,4 +144,4 @@ html_content = """<!DOCTYPE html>
 with open("index.html", "w", encoding="utf-8") as f:
     f.write(html_content)
 
-print("✅ [SISTEMA Z] index.html actualizado y blindado.")
+print("✅ [SISTEMA Z] index.html soberano generado con éxito.")
