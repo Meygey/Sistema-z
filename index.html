@@ -94,20 +94,9 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="config.js"></script>
     
-<div id="logPantalla" style="background: #000; color: #0f0; padding: 15px; margin: 10px; font-family: monospace; font-size: 13px; border: 3px solid red; border-radius: 8px; z-index: 999999; position: relative; max-height: 200px; overflow-y: auto;">
-    🟢 ESTADO: Depurador Z listo para subir.
-</div>
 
 <div id="logPantalla" style="background: #000; color: #0f0; padding: 15px; margin: 10px; font-family: monospace; font-size: 13px; border: 3px solid red; border-radius: 8px; z-index: 999999; position: relative; max-height: 200px; overflow-y: auto;">
-    🟢 ESTADO: Sistema Z listo para procesar metadatos.
-</div>
-
-<div id="logPantalla" style="background: #000; color: #0f0; padding: 15px; margin: 10px; font-family: monospace; font-size: 13px; border: 3px solid red; border-radius: 8px; z-index: 999999; position: relative; max-height: 200px; overflow-y: auto;">
-    🟢 ESTADO: Depurador Z en línea.
-</div>
-
-<div id="logPantalla" style="background: #000; color: #0f0; padding: 15px; margin: 10px; font-family: monospace; font-size: 13px; border: 3px solid red; border-radius: 8px; z-index: 999999; position: relative; max-height: 200px; overflow-y: auto;">
-    🟢 ESTADO: Depurador Z enlazado directo.
+    🟢 SISTEMA Z: Depurador Limpio y Activo.
 </div>
 <script>
 function logZ(m) {
@@ -121,7 +110,7 @@ function logZ(m) {
 
 async function subirAlSistemaz() {
     alert('¡Botón presionado con éxito!');
-    logZ('🚀 ¡Clic registrado en el botón!');
+    logZ('🚀 ¡Clic registrado!');
     
     const audioInput = document.querySelector('input[type="file"]');
         alert('❌ Falta seleccionar el archivo de audio.');
@@ -130,7 +119,7 @@ async function subirAlSistemaz() {
     }
     
     const file = audioInput.files[0];
-    logZ('Archivo detectado: ' + file.name);
+    logZ('Archivo: ' + file.name);
     
     const clienteSupabase = window._supabase || window.supabase;
         alert('❌ Supabase no está inicializado.');
@@ -148,27 +137,25 @@ async function subirAlSistemaz() {
         if (error) throw error;
         
         alert('¡Éxito! Archivo subido a la boveda-z.');
-        logZ('✅ ¡Subida completada con éxito!');
+        logZ('✅ ¡Subida completada!');
     } catch (err) {
         alert('❌ Error: ' + err.message);
         logZ('❌ Error Supabase: ' + err.message);
     }
 }
 
-// Ejecutar de inmediato sin esperar DOMContentLoaded
 setTimeout(() => {
-    logZ('Buscando botón en la interfaz...');
     const btn = document.getElementById('btnSubirZ') || document.querySelector('button');
     if (btn) {
         btn.id = 'btnSubirZ';
-        logZ('✅ ¡Botón enlazado con éxito!');
+        logZ('✅ Botón listo para disparar.');
         btn.onclick = async function(e) {
             e.preventDefault();
             await subirAlSistemaz();
         };
     } else {
-        logZ('❌ No se encontró ningún botón.');
+        logZ('❌ No se encontró el botón.');
     }
-}, 500);
+}, 400);
 </script>
 </body></html>
