@@ -1,6 +1,6 @@
 import os
 
-print("🔥 [SISTEMA Z] Construyendo arquitectura definitiva desde los cimientos...")
+print("🔥 [SISTEMA Z] Inyectando motor de Likes, Comentarios y Algoritmo Trendy...")
 
 html_content = """<!DOCTYPE html>
 <html lang="es">
@@ -38,9 +38,9 @@ html_content = """<!DOCTYPE html>
         <!-- Estado del Vault -->
         <div class="bg-[#0b0b0b] border border-z rounded-xl p-6 glow-red mb-8">
             <h2 class="font-z text-xl font-bold mb-2 text-white">PUERTO TERMINAL <span class="text-red-600">Z</span></h2>
-            <p class="text-gray-400 text-xs mb-3">Plataforma descentralizada de alta frecuencia (cuatro dieciséis Hz). Bóveda Soberana activa.</p>
+            <p class="text-gray-400 text-xs mb-3">Plataforma descentralizada de alta frecuencia (cuatro dieciséis Hz). Algoritmo Trendy activo.</p>
             <div id="status-box" class="p-3 bg-black border border-zinc-800 rounded text-xs text-red-400 font-mono">
-                ⚡ Estado: Conectando al Vault descentralizado...
+                ⚡ Estado: Sincronizando Likes, Comentarios y Vault...
             </div>
         </div>
 
@@ -48,7 +48,7 @@ html_content = """<!DOCTYPE html>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <div class="bg-[#0b0b0b] border border-zinc-800 p-6 rounded-xl">
                 <h3 class="font-z font-bold text-sm mb-3 text-red-500">🎧 Carga Directa & Copyright Z</h3>
-                <p class="text-[11px] text-gray-400 mb-4">Sube tu tema desde la galería. El sistema genera sello digital y controla perfiles automáticos.</p>
+                <p class="text-[11px] text-gray-400 mb-4">Sube tu tema desde la galería. Se genera sello digital y perfil automático.</p>
                 
                 <select id="destType" class="w-full bg-black border border-zinc-800 p-2 rounded text-xs text-white mb-3 outline-none focus:border-red-600">
                     <option value="catalog">Catálogo Universal</option>
@@ -83,24 +83,37 @@ html_content = """<!DOCTYPE html>
             </div>
         </div>
 
-        <!-- Cuadrícula 3: Buscador Global & Reproductor Universal -->
+        <!-- Cuadrícula 3: Buscador Global, Reproductor & Muro de Tendencias (Trendy) -->
         <div class="bg-[#0b0b0b] border border-zinc-800 p-6 rounded-xl mb-8">
-            <h3 class="font-z font-bold text-sm mb-3 text-red-500">🌐 Buscador Global & Reproductor Z</h3>
-            <p class="text-[11px] text-gray-400 mb-4">Busca en el catálogo y perfiles, reproduce al instante y descarga en audio o video.</p>
+            <h3 class="font-z font-bold text-sm mb-3 text-red-500">🌐 Buscador Global, Reproductor & Tendencias (Trendy)</h3>
+            <p class="text-[11px] text-gray-400 mb-4">Temas posicionados por el algoritmo del Sistema Z en base a visualizaciones, likes y comentarios.</p>
             <div class="flex gap-2 mb-4">
                 <input type="text" id="globalSearchInput" placeholder="Escribe el nombre del tema o artista..." class="flex-grow bg-black border border-zinc-800 p-2 rounded text-xs text-white outline-none focus:border-red-600"/>
                 <button onclick="buscarTemas()" class="bg-red-600 hover:bg-red-700 text-white font-z px-4 py-2 rounded text-xs font-bold">BUSCAR</button>
             </div>
+            
             <!-- Reproductor Universal Operativo -->
-            <div class="p-4 bg-black border border-zinc-900 rounded space-y-3">
+            <div class="p-4 bg-black border border-zinc-900 rounded space-y-3 mb-4">
                 <div class="flex items-center justify-between">
                     <span class="text-xs text-red-500 font-z font-bold">🎵 REPRODUCTOR ACTIVO</span>
                     <span id="nowPlayingTitle" class="text-xs text-zinc-300 font-mono">Ningún tema en reproducción</span>
                 </div>
                 <audio id="globalAudioPlayer" controls class="w-full h-8 accent-red-600"></audio>
-                <div class="flex gap-2">
-                    <button onclick="alert('Descargando archivo en alta calidad...')" class="flex-1 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 py-1.5 rounded text-[10px] font-z">📥 DESCARGAR</button>
-                    <button onclick="alert('Enlace copiado al portapapeles')" class="flex-1 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 py-1.5 rounded text-[10px] font-z">🔗 COMPARTIR</button>
+                
+                <!-- Sistema de Likes y Comentarios en Vivo para el Tema en Reproducción -->
+                <div class="border-t border-zinc-800 pt-3 mt-2 flex items-center justify-between">
+                    <button onclick="darLikeActivo()" id="likeBtn" class="bg-zinc-900 hover:bg-red-950 text-red-500 border border-red-600 px-3 py-1 rounded text-xs font-z font-bold">❤️ DAR LIKE (<span id="likeCount">416</span>)</button>
+                    <span class="text-[10px] text-zinc-400 font-mono">Algoritmo Trendy: <span id="trendyScore" class="text-green-400">99.9% Frecuencia 4 16</span></span>
+                </div>
+
+                <div class="space-y-2 mt-3">
+                    <div id="commentsList" class="max-h-24 overflow-y-auto space-y-1 text-xs text-zinc-300 bg-zinc-950 p-2 rounded border border-zinc-900">
+                        <div class="text-[10px] text-red-500 font-bold">Enyi el Científico: El sistema tiene un solo dueño 🔺</div>
+                    </div>
+                    <div class="flex gap-2">
+                        <input type="text" id="commentInput" placeholder="Escribe tu comentario en el Sistema Z..." class="flex-grow bg-black border border-zinc-800 p-1.5 rounded text-xs text-white outline-none focus:border-red-600"/>
+                        <button onclick="enviarComentario()" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded text-xs font-z font-bold">COMENTAR</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -137,10 +150,10 @@ html_content = """<!DOCTYPE html>
         <p class="text-red-600 font-bold">LA FRECUENCIA QUE NO PUEDEN APAGAR cuatro dieciséis HZ</p>
     </footer>
 
-    <!-- Scripts de Lógica del Sistema Z -->
+    <!-- Scripts de Lógica del Sistema Z con Algoritmo Trendy -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, updateDoc, doc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
           apiKey: "AIzaSyA0sJA8yhBovCI7mgkxBi0L_ldi5JyL5iU",
@@ -155,7 +168,10 @@ html_content = """<!DOCTYPE html>
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Registro de Tema y Copyright Z con archivos locales
+        let currentTrackId = null;
+        let currentLikes = 416;
+
+        // Registro de Tema y Copyright Z
         window.registrarTema = async function() {
             const artist = document.getElementById('artistName').value.trim();
             const title = document.getElementById('trackTitle').value.trim();
@@ -181,6 +197,8 @@ html_content = """<!DOCTYPE html>
                     destination: dest,
                     mediaUrl: mediaUrl,
                     copyright: copyrightId,
+                    likes: 416,
+                    comments: [],
                     timestamp: new Date().toISOString()
                 });
 
@@ -192,19 +210,36 @@ html_content = """<!DOCTYPE html>
             }
         };
 
-        // Buscador Global en el Vault
+        // Buscador Global y Algoritmo Trendy
         window.buscarTemas = async function() {
             const query = document.getElementById('globalSearchInput').value.toLowerCase();
             try {
                 const querySnapshot = await getDocs(collection(db, "sistema_z_vault"));
                 let found = false;
-                querySnapshot.forEach((doc) => {
-                    const data = doc.data();
+                querySnapshot.forEach((documentSnap) => {
+                    const data = documentSnap.data();
                     if(data.title.toLowerCase().includes(query) || data.artist.toLowerCase().includes(query)) {
+                        currentTrackId = documentSnap.id;
+                        currentLikes = data.likes || 416;
                         document.getElementById('nowPlayingTitle').innerText = `${data.artist} - ${data.title} (${data.copyright})`;
+                        document.getElementById('likeCount').innerText = currentLikes;
                         if(data.mediaUrl) {
                             document.getElementById('globalAudioPlayer').src = data.mediaUrl;
                         }
+                        
+                        // Cargar comentarios
+                        const commList = document.getElementById('commentsList');
+                        commList.innerHTML = "";
+                        if(data.comments && data.comments.length > 0) {
+                            data.comments.forEach(c => {
+                                commList.innerHTML += `<div class="text-[10px] text-zinc-300">🔥 ${c}</div>`;
+                            });
+                        } else {
+                            commList.innerHTML = `<div class="text-[10px] text-zinc-500">Sin comentarios aún. ¡Sé el primero!</div>`;
+                        }
+
+                        // Algoritmo Trendy Score
+                        document.getElementById('trendyScore').innerText = ((currentLikes * 1.5) + 100).toFixed(1) + "% (TRENDY ACTIVE)";
                         found = true;
                     }
                 });
@@ -212,6 +247,55 @@ html_content = """<!DOCTYPE html>
                     alert("No se encontró el tema en el Vault local.");
                 }
             } catch (e) {
+                console.error(e);
+            }
+        };
+
+        // Dar Like en tiempo real conectado al algoritmo
+        window.darLikeActivo = async function() {
+            if(!currentTrackId) {
+                alert("⚠️ Busca y reproduce un tema primero para darle Like.");
+                return;
+            }
+            currentLikes++;
+            document.getElementById('likeCount').innerText = currentLikes;
+            document.getElementById('trendyScore').innerText = ((currentLikes * 1.5) + 100).toFixed(1) + "% (VIRAL PEAK)";
+            
+            try {
+                const trackRef = doc(db, "sistema_z_vault", currentTrackId);
+                await updateDoc(trackRef, {
+                    likes: currentLikes
+                });
+                alert("❤️ ¡Like registrado en el algoritmo del Sistema Z!");
+            } catch(e) {
+                console.error(e);
+            }
+        };
+
+        // Enviar Comentario en vivo
+        window.enviarComentario = async function() {
+            const commentText = document.getElementById('commentInput').value.trim();
+            if(!currentTrackId || !commentText) {
+                alert("⚠️ Selecciona un tema y escribe un comentario.");
+                return;
+            }
+
+            const commList = document.getElementById('commentsList');
+            commList.innerHTML += `<div class="text-[10px] text-zinc-300">🔥 ${commentText}</div>`;
+            document.getElementById('commentInput').value = "";
+
+            try {
+                const trackRef = doc(db, "sistema_z_vault", currentTrackId);
+                // Obtenemos comentarios actuales de forma simple añadiendo el nuevo texto
+                const querySnapshot = await getDocs(collection(db, "sistema_z_vault"));
+                querySnapshot.forEach(async (documentSnap) => {
+                    if(documentSnap.id === currentTrackId) {
+                        const existingComments = documentSnap.data().comments || [];
+                        existingComments.push(commentText);
+                        await updateDoc(trackRef, { comments: existingComments });
+                    }
+                });
+            } catch(e) {
                 console.error(e);
             }
         };
@@ -237,7 +321,7 @@ html_content = """<!DOCTYPE html>
             alert("Efecto de matriz alternado (Frecuencia cuatro dieciséis Hz)");
         };
 
-        document.getElementById('status-box').innerHTML = "🟢 Vault soberano y motores locales listos para operar";
+        document.getElementById('status-box').innerHTML = "🟢 Likes, Comentarios y Algoritmo Trendy sincronizados";
         document.getElementById('status-box').className = "p-3 bg-black border border-green-800 rounded text-xs text-green-400 font-mono";
     </script>
 </body>
@@ -247,4 +331,4 @@ html_content = """<!DOCTYPE html>
 with open("index.html", "w", encoding="utf-8") as f:
     f.write(html_content)
 
-print("✅ [SISTEMA Z] index.html definitivo generado desde cero.")
+print("✅ [SISTEMA Z] index.html actualizado con Likes, Comentarios y Trendy.")
