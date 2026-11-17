@@ -29,7 +29,7 @@
     </header>
 
     <main>
-        <!-- Tarjeta 1: Generador de Coprins & Carga Segura -->
+        <!-- Tarjeta 1: Generador de Coprins & Carga Directa -->
         <div class="studio-card">
             <h3>🎛️ Generador de Coprins & Carga Directa</h3>
             <select id="destinoCarga">
@@ -62,7 +62,7 @@
             <div id="listaCatalogo" style="max-height: 220px; overflow-y: auto; margin-top: 8px;"></div>
         </div>
 
-        <!-- Tarjeta 4: Estudio Z (Creador de Reels con Autoreproducción y FX) -->
+        <!-- Tarjeta 4: Estudio Z -->
         <div class="studio-card">
             <h3>🎥 Estudio Z - FX & Reels 416Hz</h3>
             <select id="audioReelSelect" onchange="prepararAudioReel()">
@@ -95,7 +95,9 @@
     <script src="config.js"></script>
     <script>
         const { createClient } = supabase;
-        const _supabase = createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.anonKey);
+        const _supabase = createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.anonKey, {
+            auth: { persistSession: false, autoRefreshToken: false }
+        });
 
         async function subirAlSistemaZ() {
             const destino = document.getElementById('destinoCarga').value;
@@ -113,13 +115,12 @@
 
             statusDiv.innerText = "Subiendo archivo a la bóveda soberana...";
 
-            // Limpieza estricta de nombres para evitar error JWS de Supabase
             const cleanMediaName = archivoMedia.name.replace(/[^a-zA-Z0-9_.-]/g, '_');
             const fileNameMedia = `media_${Date.now()}_${cleanMediaName}`;
             
             const { error: mediaError } = await _supabase.storage
                 .from(window.SUPABASE_CONFIG.bucketName)
-                .upload(fileNameMedia, archivoMedia);
+                .upload(fileNameMedia, archivoMedia, { upsert: true });
 
             if (mediaError) {
                 statusDiv.innerText = "Error al subir archivo: " + mediaError.message;
@@ -132,7 +133,7 @@
             if (portadaFile) {
                 const cleanPortadaName = portadaFile.name.replace(/[^a-zA-Z0-9_.-]/g, '_');
                 const fileNamePortada = `portada_${Date.now()}_${cleanPortadaName}`;
-                await _supabase.storage.from(window.SUPABASE_CONFIG.bucketName).upload(fileNamePortada, portadaFile);
+                await _supabase.storage.from(window.SUPABASE_CONFIG.bucketName).upload(fileNamePortada, portadaFile, { upsert: true });
                 const { data: pubPortada } = _supabase.storage.from(window.SUPABASE_CONFIG.bucketName).getPublicUrl(fileNamePortada);
                 portadaUrl = pubPortada.publicUrl;
             }
