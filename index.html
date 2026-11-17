@@ -43,7 +43,7 @@
             <input type="file" id="portadaFile" accept="image/*">
             <label style="font-size:11px; color:#aaa;">Archivo de Audio / Video:</label>
             <input type="file" id="archivoMedia" accept="audio/*,video/*">
-            <button onclick="subirAlSistemaZ()">Generar Coprin y Subir 🔺</button>
+            <button onclick="ejecutarSubidaDirecta(event)" onclick="subirAlSistemaZ()">Generar Coprin y Subir 🔺</button>
             <div id="statusCarga" class="status"></div>
         </div>
 
@@ -95,40 +95,29 @@
     <script src="config.js"></script>
     
 
-<div id="logPantalla" style="background: #000; color: #0f0; padding: 15px; margin: 10px; font-family: monospace; font-size: 13px; border: 3px solid red; border-radius: 8px; z-index: 999999; position: relative; max-height: 200px; overflow-y: auto;">
-    🟢 SISTEMA Z: Depurador Limpio y Activo.
+
+<div id="logPantalla" style="background: #000; color: #0f0; padding: 15px; margin: 10px; font-family: monospace; font-size: 13px; border: 3px solid red; border-radius: 8px;">
+    🟢 SISTEMA Z: Enlace Directo Activo.
 </div>
 <script>
-function logZ(m) {
-    const box = document.getElementById('logPantalla');
-    if(box) {
-        box.innerHTML += '<br> > ' + m;
-        box.scrollTop = box.scrollHeight;
-    }
-    console.log(m);
-}
-
-async function subirAlSistemaz() {
-    alert('¡Botón presionado con éxito!');
-    logZ('🚀 ¡Clic registrado!');
+async function ejecutarSubidaDirecta(e) {
+    if(e) e.preventDefault();
+    alert('🔥 ¡Clic directo reconocido por el sistema!');
     
     const audioInput = document.querySelector('input[type="file"]');
-        alert('❌ Falta seleccionar el archivo de audio.');
-        logZ('❌ Error: No hay archivo seleccionado.');
+        alert('❌ Error: Selecciona un archivo de audio primero.');
         return;
     }
     
     const file = audioInput.files[0];
-    logZ('Archivo: ' + file.name);
+    alert('Archivo listo para subir: ' + file.name);
     
     const clienteSupabase = window._supabase || window.supabase;
-        alert('❌ Supabase no está inicializado.');
-        logZ('❌ Error: Supabase no disponible.');
+        alert('❌ Error: Supabase no está conectado.');
         return;
     }
     
     try {
-        logZ('Subiendo a boveda-z...');
         const ruta = 'audio/' + Date.now() + '_' + file.name;
         const { data, error } = await clienteSupabase.storage
             .from('boveda-z')
@@ -136,26 +125,10 @@ async function subirAlSistemaz() {
             
         if (error) throw error;
         
-        alert('¡Éxito! Archivo subido a la boveda-z.');
-        logZ('✅ ¡Subida completada!');
+        alert('✅ ¡Éxito total! Archivo subido a boveda-z.');
     } catch (err) {
-        alert('❌ Error: ' + err.message);
-        logZ('❌ Error Supabase: ' + err.message);
+        alert('❌ Error de Supabase: ' + err.message);
     }
 }
-
-setTimeout(() => {
-    const btn = document.getElementById('btnSubirZ') || document.querySelector('button');
-    if (btn) {
-        btn.id = 'btnSubirZ';
-        logZ('✅ Botón listo para disparar.');
-        btn.onclick = async function(e) {
-            e.preventDefault();
-            await subirAlSistemaz();
-        };
-    } else {
-        logZ('❌ No se encontró el botón.');
-    }
-}, 400);
 </script>
 </body></html>
