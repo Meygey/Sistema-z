@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Z | Tierra de Mafia</title>
+    <!-- Etiquetas SEO para Google y rastreo corporativo -->
+    <meta name="description" content="Sistema Z - Plataforma oficial de Enyi el Científico y Tierra de Mafia. Frecuencia 416Hz.">
+    <meta name="keywords" content="Sistema Z, Tierra de Mafia, Enyi el Científico, 416Hz, urban music, reggaeton, trap">
+    <style>
+        :root { --bg-color: #0a0a0a; --primary: #e60000; --text: #ffffff; --card-bg: #141414; --border: #333; }
+        body { background-color: var(--bg-color); color: var(--text); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 15px; }
+        header { text-align: center; border-bottom: 2px solid var(--primary); padding-bottom: 15px; margin-bottom: 20px; }
+        h1 { color: var(--primary); text-transform: uppercase; letter-spacing: 2px; margin: 5px 0; }
+        .sub-header { color: #aaa; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
+        .studio-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 15px; max-width: 600px; margin: 0 auto 15px auto; box-shadow: 0 4px 15px rgba(230,0,0,0.15); }
+        h3 { color: var(--primary); margin-top: 0; border-bottom: 1px solid #222; padding-bottom: 8px; font-size: 16px; }
+        input, select { width: 100%; padding: 10px; background: #222; border: 1px solid #444; color: white; margin-bottom: 10px; border-radius: 4px; box-sizing: border-box; }
+        button { background: var(--primary); color: white; border: none; padding: 12px 20px; font-weight: bold; border-radius: 4px; cursor: pointer; width: 100%; text-transform: uppercase; }
+        button:hover { background: #ff1a1a; }
+        audio, video { width: 100%; margin-top: 10px; }
+        .status { margin-top: 8px; font-size: 13px; color: #aaa; text-align: center; }
+        footer { text-align: center; margin-top: 30px; padding: 20px; border-top: 1px solid var(--border); font-size: 12px; color: #888; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Sistema Z</h1>
+        <div class="sub-header">Script & Cash • El Dominio de la Calle</div>
+    </header>
+
+    <main>
+        <!-- Cuadrícula 1: Carga Directa / Generador de Coprins -->
+        <div class="studio-card">
+            <h3>🎛️ Generador de Coprins & Carga Directa</h3>
+            <select id="destinoCarga" onchange="verificarDestino()">
+                <option value="universal">Catálogo Universal (Sistema Z)</option>
+                <option value="perfil">Perfil Personal de Artista</option>
+            </select>
+            <input type="text" id="nombreArtista" placeholder="Nombre Artístico / Autor">
+            <input type="text" id="nombreTema" placeholder="Título del Tema">
+            <input type="text" id="generoTema" placeholder="Género (Ej: Reggaeton, Trap, Malianteo)">
+            <label style="font-size:12px; color:#aaa;">Portada (Imagen):</label>
+            <input type="file" id="portadaFile" accept="image/*">
+            <label style="font-size:12px; color:#aaa;">Archivo de Audio / Video (MP3, WAV, MP4):</label>
+            <input type="file" id="archivoMedia" accept="audio/*,video/*">
+            <button onclick="subirAlSistemaZ()">Generar Coprin y Subir 🔺</button>
+            <div id="statusCarga" class="status"></div>
+        </div>
+
+        <!-- Cuadrícula 2: Puerto Terminal Z (Acceso a Perfiles) -->
+        <div class="studio-card">
+            <h3>💻 Puerto Terminal Z - Perfiles</h3>
+            <input type="text" id="buscarArtistaInput" placeholder="Buscar artista en la terminal...">
+            <button onclick="buscarPerfilTerminal()" style="background:#222; border:1px solid var(--primary); margin-bottom:10px;">Acceder al Perfil</button>
+            <div id="resultadoTerminal"></div>
+        </div>
+
+        <!-- Cuadrícula 3: Buscador Global & Trending -->
+        <div class="studio-card">
+            <h3>🔍 Buscador Global & Frecuencia 416Hz</h3>
+            <input type="text" id="busquedaGlobal" placeholder="Buscar temas o artistas..." oninput="filtrarCatalogo()">
+            <div id="listaCatalogo" style="max-height: 250px; overflow-y: auto; margin-top: 10px;"></div>
+        </div>
+
+        <!-- Cuadrícula 4: Estudio Z (Creador de Reels) -->
+        <div class="studio-card">
+            <h3>🎥 Estudio Z - Creador de Reels 416Hz</h3>
+            <select id="audioReelSelect">
+                <option value="">Selecciona audio del sistema...</option>
+            </select>
+            <div style="position: relative; background: #000; border-radius: 6px; overflow: hidden; margin-bottom: 10px;">
+                <video id="previewCamara" autoplay playsinline style="width: 100%; height: 200px; object-fit: cover;"></video>
+                <div id="matrixOverlay" style="position: absolute; top:5px; left:5px; font-family: monospace; font-size: 10px; color: #00ff00; pointer-events: none;">416Hz // TIERRA DE MAFIA</div>
+            </div>
+            <button onclick="alternarFlash()" style="background:#333; margin-bottom: 5px;">⚡ Activar Flash / Linterna al Beat</button>
+            <button onclick="grabarReel()" id="btnGrabar" style="margin-bottom: 5px;">🔴 Iniciar Grabación de Reel</button>
+            <button onclick="detenerReel()" style="background:#441111;">⏹️ Detener y Ver Resultado</button>
+            <video id="videoResultado" controls style="display:none; margin-top: 10px;"></video>
+        </div>
+    </main>
+
+    <footer>
+        Enyi Científico Omotichi • Script & Cash • Tierra de Mafia • La frecuencia que no pueden apagar 416Hz 🔺
+    </footer>
+
+    <!-- SDK de Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="config.js"></script>
+    <script>
+        const { createClient } = supabase;
+        const _supabase = createClient(window.SUPABASE_CONFIG.url, window.SUPABASE_CONFIG.anonKey);
+
+        async function subirAlSistemaZ() {
+            const destino = document.getElementById('destinoCarga').value;
+            const artista = document.getElementById('nombreArtista').value.trim();
+            const titulo = document.getElementById('nombreTema').value.trim();
+            const genero = document.getElementById('generoTema').value.trim();
+            const portadaFile = document.getElementById('portadaFile').files[0];
+            const archivoMedia = document.getElementById('archivoMedia').files[0];
+            const statusDiv = document.getElementById('statusCarga');
+
+            if (!artista || !titulo || !archivoMedia) {
+                alert("Completa el nombre del artista, el título y selecciona el archivo multimedia.");
+                return;
+            }
+
+            statusDiv.innerText = "Subiendo archivo a la bóveda soberana...";
+
+            // Subir archivo multimedia principal
+            const fileNameMedia = `media_${Date.now()}_${archivoMedia.name}`;
+            const { data: mediaData, error: mediaError } = await _supabase.storage
+                .from(window.SUPABASE_CONFIG.bucketName)
+                .upload(fileNameMedia, archivoMedia);
+
+            if (mediaError) {
+                statusDiv.innerText = "Error al subir archivo: " + mediaError.message;
+                return;
+            }
+
+            const { data: pubMedia } = _supabase.storage.from(window.SUPABASE_CONFIG.bucketName).getPublicUrl(fileNameMedia);
+            
+            // Subir portada si existe
+            let portadaUrl = "";
+            if (portadaFile) {
+                const fileNamePortada = `portada_${Date.now()}_${portadaFile.name}`;
+                await _supabase.storage.from(window.SUPABASE_CONFIG.bucketName).upload(fileNamePortada, portadaFile);
+                const { data: pubPortada } = _supabase.storage.from(window.SUPABASE_CONFIG.bucketName).getPublicUrl(fileNamePortada);
+                portadaUrl = pubPortada.publicUrl;
+            }
+
+            // Generar Coprin ID único
+            const coprinId = "COPRIN-Z-" + Math.floor(100000 + Math.random() * 900000);
+
+            // Registrar en base de datos temas_z
+            const { error: dbError } = await _supabase.from('temas_z').insert([{
+                coprin_id: coprinId,
+                artista: artista,
+                titulo: titulo,
+                genero: genero || 'Urbano',
+                destino: destino,
+                portada_url: portadaUrl,
+                archivo_url: pubMedia.publicUrl,
+                tipo_archivo: archivoMedia.type
+            }]);
+
+            if (dbError) {
+                statusDiv.innerText = "Error guardando en base de datos: " + dbError.message;
+            } else {
+                statusDiv.innerHTML = `¡Éxito! Coprin Generado: <b>${coprinId}</b> 🔺`;
+                alert(`¡Tema publicado con éxito! Coprin: ${coprinId}`);
+                cargarCatalogoGlobal();
+            }
+        }
+
+        async function cargarCatalogoGlobal() {
+            const { data, error } = await _supabase.from('temas_z').select('*').order('creado_en', { ascending: false });
+            if (error) return;
+
+            const contenedor = document.getElementById('listaCatalogo');
+            contenedor.innerHTML = "";
+            const selectReel = document.getElementById('audioReelSelect');
+            selectReel.innerHTML = '<option value="">Selecciona audio para Reel...</option>';
+
+            data.forEach(tema => {
+                contenedor.innerHTML += `
+                    <div style="background:#1a1a1a; padding:8px; margin-bottom:5px; border-radius:4px; font-size:13px;">
+                        <b>${tema.artista}</b> - ${tema.titulo} (${tema.genero})<br>
+                        <audio controls src="${tema.archivo_url}" style="height:30px;"></audio>
+                        <div style="font-size:11px; color:#aaa; margin-top:4px;">Coprin: ${tema.coprin_id} | <a href="${tema.archivo_url}" download style="color:#e60000;">Descargar</a></div>
+                    </div>
+                `;
+                if(tema.tipo_archivo && tema.tipo_archivo.includes('audio')) {
+                    selectReel.innerHTML += `<option value="${tema.archivo_url}">${tema.artista} - ${tema.titulo}</option>`;
+                }
+            });
+        }
+
+        async function buscarPerfilTerminal() {
+            const q = document.getElementById('buscarArtistaInput').value.trim();
+            const resDiv = document.getElementById('resultadoTerminal');
+            if(!q) return;
+
+            const { data, error } = await _supabase.from('perfiles_z').select('*').ilike('artista', `%${q}%`);
+            if(error || !data.length) {
+                resDiv.innerHTML = `<p style="font-size:12px; color:#e60000;">No se encontró perfil con ese nombre. Se creará al subir el primer tema en modo Perfil.</p>`;
+                return;
+            }
+
+            resDiv.innerHTML = "";
+            data.forEach(p => {
+                resDiv.innerHTML += `<div style="background:#222; padding:8px; margin-top:5px; border-radius:4px;"><b>Artista:</b> ${p.artista} (${p.genero})</div>`;
+            });
+        }
+
+        let mediaRecorder;
+        let chunks = [];
+        async function grabarReel() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: {facingMode: "environment"}, audio: true });
+                document.getElementById('previewCamara').srcObject = stream;
+                
+                mediaRecorder = new MediaRecorder(stream);
+                chunks = [];
+                mediaRecorder.ondataavailable = e => chunks.push(e.data);
+                mediaRecorder.onstop = () => {
+                    const blob = new Blob(chunks, { type: 'video/mp4' });
+                    document.getElementById('videoResultado').src = URL.createObjectURL(blob);
+                    document.getElementById('videoResultado').style.display = 'block';
+                };
+                mediaRecorder.start();
+                alert("Grabando Reel Sistema Z...");
+            } catch(e) {
+                alert("Error accediendo a cámara/micrófono: " + e.message);
+            }
+        }
+
+        function detenerReel() {
+            if(mediaRecorder) mediaRecorder.stop();
+        }
+
+        async function alternarFlash() {
+            try {
+                const track = document.getElementById('previewCamara').srcObject.getVideoTracks()[0];
+                const capabilities = track.getCapabilities();
+                if (capabilities.torch) {
+                    await track.applyConstraints({ advanced: [{ torch: true }] });
+                    alert("Flash intermitente al beat activado ⚡");
+                } else {
+                    alert("El flash no está disponible en este dispositivo.");
+                }
+            } catch(e) {
+                alert("Flash no compatible o cámara apagada.");
+            }
+        }
+
+        // Cargar catálogo al abrir
+        window.onload = cargarCatalogoGlobal;
+    </script>
+</body>
+</html>
