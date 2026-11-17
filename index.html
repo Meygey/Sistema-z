@@ -101,6 +101,10 @@
 <div id="logPantalla" style="background: #000; color: #0f0; padding: 15px; margin: 10px; font-family: monospace; font-size: 13px; border: 3px solid red; border-radius: 8px; z-index: 999999; position: relative; max-height: 200px; overflow-y: auto;">
     🟢 ESTADO: Sistema Z listo para procesar metadatos.
 </div>
+
+<div id="logPantalla" style="background: #000; color: #0f0; padding: 15px; margin: 10px; font-family: monospace; font-size: 13px; border: 3px solid red; border-radius: 8px; z-index: 999999; position: relative; max-height: 200px; overflow-y: auto;">
+    🟢 ESTADO: Depurador Z en línea.
+</div>
 <script>
 function logZ(m) {
     const box = document.getElementById('logPantalla');
@@ -112,62 +116,53 @@ function logZ(m) {
 }
 
 async function subirAlSistemaz() {
-    logZ('Recopilando datos del tema...');
+    alert('¡Botón presionado con éxito! Iniciando subida...');
+    logZ('🚀 Botón tocado: procesando campos...');
     
-    // Capturar inputs por ID, nombre o selector general
-    const artista = document.querySelector('#artista, input[name*="artista"], input[placeholder*="Artista"]')?.value || 'Enyi el Cientifico';
-    const titulo = document.querySelector('#titulo, input[name*="titulo"], input[name*="nombre"], input[placeholder*="Nombre"]')?.value || 'Tema Z';
-    const genero = document.querySelector('#genero, select[name*="genero"], input[name*="genero"]')?.value || 'Dark Experimental Reggaeton';
-    
-    // Capturar archivos (audio y portada)
-    const audioInput = document.querySelector('input[type="file"][accept*="audio"], input[type="file"]');
-    const portadaInput = document.querySelector('input[type="file"][accept*="image"], input[type="file"]:nth-of-type(2)');
-    
-        logZ('❌ Falta el archivo de audio.');
-        alert('Por favor selecciona el archivo de audio.');
+    const audioInput = document.querySelector('input[type="file"]');
+        alert('❌ Error: No hay archivo seleccionado.');
+        logZ('❌ Error: Falta seleccionar el archivo.');
         return;
     }
     
-    const audioFile = audioInput.files[0];
-    logZ('Audio detectado: ' + audioFile.name);
-    logZ('Artista: ' + artista + ' | Título: ' + titulo + ' | Género: ' + genero);
+    const file = audioInput.files[0];
+    logZ('Archivo detectado: ' + file.name);
     
     const clienteSupabase = window._supabase || window.supabase;
-        logZ('❌ Error: Cliente de Supabase no inicializado.');
+        alert('❌ Error: Supabase no está cargado.');
+        logZ('❌ Error: Supabase no inicializado.');
         return;
     }
     
     try {
-        const timestamp = Date.now();
-        const rutaAudio = 'audio/' + timestamp + '_' + audioFile.name;
-        
-        logZ('Subiendo audio a la boveda-z...');
+        logZ('Conectando con Supabase (boveda-z)...');
+        const ruta = 'audio/' + Date.now() + '_' + file.name;
         const { data, error } = await clienteSupabase.storage
             .from('boveda-z')
-            .upload(rutaAudio, audioFile);
+            .upload(ruta, file);
             
         if (error) throw error;
         
-        logZ('✅ ¡Tema subido con éxito al Sistema Z!');
-        alert('¡Tema subido correctamente a la boveda-z!');
+        alert('¡Éxito! Archivo subido a la boveda-z.');
+        logZ('✅ ¡Archivo subido exitosamente!');
     } catch (err) {
-        logZ('❌ Error en Supabase: ' + err.message);
+        alert('❌ Error en Supabase: ' + err.message);
+        logZ('❌ Error Supabase: ' + err.message);
     }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    logZ('DOM cargado.');
+    logZ('DOM listo.');
     const btn = document.getElementById('btnSubirZ') || document.querySelector('button');
     if (btn) {
         btn.id = 'btnSubirZ';
-        logZ('Botón localizado correctamente.');
+        logZ('Botón enlazado.');
         btn.onclick = async function(e) {
             e.preventDefault();
-            logZ('🚀 ¡Clic registrado! Procesando...');
             await subirAlSistemaz();
         };
     } else {
-        logZ('❌ No se encontró el botón en el HTML.');
+        logZ('❌ Botón no encontrado.');
     }
 });
 </script>
