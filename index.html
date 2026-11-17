@@ -312,4 +312,18 @@
         window.onload = cargarCatalogoGlobal;
     </script>
 </body>
+
+<script>
+document.getElementById('btnSubirZ').addEventListener('click', async function(e) {
+    e.preventDefault();
+    console.log('Botón presionado mediante listener seguro');
+    try {
+        await subirAlSistemaz();
+    } catch (err) {
+        console.error(err);
+        alert('Error al ejecutar: ' + err.message);
+    }
+});
+</script>
 </html>
+
