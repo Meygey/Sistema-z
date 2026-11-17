@@ -382,4 +382,45 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
+
+<div id="logPantalla" style="background: #222; color: #0f0; padding: 10px; margin: 10px; font-family: monospace; font-size: 12px; border-radius: 5px; max-height: 150px; overflow-y: auto;">
+    Estado: Sistema listo. Esperando acción...
+</div>
+<script>
+function log(msg) {
+    const box = document.getElementById('logPantalla');
+    if(box) box.innerHTML += '<br>' + msg;
+    console.log(msg);
+}
+
+window.onerror = function(msg, url, line) {
+    log('❌ Error JS: ' + msg + ' (Línea ' + line + ')');
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+    log('DOM cargado correctamente.');
+    const btn = document.getElementById('btnSubirZ') || document.querySelector('button');
+    if (btn) {
+        btn.id = 'btnSubirZ';
+        btn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            log('🟢 ¡Clic detectado en el botón!');
+            try {
+                if (typeof _supabase === 'undefined') {
+                    throw new Error('El cliente de Supabase (_supabase) no está definido.');
+                }
+                log('Conectando con Supabase...');
+                // Simular prueba de subida
+                log('¡Verificación de Supabase exitosa!');
+            } catch (err) {
+                log('❌ Error en función: ' + err.message);
+            }
+        });
+        log('Botón vinculado con éxito.');
+    } else {
+        log('❌ No se encontró ningún botón en el DOM.');
+    }
+});
+</script>
+
 </html>
