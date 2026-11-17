@@ -325,5 +325,45 @@ document.getElementById('btnSubirZ').addEventListener('click', async function(e)
     }
 });
 </script>
-</html>
 
+<script>
+async function subirAlSistemaz() {
+    try {
+        alert("Iniciando proceso de subida a Sistema Z...");
+        const catalogSelect = document.querySelector('select') || document.querySelector('input');
+        const archivoInput = document.querySelector('input[type="file"]');
+        
+            alert("Error: Debes seleccionar al menos un archivo multimedia.");
+            return;
+        }
+
+        const archivo = archivoInput.files[0];
+        alert("Subiendo archivo: " + archivo.name);
+
+        const { data, error } = await _supabase.storage
+            .from('boveda-z')
+            .upload('media/' + Date.now() + '_' + archivo.name, archivo);
+
+        if (error) {
+            throw error;
+        }
+
+        console.log("Subida exitosa:", data);
+    } catch (err) {
+        console.error("Fallo en la subida:", err);
+        alert("Fallo al subir: " + err.message);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('btnSubirZ') || document.querySelector('button');
+    if (btn) {
+        btn.onclick = (e) => {
+            e.preventDefault();
+            subirAlSistemaz();
+        };
+    }
+});
+</script>
+
+</html>
