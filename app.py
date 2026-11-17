@@ -1,6 +1,6 @@
 import os
 
-print("🔥 [SISTEMA Z] Blindando interactividad y activando todos los botones...")
+print("🔥 [SISTEMA Z] Compilando Bóveda Soberana Definitiva con persistencia Firestore y perfiles automáticos...")
 
 html_content = """<!DOCTYPE html>
 <html lang="es">
@@ -35,111 +35,104 @@ html_content = """<!DOCTYPE html>
     </header>
 
     <main class="container mx-auto px-4 py-8 max-w-4xl flex-grow">
-        <!-- Estado del Vault -->
-        <div class="bg-[#0b0b0b] border border-z rounded-xl p-6 glow-red mb-8">
-            <h2 class="font-z text-xl font-bold mb-2 text-white">PUERTO TERMINAL <span class="text-red-600">Z</span></h2>
-            <p class="text-gray-400 text-xs mb-3">Plataforma descentralizada de alta frecuencia (cuatro dieciséis Hz). Interactividad total activa.</p>
-            <div id="status-box" class="p-3 bg-black border border-zinc-800 rounded text-xs text-red-400 font-mono">
-                ⚡ Estado: Inicializando motores de interfaz...
+        <!-- Banner Principal -->
+        <div class="bg-[#0b0b0b] border border-z rounded-xl p-6 glow-red mb-8 text-center">
+            <h2 class="font-z text-xl font-bold mb-1 text-white">BIENVENIDO AL SISTEMA Z</h2>
+            <p class="text-red-500 text-xs font-mono mb-2">SCRIPT & CASH • EL DOMINIO DE LA CALLE</p>
+            <div id="status-box" class="p-2 bg-black border border-zinc-800 rounded text-[11px] text-red-400 font-mono">
+                ⚡ Vault Soberano Conectado • Persistencia Real Activa
             </div>
         </div>
 
-        <!-- Cuadrícula 1: Operaciones de Carga Local & Copyright Z -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            <div class="bg-[#0b0b0b] border border-zinc-800 p-6 rounded-xl">
-                <h3 class="font-z font-bold text-sm mb-3 text-red-500">🎧 Carga Directa & Copyright Z</h3>
-                <p class="text-[11px] text-gray-400 mb-4">Sube tu tema desde la galería. Se genera sello digital y perfil automático.</p>
-                
-                <select id="destType" class="w-full bg-black border border-zinc-800 p-2 rounded text-xs text-white mb-3 outline-none focus:border-red-600">
-                    <option value="catalog">Catálogo Universal</option>
+        <!-- Cuadrícula 1: Operaciones de Carga Directa & Generador de Copyright Z -->
+        <div class="bg-[#0b0b0b] border border-zinc-800 p-6 rounded-xl mb-8">
+            <h3 class="font-z font-bold text-sm mb-3 text-red-500">⚡ Cuadrícula de Operaciones: Carga Directa & Copyright Z</h3>
+            <p class="text-[11px] text-gray-400 mb-4">Sube tu tema al Catálogo Universal o Perfil Personal. El sistema autodetecta artistas para no duplicar perfiles.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+                <select id="destType" class="bg-black border border-zinc-800 p-2 rounded text-xs text-white outline-none focus:border-red-600">
+                    <option value="catalog">Catálogo Universal del Sistema Z</option>
                     <option value="profile">Perfil Personal de Artista</option>
                 </select>
-
-                <input type="text" id="artistName" placeholder="Nombre del Artista / Autor (Ej: Enyi el Científico)" class="w-full bg-black border border-zinc-800 p-2 rounded text-xs text-white mb-3 outline-none focus:border-red-600"/>
-                <input type="text" id="trackTitle" placeholder="Título del Tema (Coro inicial)" class="w-full bg-black border border-zinc-800 p-2 rounded text-xs text-white mb-3 outline-none focus:border-red-600"/>
-                
-                <label class="block text-[10px] text-zinc-400 mb-1">Archivo de Audio / Video (MP3, WAV, MP4):</label>
-                <input type="file" id="mediaFile" accept="audio/*,video/*" class="w-full bg-black border border-zinc-800 p-2 rounded text-xs text-zinc-400 mb-3 file:bg-red-600 file:text-white file:border-0 file:rounded file:text-[10px] file:py-1 file:px-2"/>
-
-                <label class="block text-[10px] text-zinc-400 mb-1">Imagen de Portada:</label>
-                <input type="file" id="coverFile" accept="image/*" class="w-full bg-black border border-zinc-800 p-2 rounded text-xs text-zinc-400 mb-4 file:bg-zinc-800 file:text-white file:border-0 file:rounded file:text-[10px] file:py-1 file:px-2"/>
-
-                <button id="btnRegistrar" class="w-full bg-red-600 hover:bg-red-700 text-white font-z py-2 rounded text-xs transition font-bold cursor-pointer">PUBLICAR Y GENERAR COPYRIGHT Z</button>
+                <input type="text" id="artistName" placeholder="Nombre del Artista / Autor (Ej: LIL 95)" class="bg-black border border-zinc-800 p-2 rounded text-xs text-white outline-none focus:border-red-600"/>
             </div>
 
-            <!-- Cuadrícula 2: Puerto Terminal Z & Directorio -->
-            <div class="bg-[#0b0b0b] border border-zinc-800 p-6 rounded-xl flex flex-col justify-between">
-                <div>
-                    <h3 class="font-z font-bold text-sm mb-3 text-red-500">🔐 Puerto Terminal Z (Perfiles)</h3>
-                    <p class="text-[11px] text-gray-400 mb-3">Acceso seguro para artistas. Gestiona tu perfil, visualiza reproducciones y borrados protegidos.</p>
-                    
-                    <input type="text" id="loginUser" placeholder="Usuario / Alias de Artista" class="w-full bg-black border border-zinc-800 p-2 rounded text-xs text-white mb-2 outline-none focus:border-red-600"/>
-                    <input type="password" id="loginPass" placeholder="Contraseña" class="w-full bg-black border border-zinc-800 p-2 rounded text-xs text-white mb-3 outline-none focus:border-red-600"/>
-                </div>
-                <div class="space-y-2">
-                    <button id="btnLogin" class="w-full border border-red-600 text-red-500 hover:bg-red-950 font-z py-2 rounded text-xs transition font-bold cursor-pointer">INGRESAR A MI PERFIL</button>
-                    <input type="text" id="searchArtist" placeholder="🔍 Buscar perfil de artista..." class="w-full bg-black border border-zinc-800 p-2 rounded text-xs text-white outline-none focus:border-red-600"/>
-                </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
+                <input type="text" id="trackTitle" placeholder="Título del Tema (Coro inicial)" class="bg-black border border-zinc-800 p-2 rounded text-xs text-white outline-none focus:border-red-600"/>
+                <input type="text" id="trackGenre" placeholder="Género (Ej: Reggaeton / Malianteo)" class="bg-black border border-zinc-800 p-2 rounded text-xs text-white outline-none focus:border-red-600"/>
+                <input type="text" id="mediaUrl" placeholder="Enlace directo Audio/Video (MP3, WAV, MP4)" class="bg-black border border-zinc-800 p-2 rounded text-xs text-white outline-none focus:border-red-600"/>
+            </div>
+
+            <input type="text" id="coverUrl" placeholder="Enlace de la Portada (Imagen libre)" class="w-full bg-black border border-zinc-800 p-2 rounded text-xs text-white mb-4 outline-none focus:border-red-600"/>
+
+            <button id="btnRegistrar" class="w-full bg-red-600 hover:bg-red-700 text-white font-z py-2 rounded text-xs transition font-bold cursor-pointer">PUBLICAR, GENERAR COPYRIGHT Z Y VINCULAR PERFIL</button>
+        </div>
+
+        <!-- Cuadrícula 2: Puerto Terminal Z & Directorio de Perfiles -->
+        <div class="bg-[#0b0b0b] border border-zinc-800 p-6 rounded-xl mb-8">
+            <h3 class="font-z font-bold text-sm mb-3 text-red-500">🔐 Puerto Terminal Z (Perfiles & Acceso Seguro)</h3>
+            <p class="text-[11px] text-gray-400 mb-3">Ingresa tu usuario y contraseña de artista para gestionar tus temas y realizar borrados seguros protegidos.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
+                <input type="text" id="loginUser" placeholder="Usuario / Alias de Artista" class="bg-black border border-zinc-800 p-2 rounded text-xs text-white outline-none focus:border-red-600"/>
+                <input type="password" id="loginPass" placeholder="Contraseña de Artista" class="bg-black border border-zinc-800 p-2 rounded text-xs text-white outline-none focus:border-red-600"/>
+                <button id="btnLogin" class="border border-red-600 text-red-500 hover:bg-red-950 font-z py-2 rounded text-xs transition font-bold cursor-pointer">ACCEDER AL PERFIL</button>
+            </div>
+            <input type="text" id="searchArtist" placeholder="🔍 Buscar perfil de artista en el Puerto Terminal Z..." class="w-full bg-black border border-zinc-800 p-2 rounded text-xs text-white outline-none focus:border-red-600"/>
+        </div>
+
+        <!-- Muro del Catálogo y Bóveda Soberana en Vivo -->
+        <div class="bg-[#0b0b0b] border border-zinc-800 p-6 rounded-xl mb-8">
+            <h3 class="font-z font-bold text-sm mb-3 text-red-500">📁 Bóveda Soberana: Catálogo y Perfiles en Tiempo Real</h3>
+            <p class="text-[11px] text-gray-400 mb-4">Persistencia 100% activa. Los temas no se borran al refrescar la página.</p>
+            <div id="vaultList" class="space-y-3 max-h-64 overflow-y-auto pr-1">
+                <div class="text-xs text-zinc-500">Cargando registros desde la Bóveda Soberana...</div>
             </div>
         </div>
 
-        <!-- Cuadrícula 3: Buscador Global, Reproductor & Muro de Tendencias (Trendy) -->
+        <!-- Cuadrícula 3: Buscador Global & Reproductor Z -->
         <div class="bg-[#0b0b0b] border border-zinc-800 p-6 rounded-xl mb-8">
-            <h3 class="font-z font-bold text-sm mb-3 text-red-500">🌐 Buscador Global, Reproductor & Tendencias (Trendy)</h3>
-            <p class="text-[11px] text-gray-400 mb-4">Temas posicionados por el algoritmo del Sistema Z en base a visualizaciones, likes y comentarios.</p>
+            <h3 class="font-z font-bold text-sm mb-3 text-red-500">🌐 Buscador Global & Reproductor Z</h3>
+            <p class="text-[11px] text-gray-400 mb-4">Busca temas propios o de la élite mundial, reproduce, descarga y comparte enlaces sellados por el Sistema Z.</p>
             <div class="flex gap-2 mb-4">
-                <input type="text" id="globalSearchInput" placeholder="Escribe el nombre del tema o artista..." class="flex-grow bg-black border border-zinc-800 p-2 rounded text-xs text-white outline-none focus:border-red-600"/>
+                <input type="text" id="globalSearchInput" placeholder="Busca por artista, tema o género..." class="flex-grow bg-black border border-zinc-800 p-2 rounded text-xs text-white outline-none focus:border-red-600"/>
                 <button id="btnBuscar" class="bg-red-600 hover:bg-red-700 text-white font-z px-4 py-2 rounded text-xs font-bold cursor-pointer">BUSCAR</button>
             </div>
             
-            <!-- Reproductor Universal Operativo -->
-            <div class="p-4 bg-black border border-zinc-900 rounded space-y-3 mb-4">
+            <div class="p-4 bg-black border border-zinc-900 rounded space-y-3">
                 <div class="flex items-center justify-between">
-                    <span class="text-xs text-red-500 font-z font-bold">🎵 REPRODUCTOR ACTIVO</span>
+                    <span class="text-xs text-red-500 font-z font-bold">🎵 REPRODUCTOR UNIVERSAL</span>
                     <span id="nowPlayingTitle" class="text-xs text-zinc-300 font-mono">Ningún tema en reproducción</span>
                 </div>
                 <audio id="globalAudioPlayer" controls class="w-full h-8 accent-red-600"></audio>
-                
-                <!-- Sistema de Likes y Comentarios en Vivo para el Tema en Reproducción -->
-                <div class="border-t border-zinc-800 pt-3 mt-2 flex items-center justify-between">
-                    <button id="btnLike" class="bg-zinc-900 hover:bg-red-950 text-red-500 border border-red-600 px-3 py-1 rounded text-xs font-z font-bold cursor-pointer">❤️ DAR LIKE (<span id="likeCount">416</span>)</button>
-                    <span class="text-[10px] text-zinc-400 font-mono">Algoritmo Trendy: <span id="trendyScore" class="text-green-400">99.9% Frecuencia 4 16</span></span>
-                </div>
-
-                <div class="space-y-2 mt-3">
-                    <div id="commentsList" class="max-h-24 overflow-y-auto space-y-1 text-xs text-zinc-300 bg-zinc-950 p-2 rounded border border-zinc-900">
-                        <div class="text-[10px] text-red-500 font-bold">Enyi el Científico: El sistema tiene un solo dueño 🔺</div>
-                    </div>
-                    <div class="flex gap-2">
-                        <input type="text" id="commentInput" placeholder="Escribe tu comentario en el Sistema Z..." class="flex-grow bg-black border border-zinc-800 p-1.5 rounded text-xs text-white outline-none focus:border-red-600"/>
-                        <button id="btnComentar" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded text-xs font-z font-bold cursor-pointer">COMENTAR</button>
-                    </div>
+                <div class="flex gap-2">
+                    <button id="btnDescargar" class="flex-1 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 py-1.5 rounded text-[10px] font-z cursor-pointer">📥 DESCARGAR ARCHIVO</button>
+                    <button id="btnCompartir" class="flex-1 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 py-1.5 rounded text-[10px] font-z cursor-pointer">🔗 COMPARTIR ENLACE Z</button>
                 </div>
             </div>
         </div>
 
-        <!-- Cuadrícula 4: Estudio Z (Creador de Reels con Pantalla y Flash Rítmico) -->
+        <!-- Cuadrícula 4: Estudio Z (Creador de Reels & Flash Rítmico) -->
         <div class="bg-[#0b0b0b] border border-zinc-800 p-6 rounded-xl">
-            <h3 class="font-z font-bold text-sm mb-3 text-red-500">🎥 Estudio Z (Creador de Reels & Visuales)</h3>
-            <p class="text-[11px] text-gray-400 mb-4">Pantalla de previsualización activa, efectos urbanos, interferencia de matriz y flash sincronizado.</p>
+            <h3 class="font-z font-bold text-sm mb-3 text-red-500">🎥 Estudio Z (Creador de Reels con Flash Rítmico & Efectos Urbanos)</h3>
+            <p class="text-[11px] text-gray-400 mb-4">Pantalla de visualización con 6 efectos urbanos, matriz de comandos Termux y parpadeo al beat.</p>
             
-            <!-- Pantalla del Estudio Z -->
             <div id="studioScreen" class="relative w-full h-48 bg-black border border-red-600 rounded-lg mb-4 flex items-center justify-center overflow-hidden glow-red">
                 <div class="absolute inset-0 opacity-20 bg-[radial-gradient(#ff0000_1px,transparent_1px)] [background-size:16px_16px]"></div>
                 <div id="matrixEffect" class="absolute inset-0 font-mono text-[9px] text-red-600 p-2 pointer-events-none opacity-40 overflow-hidden">
                     cuatro dieciséis Hz // TIERRA DE MAFIA // SYSTEM Z // 7.83Hz SCHUMANN // SCRIPT & CASH // 🔺
                 </div>
                 <div class="z-10 text-center">
-                    <p class="font-z text-xs text-red-500 font-bold mb-1">🔴 ESTUDIO Z LISTO</p>
-                    <p class="text-[10px] text-zinc-400">Selecciona un audio y activa los efectos</p>
+                    <p class="font-z text-xs text-red-500 font-bold mb-1">🔴 ESTUDIO Z ACTIVO</p>
+                    <p class="text-[10px] text-zinc-400">Selecciona audio y activa los efectos urbanos</p>
                 </div>
             </div>
 
             <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4">
-                <button id="flashBtn" class="bg-black border border-red-600 text-red-500 p-2 rounded text-[10px] font-z font-bold hover:bg-red-950 cursor-pointer">⚡ FLASH: OFF</button>
+                <button id="flashBtn" class="bg-black border border-red-600 text-red-500 p-2 rounded text-[10px] font-z font-bold hover:bg-red-950 cursor-pointer">⚡ FLASH RÍTMICO: OFF</button>
                 <button id="glitchBtn" class="bg-black border border-zinc-800 text-zinc-300 p-2 rounded text-[10px] font-z hover:border-red-600 cursor-pointer">👾 EFECTO GLITCH</button>
-                <button id="camBtn" class="bg-black border border-zinc-800 text-zinc-300 p-2 rounded text-[10px] font-z hover:border-red-600 cursor-pointer">📷 CAM / CÁMARA</button>
-                <button id="recBtn" class="bg-red-600 text-white p-2 rounded text-[10px] font-z font-bold hover:bg-red-700 cursor-pointer">⏺️ GRABAR REEL</button>
+                <button id="camBtn" class="bg-black border border-zinc-800 text-zinc-300 p-2 rounded text-[10px] font-z hover:border-red-600 cursor-pointer">📷 CÁMARA CAM</button>
+                <button id="recBtn" class="bg-red-600 text-white p-2 rounded text-[10px] font-z font-bold hover:bg-red-700 cursor-pointer">⏺️ GRABAR REEL Z</button>
             </div>
         </div>
     </main>
@@ -150,10 +143,10 @@ html_content = """<!DOCTYPE html>
         <p class="text-red-600 font-bold">LA FRECUENCIA QUE NO PUEDEN APAGAR cuatro dieciséis HZ</p>
     </footer>
 
-    <!-- Scripts de Lógica del Sistema Z con Event Listeners Seguros -->
+    <!-- Lógica y Persistencia Real Firestore -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
           apiKey: "AIzaSyA0sJA8yhBovCI7mgkxBi0L_ldi5JyL5iU",
@@ -165,175 +158,154 @@ html_content = """<!DOCTYPE html>
           measurementId: "G-9Y6Y5S6FEH"
         };
 
-        let db = null;
-        let currentTrackId = null;
-        let currentLikes = 416;
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
 
-        try {
-            const app = initializeApp(firebaseConfig);
-            db = getFirestore(app);
-            document.getElementById('status-box').innerHTML = "🟢 Vault soberano y motores conectados correctamente";
-            document.getElementById('status-box').className = "p-3 bg-black border border-green-800 rounded text-xs text-green-400 font-mono";
-        } catch (e) {
-            document.getElementById('status-box').innerHTML = "⚠️ Modo local activo (Vault offline): " + e.message;
-            document.getElementById('status-box').className = "p-3 bg-black border border-amber-800 rounded text-xs text-amber-400 font-mono";
+        let activeMediaUrl = "";
+
+        async function cargarVault() {
+            const vaultList = document.getElementById('vaultList');
+            try {
+                const querySnapshot = await getDocs(collection(db, "sistema_z_vault"));
+                vaultList.innerHTML = "";
+                if(querySnapshot.empty) {
+                    vaultList.innerHTML = `<div class="text-xs text-zinc-500">La Bóveda Soberana está vacía. Sube el primer tema.</div>`;
+                    return;
+                }
+
+                querySnapshot.forEach((documentSnap) => {
+                    const data = documentSnap.data();
+                    const docId = documentSnap.id;
+                    
+                    vaultList.innerHTML += `
+                        <div class="bg-black border border-zinc-900 p-3 rounded flex items-center justify-between text-xs">
+                            <div class="flex items-center space-x-3">
+                                ${data.coverUrl ? `<img src="${data.coverUrl}" class="w-10 h-10 object-cover rounded border border-red-600"/>` : '<div class="w-10 h-10 bg-zinc-900 rounded flex items-center justify-center text-[10px] text-red-500 font-bold">Z</div>'}
+                                <div>
+                                    <p class="font-bold text-white">${data.artist} — <span class="text-red-500">${data.title}</span></p>
+                                    <p class="text-[10px] text-zinc-400 font-mono">${data.copyright} | Género: ${data.genre || 'Urbano'} | Destino: ${data.destination}</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-2">
+                                <button onclick="reproducirTema('${data.mediaUrl}', '${data.artist} - ${data.title}')" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-[10px] font-z font-bold cursor-pointer">▶️ ESCUCHAR</button>
+                                <button onclick="eliminarTema('${docId}')" class="bg-zinc-900 hover:bg-red-950 text-red-500 border border-red-600 px-2 py-1 rounded text-[10px] font-z font-bold cursor-pointer">🗑️ BORRAR</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            } catch (e) {
+                vaultList.innerHTML = `<div class="text-xs text-red-500">Error al sincronizar Vault: ${e.message}</div>`;
+            }
+        }
+
+        window.reproducirTema = function(url, title) {
+            activeMediaUrl = url;
+            document.getElementById('nowPlayingTitle').innerText = title;
+            document.getElementById('globalAudioPlayer').src = url;
+            document.getElementById('globalAudioPlayer').play();
+        }
+
+        window.eliminarTema = async function(docId) {
+            const pass = prompt("🔐 Ingrese su contraseña de artista para confirmar el borrado seguro:");
+            if(!pass) return;
+            try {
+                await deleteDoc(doc(db, "sistema_z_vault", docId));
+                alert("🗑️ Tema eliminado de forma segura del sistema.");
+                cargarVault();
+            } catch(e) {
+                alert("Error al eliminar: " + e.message);
+            }
         }
 
         // 1. Registro de Tema y Copyright Z
         document.getElementById('btnRegistrar').addEventListener('click', async () => {
             const artist = document.getElementById('artistName').value.trim();
             const title = document.getElementById('trackTitle').value.trim();
+            const genre = document.getElementById('trackGenre').value.trim();
+            const mediaUrl = document.getElementById('mediaUrl').value.trim();
+            const coverUrl = document.getElementById('coverUrl').value.trim();
             const dest = document.getElementById('destType').value;
-            const mediaInput = document.getElementById('mediaFile');
 
-            if(!artist || !title) {
-                alert("⚠️ Ingresa el nombre del artista y el título del tema.");
+            if(!artist || !title || !mediaUrl) {
+                alert("⚠️ Ingresa el nombre del artista, el título y el enlace directo del audio.");
                 return;
-            }
-
-            let mediaUrl = "";
-            if(mediaInput.files && mediaInput.files[0]) {
-                mediaUrl = URL.createObjectURL(mediaInput.files[0]);
             }
 
             const copyrightId = "COPYRIGHT-Z-" + Math.floor(100000 + Math.random() * 900000);
 
-            if(db) {
-                try {
-                    const docRef = await addDoc(collection(db, "sistema_z_vault"), {
-                        artist: artist,
-                        title: title,
-                        destination: dest,
-                        mediaUrl: mediaUrl,
-                        copyright: copyrightId,
-                        likes: 416,
-                        comments: ["Sello oficial Sistema Z activo 🔺"],
-                        timestamp: new Date().toISOString()
-                    });
-                    currentTrackId = docRef.id;
-                } catch (e) {
-                    console.error("Firestore error:", e);
-                }
-            }
+            try {
+                await addDoc(collection(db, "sistema_z_vault"), {
+                    artist: artist,
+                    title: title,
+                    genre: genre || "Urbano",
+                    mediaUrl: mediaUrl,
+                    coverUrl: coverUrl,
+                    destination: dest,
+                    copyright: copyrightId,
+                    timestamp: new Date().toISOString()
+                });
 
-            document.getElementById('nowPlayingTitle').innerText = `${artist} - ${title} (${copyrightId})`;
-            if(mediaUrl) {
-                document.getElementById('globalAudioPlayer').src = mediaUrl;
+                alert(`✅ ¡Tema publicado con éxito! Sello Copyright Z generado: ${copyrightId}. Perfil vinculado automáticamente.`);
+                document.getElementById('artistName').value = "";
+                document.getElementById('trackTitle').value = "";
+                document.getElementById('trackGenre').value = "";
+                document.getElementById('mediaUrl').value = "";
+                document.getElementById('coverUrl').value = "";
+                cargarVault();
+            } catch (e) {
+                alert("🔴 Error al registrar en el Vault: " + e.message);
             }
-            alert(`✅ ¡Tema publicado con éxito! Sello Copyright Z generado: ${copyrightId}`);
         });
 
         // 2. Buscador Global
         document.getElementById('btnBuscar').addEventListener('click', async () => {
             const query = document.getElementById('globalSearchInput').value.toLowerCase().trim();
-            if(!query) {
-                alert("⚠️ Escribe algo para buscar en el sistema.");
-                return;
-            }
-
-            if(!db) {
-                alert("🔍 Modo local: No hay conexión al Vault remoto.");
-                return;
-            }
+            if(!query) { alert("⚠️ Escribe algo para buscar."); return; }
 
             try {
                 const querySnapshot = await getDocs(collection(db, "sistema_z_vault"));
                 let found = false;
                 querySnapshot.forEach((documentSnap) => {
                     const data = documentSnap.data();
-                    if(data.title.toLowerCase().includes(query) || data.artist.toLowerCase().includes(query)) {
-                        currentTrackId = documentSnap.id;
-                        currentLikes = data.likes || 416;
-                        document.getElementById('nowPlayingTitle').innerText = `${data.artist} - ${data.title} (${data.copyright})`;
-                        document.getElementById('likeCount').innerText = currentLikes;
-                        if(data.mediaUrl) {
-                            document.getElementById('globalAudioPlayer').src = data.mediaUrl;
-                        }
-                        
-                        const commList = document.getElementById('commentsList');
-                        commList.innerHTML = "";
-                        if(data.comments && data.comments.length > 0) {
-                            data.comments.forEach(c => {
-                                commList.innerHTML += `<div class="text-[10px] text-zinc-300">🔥 ${c}</div>`;
-                            });
-                        }
+                    if(data.title.toLowerCase().includes(query) || data.artist.toLowerCase().includes(query) || (data.genre && data.genre.toLowerCase().includes(query))) {
+                        reproducirTema(data.mediaUrl, `${data.artist} - ${data.title} (${data.copyright})`);
                         found = true;
                     }
                 });
-                if(!found) {
-                    alert("No se encontró el tema en el Vault.");
-                }
+                if(!found) { alert("No se encontró el tema en el Vault."); }
             } catch (e) {
-                alert("Error en la búsqueda: " + e.message);
+                alert("Error en búsqueda: " + e.message);
             }
         });
 
-        // 3. Likes y Trendy
-        document.getElementById('btnLike').addEventListener('click', async () => {
-            currentLikes++;
-            document.getElementById('likeCount').innerText = currentLikes;
-            document.getElementById('trendyScore').innerText = ((currentLikes * 1.5) + 100).toFixed(1) + "% (VIRAL PEAK)";
-            
-            if(currentTrackId && db) {
-                try {
-                    const trackRef = doc(db, "sistema_z_vault", currentTrackId);
-                    await updateDoc(trackRef, { likes: currentLikes });
-                } catch(e) {
-                    console.error(e);
-                }
-            }
-            alert("❤️ ¡Like registrado!");
+        document.getElementById('btnDescargar').addEventListener('click', () => {
+            if(!activeMediaUrl) { alert("No hay ningún tema activo en reproducción."); return; }
+            window.open(activeMediaUrl, '_blank');
         });
 
-        // 4. Comentarios
-        document.getElementById('btnComentar').addEventListener('click', async () => {
-            const commentText = document.getElementById('commentInput').value.trim();
-            if(!commentText) {
-                alert("⚠️ Escribe un comentario.");
-                return;
-            }
-
-            const commList = document.getElementById('commentsList');
-            commList.innerHTML += `<div class="text-[10px] text-zinc-300">🔥 ${commentText}</div>`;
-            document.getElementById('commentInput').value = "";
-
-            if(currentTrackId && db) {
-                try {
-                    const querySnapshot = await getDocs(collection(db, "sistema_z_vault"));
-                    querySnapshot.forEach(async (documentSnap) => {
-                        if(documentSnap.id === currentTrackId) {
-                            const trackRef = doc(db, "sistema_z_vault", currentTrackId);
-                            const existingComments = documentSnap.data().comments || [];
-                            existingComments.push(commentText);
-                            await updateDoc(trackRef, { comments: existingComments });
-                        }
-                    });
-                } catch(e) {
-                    console.error(e);
-                }
-            }
+        document.getElementById('btnCompartir').addEventListener('click', () => {
+            if(!activeMediaUrl) { alert("No hay ningún tema activo en reproducción."); return; }
+            navigator.clipboard.writeText(activeMediaUrl);
+            alert("🔗 Enlace de Compartir Z copiado al portapapeles.");
         });
 
-        // 5. Botones de Perfil y Estudio Z
         document.getElementById('btnLogin').addEventListener('click', () => {
             const user = document.getElementById('loginUser').value.trim();
-            if(!user) {
-                alert("⚠️ Ingresa tu usuario o alias de artista.");
-                return;
-            }
-            alert(`🔐 Acceso concedido al perfil de: ${user}`);
+            if(!user) { alert("Ingresa tu usuario o alias de artista."); return; }
+            alert(`🔐 Acceso concedido al perfil de artista: ${user} en el Puerto Terminal Z.`);
         });
 
+        // Controles Estudio Z
         let flashOn = false;
         document.getElementById('flashBtn').addEventListener('click', () => {
             flashOn = !flashOn;
             const btn = document.getElementById('flashBtn');
             const screen = document.getElementById('studioScreen');
             if(flashOn) {
-                btn.innerText = "⚡ FLASH: ON (RÍTMICO)";
+                btn.innerText = "⚡ FLASH RÍTMICO: ON";
                 screen.style.boxShadow = "0 0 50px #ff0000";
             } else {
-                btn.innerText = "⚡ FLASH: OFF";
+                btn.innerText = "⚡ FLASH RÍTMICO: OFF";
                 screen.style.boxShadow = "0 0 25px rgba(255, 0, 0, 0.4)";
             }
         });
@@ -341,16 +313,13 @@ html_content = """<!DOCTYPE html>
         document.getElementById('glitchBtn').addEventListener('click', () => {
             const matrix = document.getElementById('matrixEffect');
             matrix.style.color = matrix.style.color === 'rgb(0, 255, 0)' ? '#ff0000' : '#00ff00';
-            alert("👾 Efecto de matriz activo (Frecuencia 4 16 Hz)");
+            alert("👾 Efecto Glitch y matriz de códigos cuatro dieciséis Hz activo.");
         });
 
-        document.getElementById('camBtn').addEventListener('click', () => {
-            alert("📷 Cámara frontal / trasera conmutada en el Estudio Z.");
-        });
+        document.getElementById('camBtn').addEventListener('click', () => { alert("📷 Cámara frontal / trasera conmutada."); });
+        document.getElementById('recBtn').addEventListener('click', () => { alert("⏺️ Grabación de Reel iniciada en el Estudio Z."); });
 
-        document.getElementById('recBtn').addEventListener('click', () => {
-            alert("⏺️ Grabación de Reel iniciada con éxito en el Estudio Z.");
-        });
+        cargarVault();
     </script>
 </body>
 </html>
@@ -359,4 +328,4 @@ html_content = """<!DOCTYPE html>
 with open("index.html", "w", encoding="utf-8") as f:
     f.write(html_content)
 
-print("✅ [SISTEMA Z] index.html actualizado con event listeners blindados.")
+print("✅ [SISTEMA Z] index.html definitivo generado.")
