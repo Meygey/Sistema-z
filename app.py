@@ -1,0 +1,89 @@
+import os
+
+print("🔥 [SISTEMA Z] Reconfigurando motor libre sin bloqueos regionales...")
+
+html_content = """<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Z | Tierra de Mafia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #030303; color: #ffffff; font-family: 'Inter', sans-serif; }
+        .font-z { font-family: 'Orbitron', sans-serif; }
+        .glow-red { box-shadow: 0 0 25px rgba(255, 0, 0, 0.4); }
+        .border-z { border-color: #ff0000; }
+        .bg-z-red { background-color: #ff0000; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+    <header class="border-b border-z p-4 bg-[#080808] sticky top-0 z-50 flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+            <div class="w-4 h-4 bg-z-red rounded-full animate-pulse glow-red"></div>
+            <h1 class="font-z font-black text-xl tracking-wider text-red-600">SISTEMA <span class="text-white">Z</span></h1>
+        </div>
+        <span class="text-xs font-z text-red-500 border border-z px-2 py-1 rounded">TIERRA DE MAFIA</span>
+    </header>
+
+    <main class="container mx-auto px-4 py-8 max-w-4xl flex-grow">
+        <div class="bg-[#0b0b0b] border border-z rounded-xl p-6 glow-red mb-8">
+            <h2 class="font-z text-2xl font-bold mb-2 text-white">PUERTO TERMINAL <span class="text-red-600">Z</span></h2>
+            <p class="text-gray-400 text-sm mb-4">Plataforma descentralizada de streaming de alta frecuencia (cuatro dieciséis Hz). Sincronizado y libre de censura.</p>
+            <div id="status-box" class="p-3 bg-black border border-zinc-800 rounded text-xs text-red-400 font-mono">
+                ⚡ Estado: Conectando al Vault descentralizado...
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="bg-[#0b0b0b] border border-zinc-800 p-6 rounded-xl">
+                <h3 class="font-z font-bold text-lg mb-3 text-red-500">🎧 Registrar Track & Copyright Z</h3>
+                <p class="text-xs text-gray-400 mb-4">Arranca directo con el coro para frenar el scroll. Ingresa el enlace directo del audio.</p>
+                <input type="text" id="trackUrl" placeholder="https://... (URL directa MP3)" class="w-full bg-black border border-zinc-800 p-2 rounded text-xs text-white mb-3 focus:border-red-600 outline-none"/>
+                <input type="text" id="trackTitle" placeholder="Nombre del tema (Ej: Contrabando)" class="w-full bg-black border border-zinc-800 p-2 rounded text-xs text-white mb-3 focus:border-red-600 outline-none"/>
+                <button onclick="alert('Track enlazado al sistema central cuatro dieciséis')" class="w-full bg-red-600 hover:bg-red-700 text-white font-z py-2 rounded text-sm transition font-bold">PUBLICAR EN EL VAULT</button>
+            </div>
+            <div class="bg-[#0b0b0b] border border-zinc-800 p-6 rounded-xl">
+                <h3 class="font-z font-bold text-lg mb-3 text-red-500">🎥 Estudio Z (Reels & Flash)</h3>
+                <p class="text-xs text-gray-400 mb-4">Generador de visuales con destello de flash sincronizado para TikTok e Instagram.</p>
+                <button onclick="alert('Estudio Z activo: Flash rítmico listo para disparar')" class="w-full border border-red-600 text-red-500 hover:bg-red-950 font-z py-2 rounded text-sm transition font-bold">ABRIR ESTUDIO Z</button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="border-t border-zinc-900 text-center py-4 text-xs text-gray-600 font-z">
+        © 2026 TIERRA DE MAFIA • SISTEMA Z • cuatro dieciséis
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyA0sJA8yhBovCI7mgkxBi0L_ldi5JyL5iU",
+          authDomain: "sistema-z-vault.firebaseapp.com",
+          projectId: "sistema-z-vault",
+          storageBucket: "sistema-z-vault.firebasestorage.app",
+          messagingSenderId: "109056330158",
+          appId: "1:109056330158:web:c49fbd4b5dd494021b603f",
+          measurementId: "G-9Y6Y5S6FEH"
+        };
+
+        try {
+            const app = initializeApp(firebaseConfig);
+            const db = getFirestore(app);
+            document.getElementById('status-box').innerHTML = "🟢 Conectado al Vault de Firebase con éxito";
+            document.getElementById('status-box').className = "p-3 bg-black border border-green-800 rounded text-xs text-green-400 font-mono";
+        } catch (e) {
+            document.getElementById('status-box').innerHTML = "🔴 Error: " + e.message;
+        }
+    </script>
+</body>
+</html>
+"""
+
+with open("index.html", "w", encoding="utf-8") as f:
+    f.write(html_content)
+
+print("✅ [SISTEMA Z] index.html actualizado y blindado.")
