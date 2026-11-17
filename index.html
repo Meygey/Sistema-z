@@ -311,116 +311,35 @@
 
         window.onload = cargarCatalogoGlobal;
     </script>
-</body>
 
-<script>
-document.getElementById('btnSubirZ').addEventListener('click', async function(e) {
-    e.preventDefault();
-    console.log('Botón presionado mediante listener seguro');
-    try {
-        await subirAlSistemaz();
-    } catch (err) {
-        console.error(err);
-        alert('Error al ejecutar: ' + err.message);
-    }
-});
-</script>
-
-<script>
-async function subirAlSistemaz() {
-    try {
-        alert("Iniciando proceso de subida a Sistema Z...");
-        const catalogSelect = document.querySelector('select') || document.querySelector('input');
-        const archivoInput = document.querySelector('input[type="file"]');
-        
-            alert("Error: Debes seleccionar al menos un archivo multimedia.");
-            return;
-        }
-
-        const archivo = archivoInput.files[0];
-        alert("Subiendo archivo: " + archivo.name);
-
-        const { data, error } = await _supabase.storage
-            .from('boveda-z')
-            .upload('media/' + Date.now() + '_' + archivo.name, archivo);
-
-        if (error) {
-            throw error;
-        }
-
-        console.log("Subida exitosa:", data);
-    } catch (err) {
-        console.error("Fallo en la subida:", err);
-        alert("Fallo al subir: " + err.message);
-    }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    const btn = document.getElementById('btnSubirZ') || document.querySelector('button');
-    if (btn) {
-        btn.onclick = (e) => {
-            e.preventDefault();
-            subirAlSistemaz();
-        };
-    }
-});
-</script>
-
-
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const btn = document.getElementById('btnSubirZ');
-    if (btn) {
-        btn.addEventListener('click', async (e) => {
-            e.preventDefault();
-            console.log('Botón Generar Coprin y Subir presionado');
-            await subirAlSistemaz();
-        });
-    } else {
-        console.error('No se encontró el botón btnSubirZ');
-    }
-});
-</script>
-
-
-<div id="logPantalla" style="background: #222; color: #0f0; padding: 10px; margin: 10px; font-family: monospace; font-size: 12px; border-radius: 5px; max-height: 150px; overflow-y: auto;">
-    Estado: Sistema listo. Esperando acción...
+<div id="logPantalla" style="background: #000; color: #0f0; padding: 15px; margin: 10px; font-family: monospace; font-size: 14px; border: 3px solid red; border-radius: 8px; z-index: 999999; position: relative;">
+    🟢 ESTADO: Depurador Z cargado correctamente.
 </div>
 <script>
-function log(msg) {
+function logZ(m) {
     const box = document.getElementById('logPantalla');
-    if(box) box.innerHTML += '<br>' + msg;
-    console.log(msg);
+    if(box) box.innerHTML += '<br> > ' + m;
+    console.log(m);
 }
-
-window.onerror = function(msg, url, line) {
-    log('❌ Error JS: ' + msg + ' (Línea ' + line + ')');
-};
-
 document.addEventListener('DOMContentLoaded', () => {
-    log('DOM cargado correctamente.');
+    logZ('DOM listo.');
     const btn = document.getElementById('btnSubirZ') || document.querySelector('button');
     if (btn) {
         btn.id = 'btnSubirZ';
-        btn.addEventListener('click', async (e) => {
+        logZ('Botón btnSubirZ localizado.');
+        btn.onclick = function(e) {
             e.preventDefault();
-            log('🟢 ¡Clic detectado en el botón!');
-            try {
-                if (typeof _supabase === 'undefined') {
-                    throw new Error('El cliente de Supabase (_supabase) no está definido.');
-                }
-                log('Conectando con Supabase...');
-                // Simular prueba de subida
-                log('¡Verificación de Supabase exitosa!');
-            } catch (err) {
-                log('❌ Error en función: ' + err.message);
+            logZ('🚀 ¡Clic exitoso en el botón!');
+            if (typeof subirAlSistemaz === 'function') {
+                logZ('Ejecutando subida...');
+                subirAlSistemaz();
+            } else {
+                logZ('⚠️ Clic registrado, pero falta definir subirAlSistemaz.');
             }
-        });
-        log('Botón vinculado con éxito.');
+        };
     } else {
-        log('❌ No se encontró ningún botón en el DOM.');
+        logZ('❌ No se encontró el botón en el HTML.');
     }
 });
 </script>
-
-</html>
+</body></html>
