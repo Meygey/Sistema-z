@@ -1,4 +1,3 @@
-
 /**
  * 🔺 SISTEMA Z - INTERFAZ DE REGISTRO Y PERFILES DE ARTISTAS
  * Módulo visual independiente para la gestión de cuentas en Supabase.
