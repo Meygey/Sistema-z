@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema Z | Bóveda Soberana Supabase</title>
+    <title>Sistema Z | Bóveda Soberana HTTP Direct</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         body { background-color: #030303; color: #ffffff; font-family: 'Inter', sans-serif; }
@@ -26,7 +25,7 @@
         </div>
         <div class="text-right">
             <span class="text-xs font-z text-red-500 border border-z px-2 py-1 rounded block">TIERRA DE MAFIA</span>
-            <span class="text-[10px] text-zinc-500 font-mono">Estado: <span id="connection-status" class="text-yellow-500">Conectando...</span></span>
+            <span class="text-[10px] text-zinc-500 font-mono">Estado: <span id="connection-status" class="text-green-500">Conexión Directa HTTP</span></span>
         </div>
     </header>
 
@@ -34,12 +33,12 @@
         <div class="bg-black border border-zinc-800 rounded-xl p-4 mb-8 font-mono text-[11px]">
             <p class="text-red-500 font-z font-bold mb-1">🖥️ CONSOLA DE DEPURACIÓN Z:</p>
             <div id="debugConsole" class="text-zinc-400 h-20 overflow-y-auto bg-[#050505] p-2 rounded border border-zinc-900">
-                [Sistema] Inicializando motor Supabase...
+                [Sistema] Inicializando protocolo HTTP directo...
             </div>
         </div>
 
         <div class="bg-[#0b0b0b] border border-z rounded-xl p-6 glow-red mb-8">
-            <h3 class="font-z font-bold text-sm mb-3 text-red-500">🎧 Carga Directa de Temas (Supabase Storage & DB)</h3>
+            <h3 class="font-z font-bold text-sm mb-3 text-red-500">🎧 Carga Directa de Temas (HTTP REST API)</h3>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
                 <input type="text" id="artistName" placeholder="Nombre del Artista" class="bg-black border border-zinc-800 p-2 rounded text-xs text-white outline-none focus:border-red-600"/>
@@ -91,22 +90,18 @@
         const SUPABASE_URL = "https://uxyvpqraebwptbbvngus.supabase.co";
         const SUPABASE_ANON_KEY = "Sb_publishable_3i0NSPnUKz89ykUYcFiEDg_bq9Uaf9s";
 
-        let supabaseClient = null;
-        try {
-            supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-            document.getElementById('connection-status').innerText = "Conectado";
-            document.getElementById('connection-status').className = "text-green-500";
-            debugLog("Cliente Supabase conectado con éxito a la API.");
-        } catch (e) {
-            debugLog("Error al iniciar Supabase: " + e.message, true);
-        }
-
         async function cargarCatalogoSupabase() {
             const catalogDiv = document.getElementById('supabaseCatalog');
-            if(!supabaseClient) return;
             try {
-                const { data, error } = await supabaseClient.from('temas_z').select('*').order('created_at', { ascending: false });
-                if (error) throw error;
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/temas_z?select=*&order=created_at.desc`, {
+                    headers: {
+                        "apikey": SUPABASE_ANON_KEY,
+                        "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
+                    }
+                });
+
+                if (!response.ok) throw new Error("Error HTTP al leer la base de datos: " + response.status);
+                const data = await response.json();
 
                 catalogDiv.innerHTML = "";
                 if(!data || data.length === 0) {
@@ -153,19 +148,24 @@
                 if(fileInput.files.length > 0) {
                     const file = fileInput.files[0];
                     const fileName = Date.now() + "_" + file.name;
-                    debugLog("Subiendo archivo al Storage: " + fileName);
+                    debugLog("Subiendo archivo vía REST Storage: " + fileName);
 
-                    const { data: storageData, error: storageError } = await supabaseClient.storage
-                        .from('audios_z')
-                        .upload(fileName, file);
+                    const uploadResponse = await fetch(`${SUPABASE_URL}/storage/v1/object/audios_z/${fileName}`, {
+                        method: 'POST',
+                        headers: {
+                            "apikey": SUPABASE_ANON_KEY,
+                            "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+                            "Content-Type": file.type || 'application/octet-stream'
+                        },
+                        body: file
+                    });
 
-                    if (storageError) throw storageError;
+                    if (!uploadResponse.ok) {
+                        const errText = await uploadResponse.text();
+                        throw new Error("Fallo en Storage: " + errText);
+                    }
 
-                    const { data: publicURLData } = supabaseClient.storage
-                        .from('audios_z')
-                        .getPublicUrl(fileName);
-
-                    mediaUrl = publicURLData.publicUrl;
+                    mediaUrl = `${SUPABASE_URL}/storage/v1/object/public/audios_z/${fileName}`;
                     debugLog("Archivo subido con éxito al Storage.");
                 } else {
                     alert("⚠️ Selecciona un archivo de audio o video.");
@@ -174,12 +174,29 @@
 
                 const copyrightId = "COPYRIGHT-Z-" + Math.floor(100000 + Math.random() * 900000);
 
-                debugLog("Guardando metadatos en tabla 'temas_z'...");
-                const { error: dbError } = await supabaseClient
-                    .from('temas_z')
-                    .insert([{ artist, title, genre: genre || "Urbano", media_url: mediaUrl, cover_url: coverUrl, copyright: copyrightId }]);
+                debugLog("Guardando metadatos vía REST Database...");
+                const dbResponse = await fetch(`${SUPABASE_URL}/rest/v1/temas_z`, {
+                    method: 'POST',
+                    headers: {
+                        "apikey": SUPABASE_ANON_KEY,
+                        "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+                        "Content-Type": "application/json",
+                        "Prefer": "return=minimal"
+                    },
+                    body: JSON.stringify({
+                        artist: artist,
+                        title: title,
+                        genre: genre || "Urbano",
+                        media_url: mediaUrl,
+                        cover_url: coverUrl,
+                        copyright: copyrightId
+                    })
+                });
 
-                if (dbError) throw dbError;
+                if (!dbResponse.ok) {
+                    const errDb = await dbResponse.text();
+                    throw new Error("Fallo en Base de Datos: " + errDb);
+                }
 
                 debugLog("¡Tema registrado con éxito!");
                 alert(`✅ ¡Tema publicado en Supabase! Sello: ${copyrightId}`);
