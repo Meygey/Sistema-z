@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema Z | Supabase Vault & Terminal</title>
+    <title>Sistema Z | Bóveda Soberana Supabase</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Librería oficial de Supabase JS -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
@@ -17,13 +16,12 @@
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between">
-    <!-- Cabecera Oficial -->
     <header class="border-b border-z p-4 bg-[#080808] sticky top-0 z-50 flex justify-between items-center">
         <div class="flex items-center space-x-3">
             <div class="w-4 h-4 bg-z-red rounded-full animate-pulse glow-red"></div>
             <div>
                 <h1 class="font-z font-black text-lg tracking-wider text-red-600">SISTEMA <span class="text-white">Z</span></h1>
-                <p class="text-[10px] text-zinc-400 font-z">SUPABASE STORAGE & VAULT • 4 16 HZ</p>
+                <p class="text-[10px] text-zinc-400 font-z">BÓVEDA SOBERANA • 4 16 HZ</p>
             </div>
         </div>
         <div class="text-right">
@@ -33,26 +31,23 @@
     </header>
 
     <main class="container mx-auto px-4 py-8 max-w-4xl flex-grow">
-        <!-- Consola de Depuración en Vivo (Para cazar errores del botón al instante) -->
         <div class="bg-black border border-zinc-800 rounded-xl p-4 mb-8 font-mono text-[11px]">
             <p class="text-red-500 font-z font-bold mb-1">🖥️ CONSOLA DE DEPURACIÓN Z:</p>
             <div id="debugConsole" class="text-zinc-400 h-20 overflow-y-auto bg-[#050505] p-2 rounded border border-zinc-900">
-                [Sistema] Inicializando motor Supabase y verificación de llaves...
+                [Sistema] Inicializando motor Supabase...
             </div>
         </div>
 
-        <!-- Cuadrícula de Carga con Supabase -->
         <div class="bg-[#0b0b0b] border border-z rounded-xl p-6 glow-red mb-8">
             <h3 class="font-z font-bold text-sm mb-3 text-red-500">🎧 Carga Directa de Temas (Supabase Storage & DB)</h3>
-            <p class="text-[11px] text-gray-400 mb-4">Llena los campos, selecciona tu archivo de audio/video y sube a la base de datos soberana de forma permanente.</p>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
-                <input type="text" id="artistName" placeholder="Nombre del Artista (Ej: Enyi el Científico)" class="bg-black border border-zinc-800 p-2 rounded text-xs text-white outline-none focus:border-red-600"/>
-                <input type="text" id="trackTitle" placeholder="Título del Tema (Coro inicial)" class="bg-black border border-zinc-800 p-2 rounded text-xs text-white outline-none focus:border-red-600"/>
+                <input type="text" id="artistName" placeholder="Nombre del Artista" class="bg-black border border-zinc-800 p-2 rounded text-xs text-white outline-none focus:border-red-600"/>
+                <input type="text" id="trackTitle" placeholder="Título del Tema" class="bg-black border border-zinc-800 p-2 rounded text-xs text-white outline-none focus:border-red-600"/>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
-                <input type="text" id="trackGenre" placeholder="Género (Ej: Reggaeton / Malianteo)" class="bg-black border border-zinc-800 p-2 rounded text-xs text-white outline-none focus:border-red-600"/>
+                <input type="text" id="trackGenre" placeholder="Género (Ej: Reggaeton)" class="bg-black border border-zinc-800 p-2 rounded text-xs text-white outline-none focus:border-red-600"/>
                 <input type="file" id="mediaFile" accept="audio/*,video/*" class="bg-black border border-zinc-800 p-1.5 rounded text-xs text-zinc-400 outline-none focus:border-red-600 file:bg-red-600 file:text-white file:border-0 file:rounded file:text-[10px] file:cursor-pointer"/>
             </div>
 
@@ -61,15 +56,13 @@
             <button id="btnUploadSupabase" class="w-full bg-red-600 hover:bg-red-700 text-white font-z py-2.5 rounded text-xs transition font-bold cursor-pointer">🚀 SUBIR TEMA A SUPABASE Y GENERAR COPYRIGHT Z</button>
         </div>
 
-        <!-- Muro del Catálogo en Vivo -->
         <div class="bg-[#0b0b0b] border border-zinc-800 p-6 rounded-xl mb-8">
-            <h3 class="font-z font-bold text-sm mb-3 text-red-500">📁 Catálogo Soberano (Supabase Database)</h3>
+            <h3 class="font-z font-bold text-sm mb-3 text-red-500">📁 Catálogo Soberano en Tiempo Real</h3>
             <div id="supabaseCatalog" class="space-y-3 max-h-60 overflow-y-auto pr-1">
-                <div class="text-xs text-zinc-500">Cargando temas desde Supabase...</div>
+                <div class="text-xs text-zinc-500">Cargando temas...</div>
             </div>
         </div>
 
-        <!-- Reproductor Universal -->
         <div class="bg-[#0b0b0b] border border-zinc-800 p-6 rounded-xl">
             <h3 class="font-z font-bold text-sm mb-3 text-red-500">🌐 Reproductor Z</h3>
             <div class="p-4 bg-black border border-zinc-900 rounded space-y-3">
@@ -82,13 +75,11 @@
         </div>
     </main>
 
-    <!-- Pie de Página Oficial -->
     <footer class="border-t border-zinc-900 text-center py-4 text-xs text-gray-500 font-z space-y-1">
         <p>ENYI CIENTÍFICO OMOTICHI • SCRIPT & CASH • TIERRA DE MAFIA</p>
         <p class="text-red-600 font-bold">LA FRECUENCIA QUE NO PUEDEN APAGAR cuatro dieciséis HZ</p>
     </footer>
 
-    <!-- Lógica de Supabase con Depuración -->
     <script>
         const logBox = document.getElementById('debugConsole');
         function debugLog(msg, isError = false) {
@@ -97,33 +88,29 @@
             logBox.scrollTop = logBox.scrollHeight;
         }
 
-        // Credenciales de Supabase (Ajusta con tus llaves reales si deseas usarlas, estas vienen preparadas para el Vault)
-        const SUPABASE_URL = "https://tu-proyecto.supabase.co"; 
-        const SUPABASE_ANON_KEY = "tu-anon-key-aqui";
+        const SUPABASE_URL = "https://uxyvpqraebwptbbvngus.supabase.co";
+        const SUPABASE_ANON_KEY = "Sb_publishable_3i0NSPnUKz89ykUYcFiEDg_bq9Uaf9s";
 
         let supabaseClient = null;
         try {
             supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
             document.getElementById('connection-status').innerText = "Conectado";
             document.getElementById('connection-status').className = "text-green-500";
-            debugLog("Cliente Supabase inicializado correctamente.");
+            debugLog("Cliente Supabase conectado con éxito a la API.");
         } catch (e) {
             debugLog("Error al iniciar Supabase: " + e.message, true);
         }
 
         async function cargarCatalogoSupabase() {
             const catalogDiv = document.getElementById('supabaseCatalog');
-            if(!supabaseClient) {
-                catalogDiv.innerHTML = `<div class="text-xs text-red-500">Supabase no está configurado con las llaves activas.</div>`;
-                return;
-            }
+            if(!supabaseClient) return;
             try {
                 const { data, error } = await supabaseClient.from('temas_z').select('*').order('created_at', { ascending: false });
                 if (error) throw error;
 
                 catalogDiv.innerHTML = "";
                 if(!data || data.length === 0) {
-                    catalogDiv.innerHTML = `<div class="text-xs text-zinc-500">No hay temas en Supabase todavía. Sube el primero.</div>`;
+                    catalogDiv.innerHTML = `<div class="text-xs text-zinc-500">No hay temas todavía en Supabase. Sube el primero.</div>`;
                     return;
                 }
 
@@ -139,8 +126,7 @@
                     `;
                 });
             } catch (err) {
-                debugLog("Error cargando catálogo de Supabase: " + err.message, true);
-                catalogDiv.innerHTML = `<div class="text-xs text-red-500">Error al leer la base de datos: ${err.message}</div>`;
+                debugLog("Error cargando catálogo: " + err.message, true);
             }
         }
 
@@ -150,7 +136,6 @@
             document.getElementById('globalAudioPlayer').play();
         }
 
-        // Botón de Carga Blindado con try/catch y depuración visual
         document.getElementById('btnUploadSupabase').addEventListener('click', async () => {
             const artist = document.getElementById('artistName').value.trim();
             const title = document.getElementById('trackTitle').value.trim();
@@ -160,26 +145,15 @@
 
             if(!artist || !title) {
                 alert("⚠️ Ingresa el nombre del artista y el título del tema.");
-                debugLog("Intento de subida fallido: Faltan campos obligatorios.", true);
                 return;
             }
-
-            if(!supabaseClient) {
-                alert("⚠️ Supabase no está enlazado correctamente.");
-                debugLog("Supabase client nulo.", true);
-                return;
-            }
-
-            debugLog("Iniciando proceso de carga al servidor...");
 
             try {
                 let mediaUrl = "";
-
-                // Si seleccionaron archivo físico, lo subimos al Storage de Supabase
                 if(fileInput.files.length > 0) {
                     const file = fileInput.files[0];
                     const fileName = Date.now() + "_" + file.name;
-                    debugLog("Subiendo archivo físico al Storage: " + fileName);
+                    debugLog("Subiendo archivo al Storage: " + fileName);
 
                     const { data: storageData, error: storageError } = await supabaseClient.storage
                         .from('audios_z')
@@ -187,7 +161,6 @@
 
                     if (storageError) throw storageError;
 
-                    // Obtener URL pública del archivo subido
                     const { data: publicURLData } = supabaseClient.storage
                         .from('audios_z')
                         .getPublicUrl(fileName);
@@ -195,42 +168,34 @@
                     mediaUrl = publicURLData.publicUrl;
                     debugLog("Archivo subido con éxito al Storage.");
                 } else {
-                    debugLog("No se seleccionó archivo físico, se requiere enlace o archivo.", true);
-                    alert("⚠️ Selecciona un archivo de audio o video para subir.");
+                    alert("⚠️ Selecciona un archivo de audio o video.");
                     return;
                 }
 
                 const copyrightId = "COPYRIGHT-Z-" + Math.floor(100000 + Math.random() * 900000);
 
-                // Insertar registro en la tabla de Supabase
-                debugLog("Guardando metadatos en la tabla 'temas_z'...");
+                debugLog("Guardando metadatos en tabla 'temas_z'...");
                 const { error: dbError } = await supabaseClient
                     .from('temas_z')
-                    .insert([
-                        { artist: artist, title: title, genre: genre || "Urbano", media_url: mediaUrl, cover_url: coverUrl, copyright: copyrightId }
-                    ]);
+                    .insert([{ artist, title, genre: genre || "Urbano", media_url: mediaUrl, cover_url: coverUrl, copyright: copyrightId }]);
 
                 if (dbError) throw dbError;
 
-                debugLog("¡Tema registrado con éxito en Supabase y Bóveda Soberana!");
-                alert(`✅ ¡Tema publicado y guardado en Supabase! Sello: ${copyrightId}`);
-                
-                // Limpiar campos
+                debugLog("¡Tema registrado con éxito!");
+                alert(`✅ ¡Tema publicado en Supabase! Sello: ${copyrightId}`);
                 document.getElementById('artistName').value = "";
                 document.getElementById('trackTitle').value = "";
                 document.getElementById('trackGenre').value = "";
                 document.getElementById('coverUrl').value = "";
                 fileInput.value = "";
-                
                 cargarCatalogoSupabase();
 
             } catch (err) {
-                debugLog("ERROR CRÍTICO EN BOTÓN DE CARGA: " + err.message, true);
+                debugLog("ERROR EN CARGA: " + err.message, true);
                 alert("🔴 Error en la subida: " + err.message + "\nRevisa la consola de depuración arriba.");
             }
         });
 
-        // Cargar al iniciar
         cargarCatalogoSupabase();
     </script>
 </body>
