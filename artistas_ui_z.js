@@ -1,3 +1,4 @@
+
 /**
  * 🔺 SISTEMA Z - INTERFAZ DE REGISTRO Y PERFILES DE ARTISTAS
  * Módulo visual independiente para la gestión de cuentas en Supabase.
@@ -24,17 +25,16 @@
                 <span id="z-current-user" style="color: #888;">Modo Público</span>
             </div>
             <div>
-                <button id="z-btn-auth" style="background: #ff1a1a; color: #fff; border: none; padding: 5px 12px; border-radius: 4px; cursor: pointer; font-weight: bold;">Acceder / Registrar</button>
+                <button onclick="window.EstudioReelsZ && window.EstudioReelsZ.abrirEstudio()" style="background: #1a1a1a; color: #ff1a1a; border: 1px solid #ff1a1a; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-weight: bold; margin-right: 6px;">🎥 Reel</button>
+                <button id="z-btn-auth" style="background: #ff1a1a; color: #fff; border: none; padding: 5px 12px; border-radius: 4px; cursor: pointer; font-weight: bold;">Acceder</button>
             </div>
         `;
 
         document.body.prepend(bar);
-
-        // Ajustar el margen superior del body para que la barra no tape el contenido
         document.body.style.marginTop = "45px";
 
         document.getElementById('z-btn-auth').addEventListener('click', () => {
-            alert("🔺 Consola de Autenticación Z: Módulo de perfiles activo. Próximo paso: Vínculo con Supabase.");
+            alert("🔺 Consola de Autenticación Z: Módulo de perfiles activo.");
         });
     }
 
