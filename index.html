@@ -25,7 +25,7 @@
         </div>
         <div class="text-right">
             <span class="text-xs font-z text-red-500 border border-z px-2 py-1 rounded block">TIERRA DE MAFIA</span>
-            <span class="text-[10px] text-zinc-500 font-mono">Estado: <span id="connection-status" class="text-green-500">Conectado (JWT)</span></span>
+            <span class="text-[10px] text-zinc-500 font-mono">Estado: <span id="connection-status" class="text-green-500">Conectado (Bóveda-Z)</span></span>
         </div>
     </header>
 
@@ -33,7 +33,7 @@
         <div class="bg-black border border-zinc-800 rounded-xl p-4 mb-8 font-mono text-[11px]">
             <p class="text-red-500 font-z font-bold mb-1">🖥️ CONSOLA DE DEPURACIÓN Z:</p>
             <div id="debugConsole" class="text-zinc-400 h-20 overflow-y-auto bg-[#050505] p-2 rounded border border-zinc-900">
-                [Sistema] Inicializando protocolo Z con token JWT...
+                [Sistema] Inicializando protocolo Z con bucket boveta-z...
             </div>
         </div>
 
@@ -89,6 +89,7 @@
 
         const SUPABASE_URL = "https://uxyvpqraebwptbbvngus.supabase.co";
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV4eXZwcXJhZWJ3cHRiYnZuZ3VzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ4NzQ4ODksImV4cCI6MjExMDQ1MDg4OX0.Gb9UgFg2YbC8ow4lzR_yKnExab1dmXU38UFuuuIYX0k";
+        const BUCKET_NAME = "boveta-z";
 
         async function cargarCatalogoSupabase() {
             const catalogDiv = document.getElementById('supabaseCatalog');
@@ -152,9 +153,9 @@
                 if(fileInput.files.length > 0) {
                     const file = fileInput.files[0];
                     const fileName = Date.now() + "_" + file.name.replace(/[^a-zA-Z0-9_.-]/g, '_');
-                    debugLog("Subiendo archivo vía REST Storage: " + fileName);
+                    debugLog("Subiendo archivo vía REST Storage (" + BUCKET_NAME + "): " + fileName);
 
-                    const uploadResponse = await fetch(`${SUPABASE_URL}/storage/v1/object/audios_z/${fileName}`, {
+                    const uploadResponse = await fetch(`${SUPABASE_URL}/storage/v1/object/${BUCKET_NAME}/${fileName}`, {
                         method: 'POST',
                         headers: {
                             "apikey": SUPABASE_ANON_KEY,
@@ -169,7 +170,7 @@
                         throw new Error("Fallo en Storage: " + errText);
                     }
 
-                    mediaUrl = `${SUPABASE_URL}/storage/v1/object/public/audios_z/${fileName}`;
+                    mediaUrl = `${SUPABASE_URL}/storage/v1/object/public/${BUCKET_NAME}/${fileName}`;
                     debugLog("Archivo subido con éxito al Storage.");
                 } else {
                     alert("⚠️ Selecciona un archivo de audio o video.");
