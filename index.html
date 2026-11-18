@@ -36,7 +36,7 @@
             <label>Archivo de Audio (.mp3 / .wav):</label>
             <input type="file" id="audioInput" accept="audio/*">
         </div>
-        <button id="btnSubirZ" onclick="procesarSubidaSistemaZ(event)">Generar Coprin y Subir</button>
+        <button id="btnSubirZ" >Generar Coprin y Subir</button>
         <div id="logPantalla">🟢 Sistema Z: Conectado a Bóveda. Listo para operar.</div>
     </div>
 
@@ -87,5 +87,45 @@
             }
         }
     </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('btnSubirZ');
+    if (btn) {
+        console.log('Botón encontrado por el sistema.');
+        btn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            alert('🔥 ¡Clic detectado por el escuchador Z!');
+            
+            const titulo = document.getElementById('tituloInput').value || 'Tema_Sin_Nombre';
+            const audioInput = document.getElementById('audioInput');
+            
+                alert('⚠️ Selecciona un archivo de audio primero.');
+                return;
+            }
+            
+            const audioFile = audioInput.files[0];
+            alert('Subiendo archivo: ' + audioFile.name);
+            
+            const clienteSupabase = window.supabase.createClient(
+                'https://tlvcwwrir2oaoai4f0ed.supabase.co',
+                'Sb_publishable_3i0NSPnUKz89ykUYcFiEDg_bq9Uaf9s'
+            );
+            
+            try {
+                const ruta = 'audio/' + Date.now() + '_' + audioFile.name;
+                const { data, error } = await clienteSupabase.storage
+                    .from('boveda-z')
+                    .upload(ruta, audioFile);
+                    
+                if (error) throw error;
+                alert('✅ ¡Éxito total! Archivo subido a la boveda-z.');
+            } catch (err) {
+                alert('❌ Error de Supabase: ' + err.message);
+            }
+        });
+    }
+});
+</script>
 </body>
 </html>
