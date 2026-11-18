@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema Z | Bóveda Soberana Supabase Oficial</title>
+    <title>Sistema Z | Bóveda Soberana Oficial</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
@@ -25,7 +25,7 @@
         </div>
         <div class="text-right">
             <span class="text-xs font-z text-red-500 border border-z px-2 py-1 rounded block">TIERRA DE MAFIA</span>
-            <span class="text-[10px] text-zinc-500 font-mono">Estado: <span id="connection-status" class="text-green-500">Conectado (Z-Media)</span></span>
+            <span class="text-[10px] text-zinc-500 font-mono">Estado: <span id="connection-status" class="text-green-500">Soberano Activo</span></span>
         </div>
     </header>
 
@@ -33,32 +33,28 @@
         <div class="bg-black border border-zinc-800 rounded-xl p-4 mb-8 font-mono text-[11px]">
             <p class="text-red-500 font-z font-bold mb-1">🖥️ CONSOLA DE DEPURACIÓN Z:</p>
             <div id="debugConsole" class="text-zinc-400 h-20 overflow-y-auto bg-[#050505] p-2 rounded border border-zinc-900">
-                [Sistema] Inicializando selectores multimedia directos...
+                [Sistema] Conexión lista con Supabase DB...
             </div>
         </div>
 
         <div class="bg-[#0b0b0b] border border-z rounded-xl p-6 glow-red mb-8">
-            <h3 class="font-z font-bold text-sm mb-3 text-red-500">🎧 Carga Directa de Temas y Portadas</h3>
+            <h3 class="font-z font-bold text-sm mb-3 text-red-500">🎧 Registro Soberano de Temas</h3>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
-                <input type="text" id="artistName" placeholder="Nombre del Artista" class="bg-black border border-zinc-800 p-2 rounded text-xs text-white outline-none focus:border-red-600"/>
+                <input type="text" id="artistName" placeholder="Nombre del Artista (Ej: Enyi el Científico)" class="bg-black border border-zinc-800 p-2 rounded text-xs text-white outline-none focus:border-red-600"/>
                 <input type="text" id="trackTitle" placeholder="Título del Tema" class="bg-black border border-zinc-800 p-2 rounded text-xs text-white outline-none focus:border-red-600"/>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
                 <input type="text" id="trackGenre" placeholder="Género (Ej: Dark Reggaeton)" class="bg-black border border-zinc-800 p-2 rounded text-xs text-white outline-none focus:border-red-600"/>
-                <div class="flex flex-col space-y-1">
-                    <label class="text-[10px] text-zinc-400 font-z">📁 Archivo de Audio (MP3/M4A/WAV):</label>
-                    <input type="file" id="mediaFile" accept="audio/*" class="bg-black border border-zinc-800 p-1.5 rounded text-xs text-zinc-400 outline-none focus:border-red-600 file:bg-red-600 file:text-white file:border-0 file:rounded file:text-[10px] file:cursor-pointer"/>
-                </div>
+                <input type="text" id="mediaUrlInput" placeholder="Enlace directo del Audio (URL)" class="bg-black border border-zinc-800 p-2 rounded text-xs text-white outline-none focus:border-red-600"/>
             </div>
 
-            <div class="flex flex-col space-y-1 mb-4">
-                <label class="text-[10px] text-zinc-400 font-z">🖼️ Imagen de Portada (Galería):</label>
-                <input type="file" id="coverFile" accept="image/*" class="bg-black border border-zinc-800 p-1.5 rounded text-xs text-zinc-400 outline-none focus:border-red-600 file:bg-red-600 file:text-white file:border-0 file:rounded file:text-[10px] file:cursor-pointer"/>
+            <div class="mb-4">
+                <input type="text" id="coverUrlInput" placeholder="Enlace de la Portada (URL de imagen opcional)" class="w-full bg-black border border-zinc-800 p-2 rounded text-xs text-white outline-none focus:border-red-600"/>
             </div>
 
-            <button id="btnUploadSupabase" class="w-full bg-red-600 hover:bg-red-700 text-white font-z py-2.5 rounded text-xs transition font-bold cursor-pointer">🚀 SUBIR TEMA, PORTADA Y GENERAR COPYRIGHT Z</button>
+            <button id="btnUploadSupabase" class="w-full bg-red-600 hover:bg-red-700 text-white font-z py-2.5 rounded text-xs transition font-bold cursor-pointer">🚀 REGISTRAR TEMA Y GENERAR COPYRIGHT Z</button>
         </div>
 
         <div class="bg-[#0b0b0b] border border-zinc-800 p-6 rounded-xl mb-8">
@@ -95,7 +91,6 @@
 
         const SUPABASE_URL = "https://uxyvpqraebwptbbvngus.supabase.co";
         const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV4eXZwcXJhZWJ3cHRiYnZuZ3VzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ4NzQ4ODksImV4cCI6MjExMDQ1MDg4OX0.Gb9UgFg2YbC8ow4lzR_yKnExab1dmXU38UFuuuIYX0k";
-        const BUCKET_NAME = "boveta-z";
 
         async function cargarCatalogoSupabase() {
             const catalogDiv = document.getElementById('supabaseCatalog');
@@ -115,7 +110,7 @@
 
                 catalogDiv.innerHTML = "";
                 if(!data || data.length === 0) {
-                    catalogDiv.innerHTML = `<div class="text-xs text-zinc-500">No hay temas todavía en Supabase. Sube el primero.</div>`;
+                    catalogDiv.innerHTML = `<div class="text-xs text-zinc-500">No hay temas todavía en Supabase. Registra el primero.</div>`;
                     return;
                 }
 
@@ -133,7 +128,7 @@
                         </div>
                     `;
                 });
-                debugLog("Catálogo cargado con éxito.");
+                debugLog("Catálogo sincronizado con éxito.");
             } catch (err) {
                 debugLog("Error cargando catálogo: " + err.message, true);
             }
@@ -149,71 +144,18 @@
             const artist = document.getElementById('artistName').value.trim();
             const title = document.getElementById('trackTitle').value.trim();
             const genre = document.getElementById('trackGenre').value.trim();
-            const mediaFileInput = document.getElementById('mediaFile');
-            const coverFileInput = document.getElementById('coverFile');
+            const mediaUrl = document.getElementById('mediaUrlInput').value.trim();
+            const coverUrl = document.getElementById('coverUrlInput').value.trim();
 
-            if(!artist || !title) {
-                alert("⚠️ Ingresa el nombre del artista y el título del tema.");
-                return;
-            }
-
-            if(mediaFileInput.files.length === 0) {
-                alert("⚠️ Selecciona un archivo de audio.");
+            if(!artist || !title || !mediaUrl) {
+                alert("⚠️ Ingresa el nombre del artista, el título y el enlace directo del audio.");
                 return;
             }
 
             try {
-                // 1. Subir Audio
-                const audioFile = mediaFileInput.files[0];
-                const audioFileName = "audio_" + Date.now() + "_" + audioFile.name.replace(/[^a-zA-Z0-9_.-]/g, '_');
-                debugLog("Subiendo audio: " + audioFileName);
-
-                const audioRes = await fetch(`${SUPABASE_URL}/storage/v1/object/${BUCKET_NAME}/${audioFileName}`, {
-                    method: 'POST',
-                    headers: {
-                        "apikey": SUPABASE_ANON_KEY,
-                        "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
-                        "Content-Type": audioFile.type || 'audio/mp4'
-                    },
-                    body: audioFile
-                });
-
-                if (!audioRes.ok) {
-                    const errAudio = await audioRes.text();
-                    throw new Error("Fallo subiendo audio: " + errAudio);
-                }
-                const mediaUrl = `${SUPABASE_URL}/storage/v1/object/public/${BUCKET_NAME}/${audioFileName}`;
-                debugLog("Audio subido con éxito.");
-
-                // 2. Subir Portada (si seleccionó)
-                let coverUrl = "";
-                if(coverFileInput.files.length > 0) {
-                    const coverFile = coverFileInput.files[0];
-                    const coverFileName = "cover_" + Date.now() + "_" + coverFile.name.replace(/[^a-zA-Z0-9_.-]/g, '_');
-                    debugLog("Subiendo portada: " + coverFileName);
-
-                    const coverRes = await fetch(`${SUPABASE_URL}/storage/v1/object/${BUCKET_NAME}/${coverFileName}`, {
-                        method: 'POST',
-                        headers: {
-                            "apikey": SUPABASE_ANON_KEY,
-                            "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
-                            "Content-Type": coverFile.type || 'image/jpeg'
-                        },
-                        body: coverFile
-                    });
-
-                    if (coverRes.ok) {
-                        coverUrl = `${SUPABASE_URL}/storage/v1/object/public/${BUCKET_NAME}/${coverFileName}`;
-                        debugLog("Portada subida con éxito.");
-                    } else {
-                        debugLog("Aviso: No se pudo subir la portada, continuando sin ella.", true);
-                    }
-                }
-
-                // 3. Registrar en Base de Datos
                 const copyrightId = "COPYRIGHT-Z-" + Math.floor(100000 + Math.random() * 900000);
 
-                debugLog("Registrando en Base de Datos...");
+                debugLog("Registrando metadatos en Supabase...");
                 const dbResponse = await fetch(`${SUPABASE_URL}/rest/v1/temas_z`, {
                     method: 'POST',
                     headers: {
@@ -237,20 +179,19 @@
                     throw new Error("Fallo en Base de Datos: " + errDb);
                 }
 
-                debugLog("¡Tema y portada publicados con éxito!");
+                debugLog("¡Tema registrado con éxito!");
                 alert(`✅ ¡Tema publicado en Supabase! Sello: ${copyrightId}`);
                 
-                // Limpiar formulario
                 document.getElementById('artistName').value = "";
                 document.getElementById('trackTitle').value = "";
                 document.getElementById('trackGenre').value = "";
-                mediaFileInput.value = "";
-                coverFileInput.value = "";
+                document.getElementById('mediaUrlInput').value = "";
+                document.getElementById('coverUrlInput').value = "";
                 cargarCatalogoSupabase();
 
             } catch (err) {
-                debugLog("ERROR EN CARGA: " + err.message, true);
-                alert("🔴 Error en la subida: " + err.message + "\nRevisa la consola de depuración.");
+                debugLog("ERROR EN REGISTRO: " + err.message, true);
+                alert("🔴 Error en el registro: " + err.message);
             }
         });
 
