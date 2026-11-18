@@ -3,132 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema Z | Tierra de Mafia</title>
-    <meta name="description" content="Sistema Z - Plataforma oficial de Enyi el Científico y Tierra de Mafia. Frecuencia 416Hz.">
+    <title>Sistema Z - Bóveda Oficial</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        :root { --bg-color: #050505; --primary: #e60000; --text: #ffffff; --card-bg: #111111; --border: #222; }
-        body { background-color: var(--bg-color); color: var(--text); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 12px; }
-        header { text-align: center; border-bottom: 2px solid var(--primary); padding-bottom: 12px; margin-bottom: 15px; }
-        h1 { color: var(--primary); text-transform: uppercase; letter-spacing: 2px; margin: 5px 0; font-size: 22px; }
-        .sub-header { color: #888; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
-        .studio-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 12px; max-width: 600px; margin: 0 auto 12px auto; box-shadow: 0 4px 15px rgba(230,0,0,0.1); }
-        h3 { color: var(--primary); margin-top: 0; border-bottom: 1px solid #1a1a1a; padding-bottom: 6px; font-size: 15px; }
-        input, select { width: 100%; padding: 10px; background: #1a1a1a; border: 1px solid #333; color: white; margin-bottom: 8px; border-radius: 4px; box-sizing: border-box; font-size: 14px; }
-        button { background: var(--primary); color: white; border: none; padding: 12px; font-weight: bold; border-radius: 4px; cursor: pointer; width: 100%; text-transform: uppercase; font-size: 14px; }
-        button:hover { background: #ff1a1a; }
-        audio, video { width: 100%; margin-top: 8px; border-radius: 4px; }
-        .status { margin-top: 6px; font-size: 12px; color: #aaa; text-align: center; }
-        footer { text-align: center; margin-top: 20px; padding: 15px; border-top: 1px solid var(--border); font-size: 11px; color: #666; }
+        body { background-color: #0b0b0b; color: #f1f1f1; font-family: monospace; padding: 20px; max-width: 600px; margin: auto; }
+        .card { background: #141414; border: 2px solid #ff0033; border-radius: 10px; padding: 20px; box-shadow: 0 0 15px rgba(255, 0, 51, 0.2); }
+        h2 { color: #ff0033; text-align: center; text-transform: uppercase; letter-spacing: 2px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; color: #ccc; font-size: 13px; }
+        input, select { width: 100%; padding: 10px; background: #1f1f1f; border: 1px solid #333; color: #fff; border-radius: 5px; box-sizing: border-box; }
+        button { width: 100%; background: #ff0033; color: #fff; border: none; padding: 12px; font-weight: bold; font-size: 15px; border-radius: 5px; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
+        button:hover { background: #d00028; }
+        #logPantalla { background: #000; color: #0f0; padding: 12px; margin-top: 20px; font-size: 12px; border: 1px solid #0f0; border-radius: 5px; max-height: 150px; overflow-y: auto; }
     </style>
 </head>
 <body>
-
-    <header>
-        <h1>Sistema Z</h1>
-        <div class="sub-header">Script & Cash • Frecuencia 416Hz 🔺</div>
-    </header>
-
-    <main>
-        <!-- Tarjeta 1: Generador de Coprins & Carga Directa -->
-        <div class="studio-card">
-            <h3>🎛️ Generador de Coprins & Carga Directa</h3>
-            <select id="destinoCarga">
-                <option value="universal">Catálogo Universal (Sistema Z)</option>
-                <option value="perfil">Perfil Personal de Artista</option>
-            </select>
-            <input type="text" id="nombreArtista" placeholder="Nombre Artístico (Ej: Enyi el Científico)">
-            <input type="text" id="nombreTema" placeholder="Título del Tema">
-            <input type="text" id="generoTema" placeholder="Género (Ej: Dark ReguetrapDril)">
-            <label style="font-size:11px; color:#aaa;">Portada (Imagen):</label>
-            <input type="file" id="portadaFile" accept="image/*">
-            <label style="font-size:11px; color:#aaa;">Archivo de Audio / Video:</label>
-            <input type="file" id="archivoMedia" accept="audio/*,video/*">
-            <button onclick="ejecutarSubidaDirecta(event)" onclick="subirAlSistemaZ()">Generar Coprin y Subir 🔺</button>
-            <div id="statusCarga" class="status"></div>
+    <div class="card">
+        <h2>Sistema Z 🔺 Bóveda</h2>
+        <div class="form-group">
+            <label>Artista:</label>
+            <input type="text" id="artistaInput" value="Enyi el Científico">
         </div>
-
-        <!-- Tarjeta 2: Puerto Terminal Z -->
-        <div class="studio-card">
-            <h3>💻 Puerto Terminal Z - Perfiles</h3>
-            <input type="text" id="buscarArtistaInput" placeholder="Buscar artista...">
-            <button onclick="buscarPerfilTerminal()" style="background:#1a1a1a; border:1px solid var(--primary); margin-top:4px;">Acceder al Perfil</button>
-            <div id="resultadoTerminal" style="margin-top:8px;"></div>
+        <div class="form-group">
+            <label>Título del Tema:</label>
+            <input type="text" id="tituloInput" placeholder="Ej. El Canto de la Conexión">
         </div>
-
-        <!-- Tarjeta 3: Buscador Global & Trending -->
-        <div class="studio-card">
-            <h3>🔍 Buscador Global & Catálogo Z</h3>
-            <input type="text" id="busquedaGlobal" placeholder="Buscar temas en el sistema..." oninput="filtrarCatalogo()">
-            <div id="listaCatalogo" style="max-height: 220px; overflow-y: auto; margin-top: 8px;"></div>
+        <div class="form-group">
+            <label>Género / Estilo:</label>
+            <input type="text" id="generoInput" value="Dark Experimental Reggaeton">
         </div>
-
-        <!-- Tarjeta 4: Estudio Z -->
-        <div class="studio-card">
-            <h3>🎥 Estudio Z - FX & Reels 416Hz</h3>
-            <select id="audioReelSelect" onchange="prepararAudioReel()">
-                <option value="">Selecciona audio de fondo del sistema...</option>
-            </select>
-            <audio id="audioAmbienteEstudio" preload="auto"></audio>
-
-            <div style="position: relative; background: #000; border-radius: 6px; overflow: hidden; margin-bottom: 8px; border: 1px solid #333;">
-                <video id="previewCamara" autoplay playsinline muted style="width: 100%; height: 180px; object-fit: cover;"></video>
-                <div style="position: absolute; top:8px; left:8px; font-family: monospace; font-size: 11px; color: #e60000; background: rgba(0,0,0,0.7); padding: 2px 6px; border-radius: 3px;">🔴 TIERRA DE MAFIA // 416Hz</div>
-                <div style="position: absolute; bottom:8px; right:8px; font-family: monospace; font-size: 10px; color: #00ff00; background: rgba(0,0,0,0.7); padding: 2px 6px; border-radius: 3px;" id="statusFx">FX: MATRIX ACTIVO</div>
-            </div>
-            <select id="selectFiltro" onchange="cambiarFiltroFX()" style="background:#1a1a1a; color:#fff; margin-bottom:8px;">
-                <option value="matrix">Efecto Matriz Verde (Cyberpunk)</option>
-                <option value="mafia">Efecto Rojo Sangre (Tierra de Mafia)</option>
-                <option value="mono">Blanco y Noir (Cine Puro)</option>
-            </select>
-            <button onclick="alternarFlash()" style="background:#222; border:1px solid #441111; margin-bottom: 6px;">⚡ Activar Linterna / Flash</button>
-            <button onclick="grabarReel()" id="btnGrabar" style="margin-bottom: 6px;">🔴 Iniciar Grabación con Beat</button>
-            <button onclick="detenerReel()" style="background:#441111;">⏹️ Detener y Descargar Reel</button>
-            <video id="videoResultado" controls style="display:none; margin-top: 8px;"></video>
+        <div class="form-group">
+            <label>Archivo de Audio (.mp3 / .wav):</label>
+            <input type="file" id="audioInput" accept="audio/*">
         </div>
-    </main>
+        <button id="btnSubirZ" onclick="procesarSubidaSistemaZ(event)">Generar Coprin y Subir</button>
+        <div id="logPantalla">🟢 Sistema Z: Conectado a Bóveda. Listo para operar.</div>
+    </div>
 
-    <footer>
-        Enyi Científico Omotichi • Tierra de Mafia • 416Hz 🔺
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="config.js"></script>
-    
-
-
-<div id="logPantalla" style="background: #000; color: #0f0; padding: 15px; margin: 10px; font-family: monospace; font-size: 13px; border: 3px solid red; border-radius: 8px;">
-    🟢 SISTEMA Z: Enlace Directo Activo.
-</div>
-<script>
-async function ejecutarSubidaDirecta(e) {
-    if(e) e.preventDefault();
-    alert('🔥 ¡Clic directo reconocido por el sistema!');
-    
-    const audioInput = document.querySelector('input[type="file"]');
-        alert('❌ Error: Selecciona un archivo de audio primero.');
-        return;
-    }
-    
-    const file = audioInput.files[0];
-    alert('Archivo listo para subir: ' + file.name);
-    
-    const clienteSupabase = window._supabase || window.supabase;
-        alert('❌ Error: Supabase no está conectado.');
-        return;
-    }
-    
-    try {
-        const ruta = 'audio/' + Date.now() + '_' + file.name;
-        const { data, error } = await clienteSupabase.storage
-            .from('boveda-z')
-            .upload(ruta, file);
-            
-        if (error) throw error;
+    <script>
+        // CONFIGURACIÓN OFICIAL SUPABASE - SISTEMA Z
+        const SUPABASE_URL = 'https://tlvcwwrir2oaoai4f0ed.supabase.co'; 
+        const SUPABASE_ANON_KEY = 'Sb_publishable_3i0NSPnUKz89ykUYcFiEDg_bq9Uaf9s';
         
-        alert('✅ ¡Éxito total! Archivo subido a boveda-z.');
-    } catch (err) {
-        alert('❌ Error de Supabase: ' + err.message);
-    }
-}
-</script>
-</body></html>
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        function logZ(mensaje) {
+            const pantalla = document.getElementById('logPantalla');
+            pantalla.innerHTML += '<br>> ' + mensaje;
+            pantalla.scrollTop = pantalla.scrollHeight;
+            console.log(mensaje);
+        }
+
+        async function procesarSubidaSistemaZ(e) {
+            e.preventDefault();
+            logZ('🚀 Iniciando protocolo de subida...');
+
+            const titulo = document.getElementById('tituloInput').value || 'Tema_Sin_Nombre';
+            const audioFile = document.getElementById('audioInput').files[0];
+
+                alert('⚠️ Selecciona un archivo de audio primero.');
+                logZ('❌ Error: Falta el archivo de audio.');
+                return;
+            }
+
+            logZ('Cargando archivo: ' + audioFile.name);
+
+            try {
+                const timestamp = Date.now();
+                const rutaAudio = 'audio/' + timestamp + '_' + audioFile.name;
+                
+                logZ('Empujando a Supabase [boveda-z]...');
+                const { data, error } = await supabaseClient.storage
+                    .from('boveda-z')
+                    .upload(rutaAudio, audioFile);
+
+                if (error) throw error;
+
+                logZ('✅ ¡Tema guardado con éxito en boveda-z!');
+                alert('¡Éxito total! Archivo subido a la bóveda.');
+            } catch (err) {
+                logZ('❌ Error de Supabase: ' + err.message);
+                alert('Error: ' + err.message);
+            }
+        }
+    </script>
+</body>
+</html>
