@@ -57,7 +57,8 @@ window.EstudioReelsZ = {
             </div>
 
             <div style="width: 100%; max-width: 410px; background: #111; border: 1px solid #333; border-radius: 8px; padding: 7px; margin-bottom: 6px; font-size: 11px;">
-                <label style="display:block; color:#aaa; margin-bottom:3px;">🎵 Tema del catálogo (mezcla directa)</label>
+                <label style="display:block; color:#aaa; margin-bottom:3px;">🎵 Tema y artista del catálogo (cualquier artista)</label>
+                <input id="z-reel-search-input" type="text" placeholder="🔍 Buscar por canción o artista..." style="width:100%; padding:5px; background:#000; color:#fff; border:1px solid #555; border-radius:4px; margin-bottom:5px; box-sizing:border-box;" />
                 <select id="z-reel-track-select" style="width:100%; padding:5px; background:#000; color:#fff; border:1px solid #444; border-radius:4px; margin-bottom:5px;">
                     <option value="">-- Solo cámara / micrófono --</option>
                 </select>
@@ -162,8 +163,40 @@ window.EstudioReelsZ = {
         }));
     },
 
+    extraerDatoTema: function(t, idx) {
+        const audioUrl = t.audio_url || t.url_audio || t.audio || t.enlace_audio || t.media_url || t.url || t.archivo_url || "";
+        const titulo = t.titulo || t.nombre_tema || t.nombre || t.cancion || t.title || t.track || `Tema #${idx + 1}`;
+        const artista = t.artista || t.artista_nombre || t.autor || t.creador || t.artist || "";
+        return { audioUrl, titulo, artista };
+    },
+
+    renderOpcionesTemas: function(filtro = "") {
+        const select = document.getElementById('z-reel-track-select');
+        if (!select) return;
+        const q = (filtro || "").trim().toLowerCase();
+        const currentVal = select.value;
+        select.innerHTML = `<option value="">-- Solo cámara / micrófono --</option>`;
+
+        this.temasCatalogo.forEach((t, idx) => {
+            const { audioUrl, titulo, artista } = this.extraerDatoTema(t, idx);
+            if (!audioUrl) return;
+            const etiqueta = artista ? `${artista} — ${titulo}` : titulo;
+            if (q && !etiqueta.toLowerCase().includes(q)) return;
+            const opt = document.createElement('option');
+            opt.value = audioUrl;
+            opt.textContent = etiqueta;
+            select.appendChild(opt);
+        });
+        if (currentVal) select.value = currentVal;
+    },
+
     cargarTemasParaReel: async function() {
         const select = document.getElementById('z-reel-track-select');
+        const searchInput = document.getElementById('z-reel-search-input');
+        if (searchInput && !searchInput.dataset.bound) {
+            searchInput.dataset.bound = "1";
+            searchInput.addEventListener("input", () => this.renderOpcionesTemas(searchInput.value));
+        }
         if (!select) return;
         try {
             const urlBase = typeof SUPABASE_URL !== "undefined" ? SUPABASE_URL : "https://uxyvpqraebwptbbvngus.supabase.co";
@@ -174,20 +207,7 @@ window.EstudioReelsZ = {
             const rows = await res.json();
             if (!Array.isArray(rows)) return;
             this.temasCatalogo = rows;
-
-            const currentVal = select.value;
-            select.innerHTML = `<option value="">-- Solo cámara / micrófono --</option>`;
-            rows.forEach((t, idx) => {
-                const audioUrl = t.audio_url || t.url_audio || t.url || t.media_url || "";
-                if (!audioUrl) return;
-                const titulo = t.titulo || t.nombre || `Tema #${idx + 1}`;
-                const artista = t.artista || "";
-                const opt = document.createElement('option');
-                opt.value = audioUrl;
-                opt.textContent = artista ? `${artista} — ${titulo}` : titulo;
-                select.appendChild(opt);
-            });
-            if (currentVal) select.value = currentVal;
+            this.renderOpcionesTemas(searchInput ? searchInput.value : "");
         } catch (err) {
             if (window.zLog) zLog("ESTUDIO", "No se pudo cargar catálogo en Reel: " + err.message, "WARN");
         }

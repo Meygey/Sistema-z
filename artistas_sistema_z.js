@@ -60,7 +60,7 @@ async function crearPerfilRemoto(artistaNombre, artistaNorm, pinHash) {
             "apikey": key,
             "Authorization": `Bearer ${key}`,
             "Content-Type": "application/json",
-            "Prefer": "return=minimal"
+            "Prefer": "return=representation"
         },
         body: JSON.stringify({
             artista: artistaNombre,
@@ -70,7 +70,11 @@ async function crearPerfilRemoto(artistaNombre, artistaNorm, pinHash) {
             pin_hash: pinHash
         })
     });
-    return res.ok;
+    if (!res.ok) {
+        const errTxt = await res.text();
+        throw new Error(`INSERT perfiles_z (${res.status}): ${errTxt}`);
+    }
+    return true;
 }
 
 window.SistemaZArtistas = {
