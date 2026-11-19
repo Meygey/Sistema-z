@@ -38,23 +38,23 @@
         `;
 
         modal.innerHTML = `
-            <div style="background: #111; border: 2px solid #ff1a1a; border-radius: 8px; max-width: 380px; width: 100%; padding: 18px;">
+            <div style="background: #111; border: 2px solid #ff1a1a; border-radius: 8px; max-width: 390px; width: 100%; padding: 18px;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
                     <strong style="color:#ff1a1a; font-size:15px;">🔺 PERFIL DE ARTISTA Z</strong>
                     <button id="z-modal-close" style="background:none; border:none; color:#aaa; font-size:18px; cursor:pointer;">✕</button>
                 </div>
                 <p style="font-size:12px; color:#ccc; margin-bottom:12px;">
-                    Inicia con tu nombre artístico exacto para habilitar el borrado solo en tus temas.
+                    Usa tu nombre artístico y clave (mín. 4 caracteres) para validar tu sesión en cualquier teléfono o PC.
                 </p>
                 <label style="display:block; font-size:11px; color:#aaa; margin-bottom:4px;">Nombre del Artista</label>
                 <input id="z-auth-name" type="text" value="${actual.replace(/"/g, '&quot;')}" placeholder="Ej: Enyi el Científico"
                     style="width:100%; padding:8px; margin-bottom:10px; background:#000; color:#fff; border:1px solid #444; border-radius:4px; font-size:13px;" />
-                <label style="display:block; font-size:11px; color:#aaa; margin-bottom:4px;">PIN / Clave local (opcional)</label>
-                <input id="z-auth-pin" type="password" placeholder="Solo en este dispositivo"
+                <label style="display:block; font-size:11px; color:#aaa; margin-bottom:4px;">Clave / PIN de Artista</label>
+                <input id="z-auth-pin" type="password" placeholder="Mínimo 4 caracteres"
                     style="width:100%; padding:8px; margin-bottom:14px; background:#000; color:#fff; border:1px solid #444; border-radius:4px; font-size:13px;" />
                 <div style="display:flex; gap:8px; justify-content:flex-end;">
                     ${actual ? `<button id="z-auth-logout" style="background:#27272a; color:#fff; border:1px solid #555; padding:7px 12px; border-radius:4px; cursor:pointer; font-size:12px;">Cerrar sesión</button>` : ""}
-                    <button id="z-auth-save" style="background:#ff1a1a; color:#fff; border:none; padding:7px 14px; border-radius:4px; cursor:pointer; font-weight:bold; font-size:12px;">Entrar</button>
+                    <button id="z-auth-save" style="background:#ff1a1a; color:#fff; border:none; padding:7px 14px; border-radius:4px; cursor:pointer; font-weight:bold; font-size:12px;">Validar y Entrar</button>
                 </div>
             </div>
         `;
@@ -62,10 +62,15 @@
         document.body.appendChild(modal);
 
         document.getElementById('z-modal-close').addEventListener('click', () => modal.remove());
-        document.getElementById('z-auth-save').addEventListener('click', () => {
+        document.getElementById('z-auth-save').addEventListener('click', async () => {
+            const btn = document.getElementById('z-auth-save');
             const nombre = document.getElementById('z-auth-name').value;
             const pin = document.getElementById('z-auth-pin').value;
-            const res = window.SistemaZArtistas.iniciarSesionArtista(nombre, pin);
+            btn.disabled = true;
+            btn.textContent = "Validando...";
+            const res = await window.SistemaZArtistas.iniciarSesionArtista(nombre, pin);
+            btn.disabled = false;
+            btn.textContent = "Validar y Entrar";
             if (!res.ok) {
                 alert("⚠️ " + res.msg);
                 return;
