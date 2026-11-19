@@ -71,7 +71,20 @@
 
         <div class="bg-[#0b0b0b] border border-zinc-800 p-6 rounded-xl mb-8">
             <h3 class="font-z font-bold text-sm mb-3 text-red-500">📁 Catálogo Soberano en Tiempo Real</h3>
-            <div id="supabaseCatalog" class="space-y-3 max-h-60 overflow-y-auto pr-1">
+            
+<div id="z-panel-trendy-visitas" class="max-w-3xl mx-auto my-3 px-3">
+  <div class="bg-zinc-900/90 border border-red-900/50 rounded-xl p-3 space-y-2">
+    <div class="flex items-center justify-between text-xs font-mono">
+      <span class="text-red-400 font-bold">📈 TRENDY / TENDENCIAS Z</span>
+      <span class="text-zinc-300">👁 Visitas al sistema: <strong id="z-contador-visitas" class="text-white">0</strong></span>
+    </div>
+    <div id="z-trendy-lista" class="space-y-1">
+      <div class="text-xs text-zinc-500">Cargando ranking...</div>
+    </div>
+  </div>
+</div>
+
+<div id="supabaseCatalog" class="space-y-3 max-h-60 overflow-y-auto pr-1">
                 <div class="text-xs text-zinc-500">Cargando catálogo...</div>
             </div>
         </div>
@@ -590,6 +603,164 @@ catalogDiv.innerHTML += `
       window.SUPABASE_ANON_KEY = window.SUPABASE_CONFIG.anonKey;
     }
   } catch(_) {}
+})();
+</script>
+
+
+<script>
+(function(){
+  const SB_URL = "https://uxyvpqraebwptbbvngus.supabase.co";
+  function keySB(){
+    return window.SUPABASE_ANON_KEY || (typeof SUPABASE_ANON_KEY !== "undefined" ? SUPABASE_ANON_KEY : "") || (window.SUPABASE_CONFIG && window.SUPABASE_CONFIG.anonKey) || "";
+  }
+  function hdrs(){
+    const k = keySB();
+    return {
+      "apikey": k,
+      "Authorization": "Bearer " + k,
+      "Content-Type": "application/json",
+      "Prefer": "return=representation"
+    };
+  }
+
+  window.SistemaZTrendy = {
+    async registrarYMostrarVisitas(){
+      const el = document.getElementById("z-contador-visitas");
+      let total = parseInt(localStorage.getItem("z_visitas_global") || "0", 10) || 0;
+      const yaConto = sessionStorage.getItem("z_sesion_contada") === "1";
+      const k = keySB();
+
+      if (k) {
+        try {
+          const r = await fetch(`${SB_URL}/rest/v1/visitas_z?id=eq.1&select=total_visitas`, { headers: hdrs() });
+          if (r.ok) {
+            const rows = await r.json();
+            if (rows && rows.length > 0) {
+              total = parseInt(rows[0].total_visitas || 0, 10) || 0;
+            }
+            if (!yaConto) {
+              total = total + 1;
+              sessionStorage.setItem("z_sesion_contada", "1");
+              await fetch(`${SB_URL}/rest/v1/visitas_z?id=eq.1`, {
+                method: "PATCH",
+                headers: hdrs(),
+                body: JSON.stringify({ total_visitas: total, updated_at: new Date().toISOString() })
+              });
+            }
+            localStorage.setItem("z_visitas_global", String(total));
+          }
+        } catch(_) {}
+      } else if (!yaConto) {
+        total += 1;
+        sessionStorage.setItem("z_sesion_contada", "1");
+        localStorage.setItem("z_visitas_global", String(total));
+      }
+
+      if (el) el.textContent = total.toLocaleString();
+    },
+
+    async registrarPlay(item){
+      if (!item) return;
+      const rawKey = String((item.copyright || item.id || item.title || item.titulo || "tema")).trim();
+      const artista = String(item.artist || item.artista || "Sistema Z").trim();
+      const localKey = "z_plays_" + rawKey;
+      let plays = (parseInt(localStorage.getItem(localKey) || "0", 10) || 0) + 1;
+      localStorage.setItem(localKey, String(plays));
+
+      const k = keySB();
+      if (k) {
+        try {
+          const check = await fetch(`${SB_URL}/rest/v1/plays_z?tema_key=eq.${encodeURIComponent(rawKey)}&select=total_plays`, { headers: hdrs() });
+          const rows = check.ok ? await check.json() : [];
+          if (rows && rows.length > 0) {
+            plays = (parseInt(rows[0].total_plays || 0, 10) || 0) + 1;
+            await fetch(`${SB_URL}/rest/v1/plays_z?tema_key=eq.${encodeURIComponent(rawKey)}`, {
+              method: "PATCH",
+              headers: hdrs(),
+              body: JSON.stringify({ total_plays: plays, artista, updated_at: new Date().toISOString() })
+            });
+          } else {
+            await fetch(`${SB_URL}/rest/v1/plays_z`, {
+              method: "POST",
+              headers: hdrs(),
+              body: JSON.stringify({ tema_key: rawKey, artista, total_plays: plays, updated_at: new Date().toISOString() })
+            });
+          }
+          localStorage.setItem(localKey, String(plays));
+        } catch(_) {}
+      }
+      this.calcularTendencias();
+    },
+
+    async calcularTendencias(){
+      const box = document.getElementById("z-trendy-lista");
+      if (!box) return;
+      const k = keySB();
+      let likesRows = [];
+      let playsRows = [];
+      let comsRows = [];
+
+      if (k) {
+        try {
+          const [rl, rp, rc] = await Promise.all([
+            fetch(`${SB_URL}/rest/v1/likes_z?select=tema_key,total_likes`, { headers: hdrs() }),
+            fetch(`${SB_URL}/rest/v1/plays_z?select=tema_key,artista,total_plays`, { headers: hdrs() }),
+            fetch(`${SB_URL}/rest/v1/comentarios_z?select=tema_key`, { headers: hdrs() })
+          ]);
+          if (rl.ok) likesRows = await rl.json();
+          if (rp.ok) playsRows = await rp.json();
+          if (rc.ok) comsRows = await rc.json();
+        } catch(_) {}
+      }
+
+      const mapa = {};
+      for (const p of (playsRows || [])) {
+        const tk = p.tema_key;
+        if (!mapa[tk]) mapa[tk] = { tema_key: tk, artista: p.artista || "Artista Z", likes: 0, plays: 0, coms: 0 };
+        mapa[tk].plays = parseInt(p.total_plays || 0, 10) || 0;
+        if (p.artista) mapa[tk].artista = p.artista;
+      }
+      for (const l of (likesRows || [])) {
+        const tk = l.tema_key;
+        if (!mapa[tk]) mapa[tk] = { tema_key: tk, artista: "Artista Z", likes: 0, plays: 0, coms: 0 };
+        mapa[tk].likes = parseInt(l.total_likes || 0, 10) || 0;
+      }
+      for (const c of (comsRows || [])) {
+        const tk = c.tema_key;
+        if (!mapa[tk]) mapa[tk] = { tema_key: tk, artista: "Artista Z", likes: 0, plays: 0, coms: 0 };
+        mapa[tk].coms += 1;
+      }
+
+      const ranking = Object.values(mapa).map(m => {
+        const score = (m.likes * 3) + m.plays + (m.coms * 2);
+        return { ...m, score };
+      }).sort((a, b) => b.score - a.score).slice(0, 5);
+
+      if (!ranking.length) {
+        box.innerHTML = `<div class="text-xs text-zinc-500">Aún no hay suficientes vistas o likes para calcular tendencias.</div>`;
+        return;
+      }
+
+      box.innerHTML = ranking.map((r, i) => `
+        <div class="flex items-center justify-between bg-zinc-950 border border-zinc-800 rounded px-3 py-2 text-xs">
+          <div class="truncate pr-2">
+            <span class="text-red-500 font-bold mr-1">#${i + 1}</span>
+            <span class="text-white font-semibold">${r.artista}</span>
+            <span class="text-zinc-500 ml-1">(${r.tema_key})</span>
+          </div>
+          <div class="text-[11px] font-mono text-amber-300 whitespace-nowrap">
+            🔥 ${r.score} · ♥ ${r.likes} · ▶ ${r.plays}
+          </div>
+        </div>
+      `).join("");
+    }
+  };
+
+  document.addEventListener("DOMContentLoaded", () => {
+    window.SistemaZTrendy.registrarYMostrarVisitas();
+    window.SistemaZTrendy.calcularTendencias();
+    setInterval(() => window.SistemaZTrendy.calcularTendencias(), 10000);
+  });
 })();
 </script>
 
