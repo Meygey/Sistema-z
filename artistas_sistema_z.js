@@ -68,7 +68,8 @@ async function crearPerfilRemoto(artistaNombre, artistaNorm, pinHash) {
             artista_key: artistaNorm,
             artista_nombre: artistaNombre,
             pin_hash: pinHash,
-            password_hash: pinHash
+            password_hash: pinHash,
+            correo: `${artistaNorm || "artista"}@sistemaz.local`
         })
     });
     if (!res.ok) {
