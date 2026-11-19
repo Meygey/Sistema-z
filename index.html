@@ -13,6 +13,13 @@
         .border-z { border-color: #ff0000; }
         .bg-z-red { background-color: #ff0000; }
     </style>
+
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="googlebot" content="index, follow">
+<meta property="og:type" content="music.song">
+<meta property="og:site_name" content="Sistema Z">
+<link id="z-canonical" rel="canonical" href="https://meygey.github.io/Sistema-z/">
+
 </head>
 <body class="min-h-screen flex flex-col justify-between">
     <header class="border-b border-z p-4 bg-[#080808] sticky top-0 z-50 flex justify-between items-center">
@@ -292,6 +299,254 @@
             box.innerHTML += '<div>❌ ' + e.message + '</div>';
         });
     </script>
+
+<script>
+(function(){
+  const BASE_URL = "https://meygey.github.io/Sistema-z/";
+  const SB_URL = "https://uxyvpqraebwptbbvngus.supabase.co";
+  const SB_KEY = window.SUPABASE_ANON_KEY || window.supabaseKey || (window.SistemaZConfig && window.SistemaZConfig.anonKey) || "";
+
+  function headersSB(){
+    const key = SB_KEY || (window.supabaseClient && window.supabaseClient.supabaseKey) || "";
+    return {
+      "apikey": key,
+      "Authorization": "Bearer " + key,
+      "Content-Type": "application/json",
+      "Prefer": "return=representation"
+    };
+  }
+
+  function hasSB(){
+    const key = SB_KEY || (window.supabaseClient && window.supabaseClient.supabaseKey) || "";
+    return Boolean(SB_URL && key);
+  }
+
+  window.SistemaZSocial = {
+    temaKey(item, idx){
+      const raw = String((item && (item.copyright || item.id || item.title || item.titulo)) || ("tema_" + (idx || 0))).trim();
+      return encodeURIComponent(raw);
+    },
+    urlTema(item, idx){
+      const slug = this.temaKey(item, idx);
+      return `${BASE_URL}?tema=${slug}&utm_source=sistema_z&utm_medium=share_track&utm_campaign=z_416`;
+    },
+    sincronizarSEO(item, idx){
+      try {
+        const titulo = item && (item.title || item.titulo) ? String(item.title || item.titulo) : "Sistema Z — Bóveda Soberana 416Hz";
+        const artista = item && (item.artist || item.artista) ? String(item.artist || item.artista) : "ENYI científico omotichi el de las mil voces";
+        const genero = item && (item.genre || item.genero) ? String(item.genre || item.genero) : "Dark Reggaeton";
+        document.title = `${titulo} — ${artista} | Sistema Z`;
+        const linkCan = document.getElementById("z-canonical");
+        if (linkCan && item) linkCan.href = this.urlTema(item, idx || 0);
+        let desc = document.querySelector("meta[name=\"description\"]");
+        if (!desc) {
+          desc = document.createElement("meta");
+          desc.name = "description";
+          document.head.appendChild(desc);
+        }
+        desc.content = `Escucha o descarga ${titulo} de ${artista} (${genero}) en Sistema Z.`;
+      } catch(_) {}
+    },
+    compartirTema(encodedItem){
+      try {
+        const item = JSON.parse(decodeURIComponent(encodedItem));
+        const link = this.urlTema(item, 0);
+        this.sincronizarSEO(item, 0);
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(link).catch(()=>{});
+        }
+        if (navigator.share) {
+          navigator.share({
+            title: `${item.title || item.titulo || "Tema"} — ${item.artist || item.artista || "Sistema Z"}`,
+            text: `Escucha "${item.title || item.titulo || "Tema"}" en Sistema Z`,
+            url: link
+          }).catch(()=>{});
+        } else {
+          alert("Enlace de rastreo del tema copiado:\n" + link);
+        }
+      } catch(e) {
+        alert("No se pudo generar el enlace del tema.");
+      }
+    },
+    descargarMP3(encodedItem){
+      try {
+        const item = JSON.parse(decodeURIComponent(encodedItem));
+        const urlAudio = item.audio_url || item.url_audio || item.audio || "";
+        if (!urlAudio) {
+          alert("Este tema no tiene URL de audio disponible para descargar.");
+          return;
+        }
+        const artista = String(item.artist || item.artista || "Sistema Z").replace(/[\\/:*?"<>|]/g, "").trim();
+        const titulo = String(item.title || item.titulo || "Tema").replace(/[\\/:*?"<>|]/g, "").trim();
+        const a = document.createElement("a");
+        a.href = urlAudio;
+        a.download = `${artista} - ${titulo}.mp3`;
+        a.target = "_blank";
+        a.rel = "noopener";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+      } catch(e) {
+        alert("Error preparando la descarga MP3.");
+      }
+    },
+    async cargarLikesGlobal(item, spanId){
+      const key = decodeURIComponent(this.temaKey(item, 0));
+      let total = parseInt(localStorage.getItem("z_likes_" + key) || "0", 10) || 0;
+      if (hasSB()) {
+        try {
+          const res = await fetch(`${SB_URL}/rest/v1/likes_z?tema_key=eq.${encodeURIComponent(key)}&select=total_likes`, { headers: headersSB() });
+          if (res.ok) {
+            const rows = await res.json();
+            if (rows && rows.length > 0) {
+              total = parseInt(rows[0].total_likes || 0, 10) || 0;
+              localStorage.setItem("z_likes_" + key, String(total));
+            }
+          }
+        } catch(_) {}
+      }
+      const el = document.getElementById(spanId);
+      if (el) el.textContent = String(total);
+      return total;
+    },
+    async darLike(encodedItem, spanId){
+      try {
+        const item = JSON.parse(decodeURIComponent(encodedItem));
+        const key = decodeURIComponent(this.temaKey(item, 0));
+        const el = document.getElementById(spanId);
+        let actual = (parseInt((el && el.textContent) || "0", 10) || 0) + 1;
+        localStorage.setItem("z_likes_" + key, String(actual));
+        if (el) el.textContent = String(actual);
+
+        if (hasSB()) {
+          const check = await fetch(`${SB_URL}/rest/v1/likes_z?tema_key=eq.${encodeURIComponent(key)}&select=id,total_likes`, { headers: headersSB() });
+          const rows = check.ok ? await check.json() : [];
+          if (rows && rows.length > 0) {
+            actual = (parseInt(rows[0].total_likes || 0, 10) || 0) + 1;
+            await fetch(`${SB_URL}/rest/v1/likes_z?tema_key=eq.${encodeURIComponent(key)}`, {
+              method: "PATCH",
+              headers: headersSB(),
+              body: JSON.stringify({ total_likes: actual, updated_at: new Date().toISOString() })
+            });
+          } else {
+            await fetch(`${SB_URL}/rest/v1/likes_z`, {
+              method: "POST",
+              headers: headersSB(),
+              body: JSON.stringify({ tema_key: key, total_likes: actual, updated_at: new Date().toISOString() })
+            });
+          }
+          localStorage.setItem("z_likes_" + key, String(actual));
+          if (el) el.textContent = String(actual);
+        }
+      } catch(_) {}
+    },
+    async cargarComentariosGlobal(item, listId, countId){
+      const key = decodeURIComponent(this.temaKey(item, 0));
+      let lista = [];
+      try { lista = JSON.parse(localStorage.getItem("z_coms_" + key) || "[]"); } catch(_) {}
+      if (hasSB()) {
+        try {
+          const res = await fetch(`${SB_URL}/rest/v1/comentarios_z?tema_key=eq.${encodeURIComponent(key)}&order=id.asc&select=autor,texto,created_at`, { headers: headersSB() });
+          if (res.ok) {
+            const rows = await res.json();
+            if (Array.isArray(rows)) {
+              lista = rows.map(r => ({
+                autor: r.autor || "Oyente Z",
+                texto: r.texto || "",
+                fecha: r.created_at ? new Date(r.created_at).toLocaleDateString() : ""
+              }));
+              localStorage.setItem("z_coms_" + key, JSON.stringify(lista));
+            }
+          }
+        } catch(_) {}
+      }
+      this.pintarComentarios(lista, listId, countId);
+    },
+    toggleComentarios(boxId){
+      const box = document.getElementById(boxId);
+      if (box) box.classList.toggle("hidden");
+    },
+    async agregarComentario(encodedItem, inputId, listId, countId){
+      try {
+        const item = JSON.parse(decodeURIComponent(encodedItem));
+        const key = decodeURIComponent(this.temaKey(item, 0));
+        const inp = document.getElementById(inputId);
+        if (!inp) return;
+        const texto = String(inp.value || "").trim();
+        if (!texto) return;
+        const autor = (localStorage.getItem("z_artista_activo") || "Oyente Z").trim();
+        inp.value = "";
+
+        if (hasSB()) {
+          await fetch(`${SB_URL}/rest/v1/comentarios_z`, {
+            method: "POST",
+            headers: headersSB(),
+            body: JSON.stringify({ tema_key: key, autor, texto })
+          });
+          await this.cargarComentariosGlobal(item, listId, countId);
+        } else {
+          let lista = [];
+          try { lista = JSON.parse(localStorage.getItem("z_coms_" + key) || "[]"); } catch(_) {}
+          lista.push({ autor, texto, fecha: new Date().toLocaleDateString() });
+          localStorage.setItem("z_coms_" + key, JSON.stringify(lista));
+          this.pintarComentarios(lista, listId, countId);
+        }
+      } catch(_) {}
+    },
+    pintarComentarios(lista, listId, countId){
+      const listEl = document.getElementById(listId);
+      const cntEl = document.getElementById(countId);
+      if (cntEl) cntEl.textContent = String(lista.length);
+      if (!listEl) return;
+      listEl.innerHTML = lista.map(c =>
+        `<div class="bg-zinc-950 border border-zinc-800 rounded px-2 py-1 text-[11px] text-zinc-200"><span class="text-red-400 font-semibold">${c.autor}:</span> ${c.texto} <span class="text-zinc-500 text-[10px]">${c.fecha ? "(" + c.fecha + ")" : ""}</span></div>`
+      ).join("");
+    },
+    hidratarTarjetas(){
+      const nodes = document.querySelectorAll("[data-z-hydrate=\"1\"]");
+      nodes.forEach(node => {
+        if (node.getAttribute("data-z-done") === "1") return;
+        node.setAttribute("data-z-done", "1");
+        try {
+          const item = JSON.parse(decodeURIComponent(node.getAttribute("data-z-item")));
+          const likeId = node.getAttribute("data-like-id");
+          const listId = node.getAttribute("data-list-id");
+          const cntId = node.getAttribute("data-cnt-id");
+          this.cargarLikesGlobal(item, likeId);
+          this.cargarComentariosGlobal(item, listId, cntId);
+        } catch(_) {}
+      });
+    },
+    iniciarParametroTema(){
+      setInterval(() => this.hidratarTarjetas(), 600);
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const target = params.get("tema");
+        if (!target) return;
+        let intentos = 0;
+        const timer = setInterval(() => {
+          intentos++;
+          const btns = Array.from(document.querySelectorAll("[data-z-slug]"));
+          const match = btns.find(b => b.getAttribute("data-z-slug") === target);
+          if (match) {
+            clearInterval(timer);
+            const enc = match.getAttribute("data-z-item");
+            if (enc) {
+              try { this.sincronizarSEO(JSON.parse(decodeURIComponent(enc)), 0); } catch(_){}
+            }
+            match.scrollIntoView({ behavior: "smooth", block: "center" });
+            match.click();
+          } else if (intentos > 25) {
+            clearInterval(timer);
+          }
+        }, 400);
+      } catch(_) {}
+    }
+  };
+  document.addEventListener("DOMContentLoaded", () => window.SistemaZSocial.iniciarParametroTema());
+})();
+</script>
+
 </body>
     
 

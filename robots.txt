@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://meygey.github.io/Sistema-z/sitemap.xml
