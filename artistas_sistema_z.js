@@ -25,9 +25,14 @@ window.SistemaZArtistas = {
             
             zLog("SUPABASE", `Se cargaron ${data ? data.length : 0} temas con éxito.`);
             
-            const contenedor = document.getElementById('catalogo-contenedor') || document.querySelector('.catalogo-soberano');
+            const contenedor = document.getElementById('catalogo-contenedor') || document.querySelector('.catalogo-soberano') || document.body;
             if (contenedor && data) {
-                contenedor.innerHTML = data.map(t => `<div class="tema-card"><strong>${t.artist}</strong> - ${t.title}</div>`).join('');
+                contenedor.innerHTML = data.map(t => `
+                    <div class="tema-card" style="background:#111;color:#fff;padding:15px;margin:10px;border-radius:8px;border:1px solid #ff0033;">
+                        <strong>🎵 ${t.titulo || t.title || 'Sin título'}</strong><br>
+                        <span>Artista: ${t.artista || t.artist || 'Desconocido'}</span>
+                    </div>
+                `).join('');
             }
         } catch (err) {
             zLog("SUPABASE", err.message, "ERROR");
@@ -38,3 +43,4 @@ window.SistemaZArtistas = {
 document.addEventListener("DOMContentLoaded", () => {
     window.SistemaZArtistas.init();
 });
+
