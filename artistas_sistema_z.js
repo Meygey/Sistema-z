@@ -39,7 +39,7 @@ async function consultarPerfilRemoto(artistaNorm) {
             "Authorization": `Bearer ${key}`
         }
     });
-    if (res.status === 404) {
+    if (res.status === 404 || res.status === 400) {
         return { status: "missing_table", data: null };
     }
     if (!res.ok) {
