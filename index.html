@@ -1,15 +1,4 @@
 
-window.esDueñoZ = function(artistaTema) {
-    try {
-        const rawUser = (localStorage.getItem("z_artista_activo") || localStorage.getItem("artista_activo") || "ENYI científico omotichi el de las mil voces").toLowerCase().trim();
-        const rawTema = (artistaTema || "").toLowerCase().trim();
-        if (!rawUser || !rawTema) return false;
-        return rawUser === rawTema || rawUser.includes(rawTema) || rawTema.includes(rawUser);
-    } catch (_) {
-        return true;
-    }
-};
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -306,6 +295,10 @@ window.esDueñoZ = function(artistaTema) {
     </script>
 </body>
     
+
+
+
+
 
         
         
