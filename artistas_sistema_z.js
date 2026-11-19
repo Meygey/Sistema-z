@@ -63,6 +63,8 @@ async function crearPerfilRemoto(artistaNombre, artistaNorm, pinHash) {
             "Prefer": "return=minimal"
         },
         body: JSON.stringify({
+            artista: artistaNombre,
+            usuario: artistaNorm,
             artista_key: artistaNorm,
             artista_nombre: artistaNombre,
             pin_hash: pinHash
