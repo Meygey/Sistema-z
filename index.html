@@ -243,6 +243,9 @@
                 document.getElementById('trackGenre').value = "";
                 mediaFileInput.value = "";
                 coverFileInput.value = "";
+                if (typeof cargarCatalogoSupabase === "function") {
+                    cargarCatalogoSupabase();
+                }
                 
 
             } catch (err) {
