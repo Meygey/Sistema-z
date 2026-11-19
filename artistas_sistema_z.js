@@ -1,19 +1,17 @@
 /**
- * SISTEMA Z - MÓDULO DE ARTISTAS, PERFILES Y CATÁLOGO
+ * SISTEMA Z - MÓDULO DE ARTISTAS Y CATÁLOGO
  */
 
 const Z_DEBUG = true;
 
 function zLog(modulo, mensaje, tipo = "INFO") {
     if (!Z_DEBUG) return;
-    const marca_tiempo = new Date().toLocaleTimeString();
-    const prefijo = `[Z-CORE][${marca_tiempo}][${modulo}][${tipo}]`;
-    console.log(`${prefijo} ${mensaje}`);
+    console.log(`[Z-CORE][${modulo}][${tipo}] ${mensaje}`);
 }
 
 window.SistemaZArtistas = {
     init() {
-        zLog("ARTISTAS", "Módulo inicializado con éxito.");
+        zLog("ARTISTAS", "Módulo inicializado.");
         this.cargarCatalogoSupabase();
     },
 
@@ -25,12 +23,13 @@ window.SistemaZArtistas = {
             
             zLog("SUPABASE", `Se cargaron ${data ? data.length : 0} temas con éxito.`);
             
-            const contenedor = document.getElementById('catalogo-contenedor') || document.querySelector('.catalogo-soberano') || document.body;
+            // Buscamos el contenedor original de tu diseño sin alterar clases ajenas
+            const contenedor = document.getElementById('catalogo-contenedor') || document.querySelector('.catalogo-soberano');
             if (contenedor && data) {
                 contenedor.innerHTML = data.map(t => `
-                    <div class="tema-card" style="background:#111;color:#fff;padding:15px;margin:10px;border-radius:8px;border:1px solid #ff0033;">
-                        <strong>🎵 ${t.titulo || t.title || 'Sin título'}</strong><br>
-                        <span>Artista: ${t.artista || t.artist || 'Desconocido'}</span>
+                    <div class="tema-item" style="padding: 10px; border-bottom: 1px solid #333;">
+                        <span style="color: #ff0033; font-weight: bold;">${t.artist || t.artista || 'Artista'}</span> - 
+                        <span style="color: #fff;">${t.title || t.titulo || 'Tema'}</span>
                     </div>
                 `).join('');
             }
@@ -43,4 +42,5 @@ window.SistemaZArtistas = {
 document.addEventListener("DOMContentLoaded", () => {
     window.SistemaZArtistas.init();
 });
+
 
