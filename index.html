@@ -123,8 +123,17 @@
                 }
 
                 data.forEach(item => {
+                    const puedeBorrar = window.SistemaZArtistas && typeof window.SistemaZArtistas.esDuenoDelTema === "function"
+                        ? window.SistemaZArtistas.esDuenoDelTema(item.artist)
+                        : false;
+                    const artistaSeguro = String(item.artist || "").replace(/'/g, "\\'");
+                    const tituloSeguro = String(item.title || "").replace(/'/g, "\\'");
+                    const btnBorrarHtml = puedeBorrar
+                        ? `<button onclick="window.SistemaZArtistas.eliminarTema('${item.id}', '${artistaSeguro}')" class="bg-zinc-900 hover:bg-red-900 text-red-400 border border-red-700 px-2 py-1 rounded text-[10px] font-mono cursor-pointer">🗑️ BORRAR</button>`
+                        : "";
+
                     catalogDiv.innerHTML += `
-                        <div class="bg-black border border-zinc-900 p-3 rounded flex items-center justify-between text-xs">
+                        <div class="bg-black border border-zinc-900 p-3 rounded flex items-center justify-between gap-2 text-xs">
                             <div class="flex items-center space-x-3">
                                 ${item.cover_url ? `<img src="${item.cover_url}" class="w-10 h-10 object-cover rounded border border-red-600">` : `<div class="w-10 h-10 bg-zinc-800 rounded flex items-center justify-center text-[10px] text-zinc-500">Z</div>`}
                                 <div>
@@ -132,7 +141,10 @@
                                     <p class="text-[10px] text-zinc-400 font-mono">Género: ${item.genre || 'Urbano'} | ${item.copyright || 'Z'}</p>
                                 </div>
                             </div>
-                            <button onclick="reproducir('${item.media_url}', '${item.artist} - ${item.title}')" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-[10px] font-z font-bold cursor-pointer">▶️ ESCUCHAR</button>
+                            <div class="flex items-center gap-1.5">
+                                <button onclick="reproducir('${item.media_url}', '${artistaSeguro} - ${tituloSeguro}')" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-[10px] font-z font-bold cursor-pointer">▶️ ESCUCHAR</button>
+                                ${btnBorrarHtml}
+                            </div>
                         </div>
                     `;
                 });
