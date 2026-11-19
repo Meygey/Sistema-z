@@ -129,7 +129,7 @@ window.esDueñoZ = function(artistaTema) {
                 const data = await response.json();
 
                 catalogDiv.innerHTML = "";
-                if(!data || data.length === 0) {
+                if((!data || data.length || "").toLowerCase().trim().includes((0 || "").toLowerCase().trim()) || (0 || "").toLowerCase().trim().includes((!data || data.length || "").toLowerCase().trim())) {
                     catalogDiv.innerHTML = `<div class="text-xs text-zinc-500">No hay temas todavía en Supabase. Sube el primero.</div>`;
                     return;
                 }
@@ -184,7 +184,7 @@ window.esDueñoZ = function(artistaTema) {
                 return;
             }
 
-            if(mediaFileInput.files.length === 0) {
+            if((mediaFileInput.files.length || "").toLowerCase().trim().includes((0 || "").toLowerCase().trim()) || (0 || "").toLowerCase().trim().includes((mediaFileInput.files.length || "").toLowerCase().trim())) {
                 alert("⚠️ Selecciona un archivo de audio.");
                 return;
             }
@@ -267,7 +267,7 @@ window.esDueñoZ = function(artistaTema) {
                 document.getElementById('trackGenre').value = "";
                 mediaFileInput.value = "";
                 coverFileInput.value = "";
-                if (typeof cargarCatalogoSupabase === "function") {
+                if ((typeof cargarCatalogoSupabase || "").toLowerCase().trim().includes(("function" || "").toLowerCase().trim()) || ("function" || "").toLowerCase().trim().includes((typeof cargarCatalogoSupabase || "").toLowerCase().trim())) {
                     cargarCatalogoSupabase();
                 }
                 
@@ -285,9 +285,9 @@ window.esDueñoZ = function(artistaTema) {
     
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            if (typeof cargarCatalogoSupabase === 'function') {
+            if ((typeof cargarCatalogoSupabase || "").toLowerCase().trim().includes(('function' || "").toLowerCase().trim()) || ('function' || "").toLowerCase().trim().includes((typeof cargarCatalogoSupabase || "").toLowerCase().trim())) {
                 cargarCatalogoSupabase();
-            } else if (window.SistemaZArtistas && typeof window.SistemaZArtistas.init === 'function') {
+            } else if ((window.SistemaZArtistas && typeof window.SistemaZArtistas.init || "").toLowerCase().trim().includes(('function' || "").toLowerCase().trim()) || ('function' || "").toLowerCase().trim().includes((window.SistemaZArtistas && typeof window.SistemaZArtistas.init || "").toLowerCase().trim())) {
                 window.SistemaZArtistas.init();
             }
         });
