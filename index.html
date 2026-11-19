@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -118,7 +117,7 @@
                 const data = await response.json();
 
                 catalogDiv.innerHTML = "";
-                if((!data || data.length || "").toLowerCase().trim().includes((0 || "").toLowerCase().trim()) || (0 || "").toLowerCase().trim().includes((!data || data.length || "").toLowerCase().trim())) {
+                if(!data || data.length === 0) {
                     catalogDiv.innerHTML = `<div class="text-xs text-zinc-500">No hay temas todavía en Supabase. Sube el primero.</div>`;
                     return;
                 }
@@ -173,7 +172,7 @@
                 return;
             }
 
-            if((mediaFileInput.files.length || "").toLowerCase().trim().includes((0 || "").toLowerCase().trim()) || (0 || "").toLowerCase().trim().includes((mediaFileInput.files.length || "").toLowerCase().trim())) {
+            if(mediaFileInput.files.length === 0) {
                 alert("⚠️ Selecciona un archivo de audio.");
                 return;
             }
@@ -256,7 +255,7 @@
                 document.getElementById('trackGenre').value = "";
                 mediaFileInput.value = "";
                 coverFileInput.value = "";
-                if ((typeof cargarCatalogoSupabase || "").toLowerCase().trim().includes(("function" || "").toLowerCase().trim()) || ("function" || "").toLowerCase().trim().includes((typeof cargarCatalogoSupabase || "").toLowerCase().trim())) {
+                if (typeof cargarCatalogoSupabase === "function") {
                     cargarCatalogoSupabase();
                 }
                 
@@ -274,9 +273,9 @@
     
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            if ((typeof cargarCatalogoSupabase || "").toLowerCase().trim().includes(('function' || "").toLowerCase().trim()) || ('function' || "").toLowerCase().trim().includes((typeof cargarCatalogoSupabase || "").toLowerCase().trim())) {
+            if (typeof cargarCatalogoSupabase === 'function') {
                 cargarCatalogoSupabase();
-            } else if ((window.SistemaZArtistas && typeof window.SistemaZArtistas.init || "").toLowerCase().trim().includes(('function' || "").toLowerCase().trim()) || ('function' || "").toLowerCase().trim().includes((window.SistemaZArtistas && typeof window.SistemaZArtistas.init || "").toLowerCase().trim())) {
+            } else if (window.SistemaZArtistas && typeof window.SistemaZArtistas.init === 'function') {
                 window.SistemaZArtistas.init();
             }
         });
