@@ -751,12 +751,32 @@ catalogDiv.innerHTML += `
       }
       for (const l of (likesRows || [])) {
         const tk = l.tema_key;
-        if (!mapa[tk]) mapa[tk] = { tema_key: tk, artista: "Artista Z", likes: 0, plays: 0, coms: 0 };
+        if (!mapa[tk]) {
+        let etiqueta = "Artista Z";
+        const allText = document.body ? document.body.innerText : "";
+        const idx = allText.indexOf(tk);
+        if (idx !== -1) {
+          const antes = allText.slice(Math.max(0, idx - 180), idx).split("\n").map(s => s.trim()).filter(Boolean);
+          const cand = antes.reverse().find(l => !l.startsWith("Género") && !l.includes("ESCUCHAR") && !l.includes("MP3") && l.length > 2);
+          if (cand) etiqueta = cand;
+        }
+        mapa[tk] = { tema_key: tk, artista: etiqueta, likes: 0, plays: 0, coms: 0 };
+      }
         mapa[tk].likes = parseInt(l.total_likes || 0, 10) || 0;
       }
       for (const c of (comsRows || [])) {
         const tk = c.tema_key;
-        if (!mapa[tk]) mapa[tk] = { tema_key: tk, artista: "Artista Z", likes: 0, plays: 0, coms: 0 };
+        if (!mapa[tk]) {
+        let etiqueta = "Artista Z";
+        const allText = document.body ? document.body.innerText : "";
+        const idx = allText.indexOf(tk);
+        if (idx !== -1) {
+          const antes = allText.slice(Math.max(0, idx - 180), idx).split("\n").map(s => s.trim()).filter(Boolean);
+          const cand = antes.reverse().find(l => !l.startsWith("Género") && !l.includes("ESCUCHAR") && !l.includes("MP3") && l.length > 2);
+          if (cand) etiqueta = cand;
+        }
+        mapa[tk] = { tema_key: tk, artista: etiqueta, likes: 0, plays: 0, coms: 0 };
+      }
         mapa[tk].coms += 1;
       }
 
@@ -790,6 +810,43 @@ catalogDiv.innerHTML += `
     window.SistemaZTrendy.calcularTendencias();
     setInterval(() => window.SistemaZTrendy.calcularTendencias(), 10000);
   });
+})();
+</script>
+
+
+<script>
+(function(){
+  function buscarMetaTema(el){
+    let cur = el;
+    for (let i = 0; i < 8 && cur; i++) {
+      const txt = (cur.innerText || "");
+      const mCopy = txt.match(/COPYRIGHT-[A-Z0-9-]+/i);
+      const lines = txt.split("\n").map(s => s.trim()).filter(Boolean);
+      if (mCopy || lines.length >= 2) {
+        const artistaLine = lines.find(l => l.includes("—") || l.includes("-")) || lines[0] || "Sistema Z";
+        const artista = artistaLine.split("—")[0].trim();
+        return {
+          copyright: mCopy ? mCopy[0].toUpperCase() : "",
+          artista: artista || "Sistema Z",
+          title: lines[0] || "Tema Z"
+        };
+      }
+      cur = cur.parentElement;
+    }
+    return null;
+  }
+
+  document.addEventListener("click", (ev) => {
+    const btn = ev.target.closest("button, a");
+    if (!btn) return;
+    const label = (btn.innerText || "").trim().toUpperCase();
+    if (label.includes("ESCUCHAR") || label.includes("REPRODUCIR") || label.includes("PLAY")) {
+      const meta = buscarMetaTema(btn);
+      if (meta && window.SistemaZTrendy && typeof window.SistemaZTrendy.registrarPlay === "function") {
+        window.SistemaZTrendy.registrarPlay(meta);
+      }
+    }
+  }, true);
 })();
 </script>
 
