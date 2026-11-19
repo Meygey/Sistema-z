@@ -330,8 +330,12 @@ catalogDiv.innerHTML += `
   const SB_URL = "https://uxyvpqraebwptbbvngus.supabase.co";
   const SB_KEY = window.SUPABASE_ANON_KEY || window.supabaseKey || (window.SistemaZConfig && window.SistemaZConfig.anonKey) || "";
 
+  function getSBKey(){
+    return window.SUPABASE_ANON_KEY || (typeof SUPABASE_ANON_KEY !== "undefined" ? SUPABASE_ANON_KEY : "") || (window.SUPABASE_CONFIG && window.SUPABASE_CONFIG.anonKey) || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV4eXZwcXJhZWJ3cHRiYnZuZ3VzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ4NzQ4ODksImV4cCI6MjExMDQ1MDg4OX0.Gb9UgFg2YbC8ow4lzR_yKnExab1dmXU38UFuuuIYX0k";
+  }
+
   function headersSB(){
-    const key = SB_KEY || (window.supabaseClient && window.supabaseClient.supabaseKey) || "";
+    const key = getSBKey();
     return {
       "apikey": key,
       "Authorization": "Bearer " + key,
@@ -341,8 +345,7 @@ catalogDiv.innerHTML += `
   }
 
   function hasSB(){
-    const key = SB_KEY || (window.supabaseClient && window.supabaseClient.supabaseKey) || "";
-    return Boolean(SB_URL && key);
+    return Boolean(SB_URL && getSBKey());
   }
 
   window.SistemaZSocial = {
