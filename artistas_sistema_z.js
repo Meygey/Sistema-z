@@ -67,7 +67,8 @@ async function crearPerfilRemoto(artistaNombre, artistaNorm, pinHash) {
             usuario: artistaNorm,
             artista_key: artistaNorm,
             artista_nombre: artistaNombre,
-            pin_hash: pinHash
+            pin_hash: pinHash,
+            password_hash: pinHash
         })
     });
     if (!res.ok) {
