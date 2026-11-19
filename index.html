@@ -140,7 +140,30 @@
                         ? `<button onclick="window.SistemaZArtistas.eliminarTema('${item.id}', '${artistaSeguro}')" class="bg-zinc-900 hover:bg-red-900 text-red-400 border border-red-700 px-2 py-1 rounded text-[10px] font-mono cursor-pointer">🗑️ BORRAR</button>`
                         : "";
 
-                    catalogDiv.innerHTML += `
+                    
+    const _zEnc = encodeURIComponent(JSON.stringify(item));
+    const _zSlug = window.SistemaZSocial ? window.SistemaZSocial.temaKey(item, 0) : "";
+    const _zLikeId = "z-like-" + Math.random().toString(36).slice(2, 8);
+    const _zBoxId = "z-box-" + Math.random().toString(36).slice(2, 8);
+    const _zListId = "z-list-" + Math.random().toString(36).slice(2, 8);
+    const _zInpId = "z-inp-" + Math.random().toString(36).slice(2, 8);
+    const _zCntId = "z-cnt-" + Math.random().toString(36).slice(2, 8);
+    const _zSocialHtml = `
+      <div class="w-full mt-2 pt-2 border-t border-zinc-800 flex flex-wrap items-center gap-2 text-[11px]" data-z-hydrate="1" data-z-slug="${_zSlug}" data-z-item="${_zEnc}" data-like-id="${_zLikeId}" data-list-id="${_zListId}" data-cnt-id="${_zCntId}">
+        <button type="button" onclick="window.SistemaZSocial && window.SistemaZSocial.compartirTema('${_zEnc}')" class="bg-zinc-900 hover:bg-zinc-800 text-amber-300 border border-zinc-700 px-2 py-1 rounded font-mono">🔗 Enlace</button>
+        <button type="button" onclick="window.SistemaZSocial && window.SistemaZSocial.descargarMP3('${_zEnc}')" class="bg-zinc-900 hover:bg-zinc-800 text-emerald-300 border border-zinc-700 px-2 py-1 rounded font-mono">⬇ MP3</button>
+        <button type="button" onclick="window.SistemaZSocial && window.SistemaZSocial.darLike('${_zEnc}', '${_zLikeId}')" class="bg-zinc-900 hover:bg-zinc-800 text-red-400 border border-zinc-700 px-2 py-1 rounded font-mono">♥ <span id="${_zLikeId}">0</span></button>
+        <button type="button" onclick="window.SistemaZSocial && window.SistemaZSocial.toggleComentarios('${_zBoxId}')" class="bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-zinc-700 px-2 py-1 rounded font-mono">💬 <span id="${_zCntId}">0</span></button>
+      </div>
+      <div id="${_zBoxId}" class="hidden w-full mt-2 space-y-2">
+        <div id="${_zListId}" class="space-y-1"></div>
+        <div class="flex gap-1">
+          <input id="${_zInpId}" type="text" placeholder="Escribe un comentario..." class="flex-1 bg-zinc-950 border border-zinc-700 rounded px-2 py-1 text-[11px] text-white">
+          <button type="button" onclick="window.SistemaZSocial && window.SistemaZSocial.agregarComentario('${_zEnc}', '${_zInpId}', '${_zListId}', '${_zCntId}')" class="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-[11px] font-bold">Enviar</button>
+        </div>
+      </div>`;
+    
+catalogDiv.innerHTML += `
                         <div class="bg-black border border-zinc-900 p-3 rounded flex items-center justify-between gap-2 text-xs">
                             <div class="flex items-center space-x-3">
                                 ${item.cover_url ? `<img src="${item.cover_url}" class="w-10 h-10 object-cover rounded border border-red-600">` : `<div class="w-10 h-10 bg-zinc-800 rounded flex items-center justify-center text-[10px] text-zinc-500">Z</div>`}
@@ -153,7 +176,7 @@
                                 <button onclick="reproducir('${item.media_url}', '${artistaSeguro} - ${tituloSeguro}')" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-[10px] font-z font-bold cursor-pointer">▶️ ESCUCHAR</button>
                                 ${btnBorrarHtml}
                             </div>
-                        </div>
+                        ${_zSocialHtml}</div>
                     `;
                 });
                 debugLog("Catálogo cargado con éxito.");
@@ -553,6 +576,20 @@
   <a href="https://www.tiktok.com/@enyielcientifico" target="_blank" rel="noopener">Seguir en TikTok</a>
   <a href="https://www.facebook.com/enyielcientifico" target="_blank" rel="noopener">Seguir en Facebook</a>
 </div>
+
+<script>
+(function(){
+  try {
+    if (!window.SUPABASE_ANON_KEY && typeof SUPABASE_ANON_KEY !== "undefined") {
+      window.SUPABASE_ANON_KEY = SUPABASE_ANON_KEY;
+    }
+    if (!window.SUPABASE_ANON_KEY && window.SUPABASE_CONFIG && window.SUPABASE_CONFIG.anonKey) {
+      window.SUPABASE_ANON_KEY = window.SUPABASE_CONFIG.anonKey;
+    }
+  } catch(_) {}
+})();
+</script>
+
 </body>
     
 
