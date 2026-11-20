@@ -418,7 +418,11 @@ catalogDiv.innerHTML += `
     },
     urlTema(item, idx){
       const slug = this.temaKey(item, idx);
-      return `${BASE_URL}?tema=${slug}&utm_source=sistema_z&utm_medium=share_track&utm_campaign=z_416`;
+      const base = String(BASE_URL || "https://meygey.github.io/Sistema-z/").replace(/\/+$/, "");
+      if (item && item.id !== undefined && item.id !== null && String(item.id).trim() !== "") {
+        return `${base}/t/${encodeURIComponent(String(item.id).trim())}.html`;
+      }
+      return `${base}/?tema=${slug}&utm_source=sistema_z&utm_medium=share_track&utm_campaign=z_416`;
     },
     sincronizarSEO(item, idx){
       try {
