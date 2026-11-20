@@ -639,25 +639,25 @@ catalogDiv.innerHTML += `
   };
   document.addEventListener("DOMContentLoaded", () => window.SistemaZSocial.iniciarParametroTema());
   (async function abrirTemaDesdeURL(){
-  try {
-    const params = new URLSearchParams(window.location.search);
-    const temaId = (params.get("tema") || "").trim();
-    if (!temaId) return;
-    const urlMatch = document.documentElement.innerHTML.match(/https:\/\/[a-zA-Z0-9-]+\.supabase\.co/);
-    const keyMatch = document.documentElement.innerHTML.match(/eyJ[a-zA-Z0-9._-]+/);
-    if (!urlMatch || !keyMatch) return;
-    const res = await fetch(`${urlMatch[0]}/rest/v1/temas_z?id=eq.${encodeURIComponent(temaId)}&select=*`, {
-      headers: { "apikey": keyMatch[0], "Authorization": `Bearer ${keyMatch[0]}` }
-    });
-    const rows = await res.json();
-    const item = Array.isArray(rows) && rows[0] ? rows[0] : null;
-    if (!item) return;
-    const etiqueta = `${item.artist || "Artista"} - ${item.title || "Tema"}`;
-    if (typeof window.reproducir === "function" && item.media_url) {
-      try { window.reproducir(item.media_url, etiqueta); } catch(_) {}
-    }
-  } catch(_) {}
-})();
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const temaId = (params.get("tema") || "").trim();
+      if (!temaId) return;
+      const urlMatch = document.documentElement.innerHTML.match(/https:\/\/[a-zA-Z0-9-]+\.supabase\.co/);
+      const keyMatch = document.documentElement.innerHTML.match(/eyJ[a-zA-Z0-9._-]+/);
+      if (!urlMatch || !keyMatch) return;
+      const res = await fetch(`${urlMatch[0]}/rest/v1/temas_z?id=eq.${encodeURIComponent(temaId)}&select=*`, {
+        headers: { "apikey": keyMatch[0], "Authorization": `Bearer ${keyMatch[0]}` }
+      });
+      const rows = await res.json();
+      const item = Array.isArray(rows) && rows[0] ? rows[0] : null;
+      if (!item || !item.media_url) return;
+      const etiqueta = `${item.artist || "Artista"} - ${item.title || "Tema"}`;
+      if (typeof window.reproducir === "function") {
+        try { window.reproducir(item.media_url, etiqueta); } catch(_) {}
+      }
+    } catch(_) {}
+  })();
 })();
 </script>
 
