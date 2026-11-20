@@ -656,11 +656,6 @@ catalogDiv.innerHTML += `
     if (typeof window.reproducir === "function" && item.media_url) {
       try { window.reproducir(item.media_url, etiqueta); } catch(_) {}
     }
-    const box = document.createElement("div");
-    box.id = "z-tema-directo";
-    box.style.cssText = "position:fixed;bottom:14px;left:14px;right:14px;z-index:9999;background:#111;border:1px solid #dc2626;color:#fff;padding:12px;border-radius:10px;font-family:sans-serif;font-size:13px;display:flex;align-items:center;justify-content:space-between;gap:10px;";
-    box.innerHTML = `<div><strong>${etiqueta}</strong><br><span style="font-size:11px;color:#a1a1aa;">${item.genre || "Urbano"} · ${item.copyright || "Copyright Z"}</span></div>` + (item.media_url ? `<a href="${item.media_url}" target="_blank" rel="noopener" style="background:#dc2626;color:#fff;padding:8px 12px;border-radius:8px;text-decoration:none;font-weight:bold;white-space:nowrap;">▶️ Audio</a>` : "");
-    document.body.appendChild(box);
   } catch(_) {}
 })();
 })();
