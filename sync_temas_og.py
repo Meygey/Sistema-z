@@ -13,7 +13,7 @@ if not url_m or not key_m:
 sb_url = url_m.group(0).rstrip("/")
 sb_key = key_m.group(0)
 base_url = "https://meygey.github.io/Sistema-z"
-default_img = f"{base_url}/portada-sistema-z.jpg"
+default_img = f"{base_url}/portada-sistema-z.jpg?v=2"
 
 req = urllib.request.Request(
     f"{sb_url}/rest/v1/temas_z?select=id,artist,title,genre,cover_url,copyright",
