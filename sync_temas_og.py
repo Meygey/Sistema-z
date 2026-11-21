@@ -58,7 +58,6 @@ for item in temas:
   <meta name="twitter:title" content="{og_title}">
   <meta name="twitter:description" content="{og_desc}">
   <meta name="twitter:image" content="{cover}">
-  <meta http-equiv="refresh" content="0;url={target_url}">
   <script>window.location.replace("{target_url}");</script>
 </head>
 <body style="background:#080808;color:#fff;font-family:sans-serif;text-align:center;padding:40px;">
